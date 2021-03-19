@@ -86,6 +86,28 @@ namespace Scripts.OOP.TileMaps
             return next;
         }
 
+        public override bool DrawAmount(int amount, Tilemap map, TileBase tilebase)
+        {
+            bool next;
+            do
+            {
+                Vector2Int border = CurrentBorder();
+                var tile = GetTile(new Vector2Int(current.x, current.y), border);
+                mapContent[(current.x - start.x), (current.y - start.y)] = tile;
+                if (tile == MapTileType.Wall)
+                {
+                    map.SetTile(new Vector3Int(current.x, current.y, 0),
+                        tile == MapTileType.Wall ? tilebase : null);
+                }
+
+                next = Next(border);
+                amount--;
+
+            } while (next && amount > 0);
+
+            return next;
+        }
+
         private Vector2Int CurrentBorder()
         {
             int relative = (current.x - start.x);
@@ -128,7 +150,7 @@ namespace Scripts.OOP.TileMaps
         {
             if (current.y == end.y)
             {
-                if (current.x == end.x) return true;
+                if (current.x == end.x) return false;
 
                 current.y = start.y;
                 current.x++;
@@ -140,7 +162,7 @@ namespace Scripts.OOP.TileMaps
             }
             else current.y++;
 
-            return false;
+            return true;
         }
     }
 }

@@ -29,9 +29,13 @@ public class MainMenuHandler : MonoBehaviour
     private Text buttonText;
     private Image background;
 
+    private SoundHandler sounds;
+
     // Start is called before the first frame update
     void Start()
     {
+        sounds = GetComponent<SoundHandler>();
+
         instance = this;
         if (PlayerPrefs.HasKey("Score"))
         {
@@ -108,9 +112,10 @@ public class MainMenuHandler : MonoBehaviour
 
     private void GameOverUI(int newScore)
     {
+        sounds.PlayRandom("Game Over");
         gameOver.gameObject.SetActive(true);
         gameOver.SetScores(topScore, newScore);
-        goTime = 10;
+        goTime = 5;
     }
 
     private void EndGame()

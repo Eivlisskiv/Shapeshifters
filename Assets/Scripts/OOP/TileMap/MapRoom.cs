@@ -45,5 +45,6 @@ namespace Scripts.OOP.TileMaps
         public abstract void Initialize();
         public abstract bool DrawOne(Tilemap map, TileBase tile);
         public abstract bool DrawNext(Tilemap map, TileBase tile);
+        public abstract bool DrawAmount(int amount, Tilemap map, TileBase tile);
     }
 }

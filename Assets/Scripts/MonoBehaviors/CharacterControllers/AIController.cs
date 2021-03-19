@@ -51,7 +51,10 @@ public class AIController : BaseController
         if(FireReady && weapon)
         {
             if (!target || !ShootTarget(out angle))
+            {
+                if (Randomf.Chance(50)) return false;
                 angle = Random.Range(0, 360);
+            }
             return true;
         }
         return false;

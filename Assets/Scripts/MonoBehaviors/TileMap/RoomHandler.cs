@@ -94,7 +94,7 @@ public class RoomHandler : MonoBehaviour
 
     private void LoadRoom()
     {
-        if (current.DrawNext(map, tile))
+        if (!current.DrawAmount(10, map, tile))
         {
             //After the map is loaded, load the collider. Thus doind this only once.
             TilemapCollider2D collider = GetComponent<TilemapCollider2D>();

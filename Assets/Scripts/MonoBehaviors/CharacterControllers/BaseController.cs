@@ -12,6 +12,8 @@ public abstract class BaseController : MonoBehaviour
     public WeaponHandler weapon;
     public BodyPhysicsHandler body;
 
+    private SoundHandler sounds;
+
     float cooldown = 0;
     public bool FireReady => cooldown <= 0;
     public Stats stats;
@@ -39,6 +41,7 @@ public abstract class BaseController : MonoBehaviour
     void Start()
     {
         body = GetComponent<BodyPhysicsHandler>();
+        sounds = GetComponent<SoundHandler>();
         body.Color = _color;
         weapon = GetComponent<WeaponHandler>();
         OnStart();
@@ -101,15 +104,17 @@ public abstract class BaseController : MonoBehaviour
 
     private void Fire(float angle)
     {
+        sounds.PlayRandom("Fire");
         cooldown = weapon.cooldown;
         float strength = weapon.Fire(this, angle);
         body.AddForce(angle, strength, strength);
-        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         perks.Activate<ICollide>(1, perk => perk.OnCollide(this, collision));
+
+        sounds.PlayRandom("Collide");
         //Apply collision force
         for (int i = 0; i < collision.contactCount; i++)
             ApplyCollisionForce(collision.contacts[i], 0);
@@ -127,6 +132,7 @@ public abstract class BaseController : MonoBehaviour
         {
             projectile.Sender.perks.Activate<IProjectileHitTarget>(1,
                 perk => perk.OnHit(projectile, this));
+
             TakeDamage(projectile.damage, projectile.Sender,
                 projectile.transform.position);
         }
@@ -160,6 +166,7 @@ public abstract class BaseController : MonoBehaviour
 
     private void SpawnHitParticles(Vector2 position)
     {
+        sounds.PlayRandom("Hit");
         if (body && body.hitPrefab)
         {
             var debris = Instantiate(body.hitPrefab, WaveData.Wave.contentParent);
