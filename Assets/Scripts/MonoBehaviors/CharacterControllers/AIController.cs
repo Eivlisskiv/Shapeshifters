@@ -17,15 +17,25 @@ public class AIController : BaseController
     }
 
     BaseController target;
+    int perksStrength;
 
     public void Initialize(int level)
     {
-        this.level = level;
         stats = new Scripts.OOP.Character.Stats.Stats(50 + (level / 5));
+        this.level = level;
+        GainPerk();
+    }
+
+    private void GainPerk()
+    {
+        if (perksStrength >= level) return;
+
+        int perkLevel = Random.Range(0, level - perksStrength) + 1;
         Perk perk = PerksHandler.Random();
-        perk.LevelUp(level);
+        perk.LevelUp(perkLevel);
         if (perks == null) perks = new PerksHandler();
         perks.Add(perk);
+        perksStrength += perkLevel;
     }
 
     public override void OnStart()
@@ -43,6 +53,7 @@ public class AIController : BaseController
     public override void OnUpdate()
     {
         if (!target) target = GetNearestPlayer();
+        GainPerk();
     }
 
     public override bool IsFiring(out float angle)
@@ -60,7 +71,10 @@ public class AIController : BaseController
         return false;
     }
 
-    public override void OnHealthChange() { }
+    public override void OnHealthChange() 
+    {
+        
+    }
 
     public override void OnXPChange(bool isUp)
     {
@@ -78,10 +92,7 @@ public class AIController : BaseController
         return true;
     }
 
-    public override void OnDeathEnded()
-    {
-
-    }
+    public override void OnDeathEnded() { }
 
     private bool ShootTarget(out float angle)
     {

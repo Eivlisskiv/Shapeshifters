@@ -112,7 +112,7 @@ public class MainMenuHandler : MonoBehaviour
 
     private void GameOverUI(int newScore)
     {
-        sounds.PlayRandom("Game Over");
+        if(sounds) sounds.PlayRandom("Game Over");
         gameOver.gameObject.SetActive(true);
         gameOver.SetScores(topScore, newScore);
         goTime = 5;

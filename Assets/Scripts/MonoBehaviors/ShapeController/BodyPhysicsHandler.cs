@@ -154,7 +154,7 @@ public class BodyPhysicsHandler : MonoBehaviour
         if (push != 0 || !jelly)
         {
             Vector2 force = -Vectors2.FromDegAngle(angle, push + strength);
-            body.velocity = Vector2.ClampMagnitude(body.velocity + force, 50);
+            body.velocity = Vector2.ClampMagnitude(body.velocity + force, 40);
             body.angularVelocity = Mathf.Clamp(body.angularVelocity + ((points.Length - radius) * strength * -force.x), -360, 360);
         }
     }

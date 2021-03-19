@@ -201,7 +201,7 @@ public abstract class BaseController : MonoBehaviour
 
     public void OnKill(BaseController target)
     {
-        AddXP(target.xp + (target.XPRequired / 2));
+        AddXP(target.xp + (target.XPRequired / (level + 2) ));
         if(target is AIController && target.perks.Count > 0)
             perks.Add(target.perks.RandomDrop(), this is PlayerController player ? player.UI : null);
     }

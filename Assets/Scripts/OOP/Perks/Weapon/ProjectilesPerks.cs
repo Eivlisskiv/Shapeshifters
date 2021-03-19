@@ -6,6 +6,7 @@ namespace Scripts.OOP.Perks.Weapon
 {
     class Mine_Drop : EmitterPerk, IWeaponFire
     {
+        protected override int ToBuffCharge => 1;
         protected override string RessourcePath => "Projectiles/Landmine";
 
         protected override string GetDescription()

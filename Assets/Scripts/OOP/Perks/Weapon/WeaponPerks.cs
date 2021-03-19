@@ -4,6 +4,8 @@ namespace Scripts.OOP.Perks.Weapon
 {
     public class Charging_Round : Perk, IProjectileHitTarget
     {
+        protected override int ToBuffCharge => 2;
+
         protected override string GetDescription()
             => $"Projectiles air time increase projectile force by 100% and damage by ({(Intensity * 10)}%).";
 

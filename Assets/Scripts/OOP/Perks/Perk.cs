@@ -23,6 +23,8 @@
 
         public PerkUIHandler ui;
 
+        protected virtual int ToBuffCharge => 5;
+
         public Perk()
         {
             Start();
@@ -62,7 +64,7 @@
         public void ToBuff()
         {
             buff = level;
-            charge = level * 5;
+            charge = ToBuffCharge;
             level = 0;
             description = null;
         }

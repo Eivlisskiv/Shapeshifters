@@ -8,6 +8,8 @@ namespace Scripts.OOP.Perks.Character
     {
         float time;
 
+        protected override int ToBuffCharge => 25;
+
         protected override string RessourcePath => "Particles/Healing";
 
         protected override string GetDescription()
@@ -51,6 +53,8 @@ namespace Scripts.OOP.Perks.Character
 
     public class Shield : EmitterPerk, IProjectileTaken
     {
+        protected override int ToBuffCharge => 1;
+
         protected override string RessourcePath => "Particles/Shields";
 
         protected override string GetDescription()
