@@ -52,7 +52,11 @@ public class MainMenuHandler : MonoBehaviour
         if (goTime.HasValue)
         {
             goTime = Math.Max(0, goTime.Value - Time.deltaTime);
-            if (goTime == 0) EndGame();
+            if (goTime == 0)
+            {
+                goTime = null;
+                EndGame();
+            }
         }
     }
 

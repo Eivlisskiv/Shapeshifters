@@ -108,7 +108,6 @@ public class MapHandler : MonoBehaviour
         loading = null;
         current = null;
 
-
         int c = transform.childCount;
         for (int i = 0; i < c; i++)
             Destroy(transform.GetChild(i).gameObject);

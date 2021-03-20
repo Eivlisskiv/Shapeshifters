@@ -28,6 +28,7 @@ namespace Scripts.OOP.TileMaps
 
             mobs = new List<AIController>();
 
+            if (instance != null) instance.Clear();
             instance = this;
         }
 
@@ -37,6 +38,9 @@ namespace Scripts.OOP.TileMaps
             for (int i = 0; i < mobsL; i++)
                 if(mobs[i]) Object.Destroy(mobs[i].gameObject);
             mobs.Clear();
+            Object.Destroy(contentParent.gameObject);
+
+            instance = null;
         }
 
         public bool CheckEnemySpawns(out Vector2Int pos)
