@@ -4,8 +4,6 @@ using UnityEngine.Tilemaps;
 
 public class RoomHandler : MonoBehaviour
 {
-    public SpriteRenderer mask;
-
     TileBase tile;
 
     int width;
@@ -50,39 +48,40 @@ public class RoomHandler : MonoBehaviour
         map = GetComponent<Tilemap>();
         transform.localScale = new Vector3(1, 1, 0);
         map.ClearAllTiles();
-        SetForeground();
+        //SetForeground();
     }
 
-    void SetForeground()
-    {
-        if (!mask) return;
+    //void SetForeground()
+    //{
+    //    if (!mask) return;
 
-        Vector2 pixSize = new Vector2(width, height) / mask.transform.localScale;
-        if (pixSize.x > 100)// is bigger than 100x50
-        {
-            int a = Mathf.CeilToInt(pixSize.x / 100);
-            if (a % 2 != 0) a++;
-            float l = Mathf.Log(a, 2f);
-            pixSize /= l;
-            Vector2 pos = new Vector2(width, height) / a;
-            for (int x = 0; x < l; x++)
-            {
-                for (int y = 0; y < l; y++)
-                {
-                    var m = (x + 1 == l && y + 1 == l) ? mask : Instantiate(mask, transform);
-                    m.size = pixSize;
-                    m.transform.localPosition = (pos + (pos * 2 * new Vector2(x, y))) + lastEnd;
-                }
-            }
-        }
-        else
-        {
-            mask.size = new Vector2(100, 50);
-            mask.transform.localPosition = (new Vector2(width, height) / 2) + lastEnd;
-        }
-    }
+    //    Vector2 pixSize = new Vector2(width, height) / mask.transform.localScale;
+    //    if (pixSize.x > 100)// is bigger than 100x50
+    //    {
+    //        int a = Mathf.CeilToInt(pixSize.x / 100);
+    //        if (a % 2 != 0) a++;
+    //        float l = Mathf.Log(a, 2f);
+    //        pixSize /= l;
+    //        Vector2 pos = new Vector2(width, height) / a;
+    //        for (int x = 0; x < l; x++)
+    //        {
+    //            for (int y = 0; y < l; y++)
+    //            {
+    //                var m = (x + 1 == l && y + 1 == l) ? mask : Instantiate(mask, transform);
+    //                m.size = pixSize;
+    //                m.transform.localPosition = (pos + (pos * 2 * new Vector2(x, y))) + lastEnd;
+    //            }
+    //        }
+    //    }
+    //    else
+    //    {
+    //        mask.size = new Vector2(100, 50);
+    //        mask.transform.localPosition = (new Vector2(width, height) / 2) + lastEnd;
+    //    }
+    //}
 
     // Update is called once per frame
+
     void Update()
     {
         if (!loaded)

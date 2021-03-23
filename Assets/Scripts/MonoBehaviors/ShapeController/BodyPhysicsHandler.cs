@@ -60,8 +60,8 @@ public class BodyPhysicsHandler : MonoBehaviour
 
         shapeRenderer.material.color = _color;
         shapeRenderer.material.SetColor("Color", _color);
-        for (int i = 0; i < shapeRenderer.materials.Length; i++)
-            shapeRenderer.materials[i].color = _color;
+        //for (int i = 0; i < shapeRenderer.materials.Length; i++)
+            //shapeRenderer.materials[i].color = _color;
     }
 
     public void Reshape(int count)

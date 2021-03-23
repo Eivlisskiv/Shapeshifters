@@ -78,7 +78,6 @@ public class MainMenuHandler : MonoBehaviour
     {
         buttonText.text = active ? "Start" : "Loading...";
         if (!background) background = container.GetComponent<Image>();
-        background.color = new Color(background.color.r, background.color.g, background.color.b, active ? 1 : 0.3f);
         start.interactable = active;
     }
 

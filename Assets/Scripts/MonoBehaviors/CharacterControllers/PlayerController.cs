@@ -1,6 +1,7 @@
 ﻿using Scripts.OOP.Character.Stats;
 using Scripts.OOP.Perks;
 using Scripts.OOP.TileMaps;
+using Scripts.OOP.UI;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,7 +17,8 @@ public class PlayerController : BaseController
         ui.name = $"{body.name}_UI";
 
         PlayerController player = body.AddComponent<PlayerController>();
-        player.cam = cam;
+        player.cam = new PlayerCamera(cam, 15f);
+
         player.transform.position = position;
         player.Color = Color.green;
 
@@ -30,9 +32,7 @@ public class PlayerController : BaseController
         return player;
     }
 
-
-    public float camHeight = 15;
-    public Camera cam;
+    public PlayerCamera cam;
 
     private CharacterUIHandler ui;
     public CharacterUIHandler UI { get => ui; }
@@ -50,11 +50,7 @@ public class PlayerController : BaseController
 
     public override void OnUpdate()
     {
-        if (cam)
-        {
-            cam.transform.position = transform.position - new Vector3(0, 0, 10);
-            cam.orthographicSize = camHeight;
-        }
+        cam.Update(transform.position);
     }
 
     public override bool IsFiring(out float angle)
@@ -66,9 +62,7 @@ public class PlayerController : BaseController
         }
 
         //Get the world mouse position
-        Vector3 mousePos = Input.mousePosition;
-        mousePos.z = cam.nearClipPlane;
-        mousePos = cam.ScreenToWorldPoint(mousePos);
+        Vector3 mousePos = cam.MouseToWorld();
 
         //Get the angle relative to the position
         Vector2 pos = transform.position;
@@ -105,6 +99,7 @@ public class PlayerController : BaseController
     public override bool OnDeath()
     {
         players.Remove(this);
+        cam.Detach();
         return true;
     }
 

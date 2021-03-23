@@ -14,6 +14,7 @@ public class MapHandler : MonoBehaviour
     public TileBase[] tilesets;
 
     public int width;
+    public bool spawnMobs;
 
     MainMenuHandler menu;
 
@@ -30,9 +31,18 @@ public class MapHandler : MonoBehaviour
         rooms = new List<RoomHandler>();
         int height = width / 2;
         GenerateRoom(width, height, null);
-        float size = 0.70f * width;
-        Camera.main.orthographicSize = size;
-        Camera.main.transform.position = new Vector3((size * 2.2f), size * 1.08f, -10);
+        AlignCamera(0.68f * width);
+    }
+
+    private void AlignCamera(float size)
+    {
+        var cam = Camera.main;
+        cam.orthographicSize = size;
+        cam.transform.position = new Vector3((size * 2.2f), size * 1.08f, -10);
+
+        var background = cam.transform.GetChild(0).transform;
+        float s = size / 3f;
+        background.localScale = new Vector3(s, s, 1);
     }
 
     private void GenerateRoom(int width, int height, RoomHandler previous)
@@ -92,7 +102,7 @@ public class MapHandler : MonoBehaviour
 
     public void HandleWave()
     {
-        if (Wave.CheckEnemySpawns(out Vector2Int coords))
+        if (spawnMobs && Wave.CheckEnemySpawns(out Vector2Int coords))
         {
             AIController mob = Wave.SpawnMob(Instantiate(characterPrefab));
             mob.transform.position = CharacterPosition(coords + current.StartV);
