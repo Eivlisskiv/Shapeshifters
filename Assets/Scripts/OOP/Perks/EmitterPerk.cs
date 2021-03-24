@@ -1,4 +1,4 @@
-﻿using Scripts.OOP.TileMaps;
+﻿using Scripts.OOP.GameModes;
 using UnityEngine;
 
 namespace Scripts.OOP.Perks
@@ -25,7 +25,7 @@ namespace Scripts.OOP.Perks
             }
 
             GameObject go = Object.Instantiate(prefab);
-            go.transform.SetParent(parent ?? WaveData.Wave.contentParent);
+            if(parent) go.transform.SetParent(parent);
             go.transform.position = position;
             if (rotation.HasValue) 
                 go.transform.rotation = Quaternion.Euler(rotation.Value);

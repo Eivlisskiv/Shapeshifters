@@ -1,4 +1,5 @@
 ﻿using Scripts.OOP.Character.Stats;
+using Scripts.OOP.GameModes;
 using Scripts.OOP.Perks;
 using Scripts.OOP.Perks.Character.Triggers;
 using Scripts.OOP.Perks.Weapon;
@@ -12,6 +13,8 @@ public abstract class BaseController : MonoBehaviour
     public WeaponHandler weapon;
     public BodyPhysicsHandler body;
 
+    internal int team;
+
     private SoundHandler sounds;
 
     float cooldown = 0;
@@ -21,6 +24,9 @@ public abstract class BaseController : MonoBehaviour
     internal PerksHandler perks;
 
     protected int level;
+    public int Level
+    { get => level; }
+
     protected float xp;
     public int XPRequired => Mathf.FloorToInt((level + 1) * (float)Math.Pow(10, 2));
 
@@ -169,7 +175,7 @@ public abstract class BaseController : MonoBehaviour
         sounds.PlayRandom("Hit");
         if (body && body.hitPrefab)
         {
-            var debris = Instantiate(body.hitPrefab, WaveData.Wave.contentParent);
+            var debris = Instantiate(body.hitPrefab, AGameMode.GetDebrisTransform(team));
             debris.transform.position = position;
             debris.transform.rotation = Quaternion.Euler(0, 0, 
                 Vectors2.TrueAngle(transform.position, position));
@@ -216,6 +222,12 @@ public abstract class BaseController : MonoBehaviour
             up = true;
             level++;
             HitHealth(stats.MaxHealth - stats.health);
+        }
+
+        if (up)
+        {
+            AGameMode.Run<IControllerLevelUp>(mode =>
+                mode.ControllerLevelUp(this));
         }
         OnXPChange(up);
     }

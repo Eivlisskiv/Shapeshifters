@@ -1,4 +1,5 @@
-﻿using Scripts.OOP.Perks.Character.Triggers;
+﻿using Scripts.OOP.GameModes;
+using Scripts.OOP.Perks.Character.Triggers;
 using Scripts.OOP.Utils;
 using UnityEngine;
 
@@ -23,7 +24,8 @@ namespace Scripts.OOP.Perks.Character
             {
                 time -= 5f;
                 controller.HitHealth(Intensity);
-                Object.Destroy(SpawnPrefab(controller.transform.position), 1f);
+                Object.Destroy(SpawnPrefab(controller.transform.position,
+                    null, AGameMode.GetDebrisTransform(controller.team)), 1f);
             }
             return true;
         }
@@ -44,7 +46,8 @@ namespace Scripts.OOP.Perks.Character
                 Vector3 point = collision.contacts[0].point;
                 other.TakeDamage(Intensity, controller, point);
                 point.z = -5;
-                Object.Destroy(SpawnPrefab(point), 1f); 
+                Object.Destroy(SpawnPrefab(point, null,
+                    AGameMode.GetDebrisTransform(controller.team)), 1f); 
                 return true;
             }
             return false;
@@ -67,27 +70,29 @@ namespace Scripts.OOP.Perks.Character
         {
             cooldown = 5;
 
-            if (!projectile) return false;
+            if (!projectile || shield <= 0) return false;
+
+            Transform debrisParent = AGameMode.GetDebrisTransform(self.team);
 
             if(shield >= projectile.damage)
             {
                 shield -= projectile.damage;
                 projectile.active = false;
-                Shielded(projectile);
+                Shielded(projectile, debrisParent);
                 return false;
             }
 
             projectile.damage -= shield;
             shield = 0;
-            Shielded(projectile);
+            Shielded(projectile, debrisParent);
             return false;
         }
 
-        private void Shielded(ProjectileHandler projectile)
+        private void Shielded(ProjectileHandler projectile, Transform debrisParent)
         {
             var pos = projectile.transform.position;
             pos.z = -5;
-            Object.Destroy(SpawnPrefab(pos), 1f);
+            Object.Destroy(SpawnPrefab(pos, null, debrisParent), 1f);
         }
 
         public bool OnControllerUpdate(BaseController controller, float delta)

@@ -23,23 +23,15 @@ public class RoomHandler : MonoBehaviour
     public Vector2Int StartV => current.Start;
     public Vector2Int EndV => current.End;
 
-    public void SetSize(int w, int h)
+    public void SetSettings(int w, int h, TileBase tile, RoomHandler prev)
     {
         width = w;
         height = h;
+        this.tile = tile;
+        if (prev) lastEnd = new Vector2Int
+                (prev.EndV.x, (height - prev.height) / 2);
+
     }
-
-    public void SetPrevious(RoomHandler prev)
-    {
-        if (prev)
-        {
-            lastEnd = new Vector2Int(prev.EndV.x, (height - prev.height) / 2);
-
-            //Set Door
-        }
-    }
-
-    public void SetTile(TileBase tile) => this.tile = tile;
 
     // Start is called before the first frame update
     void Start()
@@ -48,47 +40,14 @@ public class RoomHandler : MonoBehaviour
         map = GetComponent<Tilemap>();
         transform.localScale = new Vector3(1, 1, 0);
         map.ClearAllTiles();
-        //SetForeground();
+
+        current = new CaveRoom(lastEnd, new Vector2Int(width, height))
+        { previousBorder = new Vector2Int(0, height) };
     }
-
-    //void SetForeground()
-    //{
-    //    if (!mask) return;
-
-    //    Vector2 pixSize = new Vector2(width, height) / mask.transform.localScale;
-    //    if (pixSize.x > 100)// is bigger than 100x50
-    //    {
-    //        int a = Mathf.CeilToInt(pixSize.x / 100);
-    //        if (a % 2 != 0) a++;
-    //        float l = Mathf.Log(a, 2f);
-    //        pixSize /= l;
-    //        Vector2 pos = new Vector2(width, height) / a;
-    //        for (int x = 0; x < l; x++)
-    //        {
-    //            for (int y = 0; y < l; y++)
-    //            {
-    //                var m = (x + 1 == l && y + 1 == l) ? mask : Instantiate(mask, transform);
-    //                m.size = pixSize;
-    //                m.transform.localPosition = (pos + (pos * 2 * new Vector2(x, y))) + lastEnd;
-    //            }
-    //        }
-    //    }
-    //    else
-    //    {
-    //        mask.size = new Vector2(100, 50);
-    //        mask.transform.localPosition = (new Vector2(width, height) / 2) + lastEnd;
-    //    }
-    //}
-
-    // Update is called once per frame
 
     void Update()
     {
-        if (!loaded)
-        {
-            if (current != null) LoadRoom();
-            else StartRoom(); //First room
-        }
+        if (!loaded && current != null) LoadRoom();
     }
 
     private void LoadRoom()
@@ -103,14 +62,16 @@ public class RoomHandler : MonoBehaviour
         }
     }
 
-    public WaveData StartWave(int level)
-        => new WaveData(current.mapContent, roomContent.transform, level);
-
-    private void StartRoom()
+    public MapTileType RandomTile(out Vector2Int pos)
     {
-        current = new CaveRoom(lastEnd, new Vector2Int(width, height))
-        { previousBorder = new Vector2Int(0, height) };
+        var content = current.mapContent;
+        pos = new Vector2Int(
+                Random.Range(0, content.GetLength(0)),
+                Random.Range(0, content.GetLength(1)));
+        return content[pos.x, pos.y];
     }
 
     private void OnDestroy() => Destroy(roomContent);
+
+
 }

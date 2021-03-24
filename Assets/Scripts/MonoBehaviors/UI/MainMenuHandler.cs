@@ -1,4 +1,6 @@
-﻿using Scripts.OOP.Perks;
+﻿using Scripts.OOP.GameModes;
+using Scripts.OOP.GameModes.Arena;
+using Scripts.OOP.Perks;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -60,17 +62,21 @@ public class MainMenuHandler : MonoBehaviour
         }
     }
 
-    public void OnClick_Start(Button button)
+    private void CheckButtons(Button button)
     {
-        map.enabled = true;
-        map.StartMap(this);
-
         if (!start)
         {
             start = button;
             buttonText = start.GetComponentInChildren<Text>();
         }
+    }
 
+    public void OnClick_Start(Button button)
+    {
+        ArenaGameMode gamemode = new ArenaGameMode(this, map);
+        gamemode.StartMap();
+
+        CheckButtons(button);
         SetStartButton(false);
     }
 
@@ -111,7 +117,6 @@ public class MainMenuHandler : MonoBehaviour
         RectTransform rect = desc.GetComponent<RectTransform>();
         perkList.sizeDelta += new Vector2(0, rect.sizeDelta.y);
     }
-       
 
     private void GameOverUI(int newScore)
     {
@@ -132,6 +137,7 @@ public class MainMenuHandler : MonoBehaviour
             score.text = newScore.ToString();
             PlayerPrefs.SetInt("Score", topScore);
         }
-        map.Clear();
+
+        AGameMode.GameMode?.EndGame();
     }
 }

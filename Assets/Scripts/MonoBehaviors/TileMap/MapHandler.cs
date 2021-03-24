@@ -1,4 +1,6 @@
-﻿using Scripts.OOP.TileMaps;
+﻿using Scripts.OOP.GameModes;
+using Scripts.OOP.TileMaps;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -16,18 +18,13 @@ public class MapHandler : MonoBehaviour
     public int width;
     public bool spawnMobs;
 
-    MainMenuHandler menu;
-
     List<RoomHandler> rooms;
 
     RoomHandler current;
     RoomHandler loading;
 
-    WaveData Wave => WaveData.Wave;
-
-    public void StartMap(MainMenuHandler menu)
+    public void StartMap()
     {
-        if (menu) this.menu = menu;
         rooms = new List<RoomHandler>();
         int height = width / 2;
         GenerateRoom(width, height, null);
@@ -45,15 +42,24 @@ public class MapHandler : MonoBehaviour
         background.localScale = new Vector3(s, s, 1);
     }
 
+    public void QueuRoom(int size)
+    {
+        if(loading != null)
+        {
+            Debug.LogWarning($"There is already a queud room");
+            return;
+        }
+
+        GenerateRoom(size, size / 2, current);
+    }
+
     private void GenerateRoom(int width, int height, RoomHandler previous)
     {
         GameObject robj = Instantiate(roomPrefab);
         robj.transform.parent = transform;
         robj.name = $"Room{rooms.Count}";
         RoomHandler room = robj.GetComponent<RoomHandler>();
-        room.SetSize(width, height);
-        room.SetPrevious(previous);
-        room.SetTile(tilesets[0]);
+        room.SetSettings(width, height, tilesets[0], previous);
         rooms.Add(room);
         loading = room;
     }
@@ -63,7 +69,7 @@ public class MapHandler : MonoBehaviour
     {
         VerifyLoadingRoom();
 
-        if (Wave != null) HandleWave();
+        AGameMode.GameMode?.OnUpdate();
     }
 
     private void VerifyLoadingRoom()
@@ -73,45 +79,23 @@ public class MapHandler : MonoBehaviour
         {
             //Asign as first room
             if (current == null)
-            {
-                NextRoom();
-                SpawnPlayer();
-                //GenerateRoom(width, width / 2, current);
-
-                menu.SetStartButton(true);
-                menu.container.SetActive(false);
-            }
+                FirstLoad();
         }
     }
 
-    private void NextRoom()
+    private void FirstLoad()
     {
         current = loading;
         loading = null;
-
-        //Next wave
-        current.StartWave((Wave?.level ?? 0) + 1);
+        AGameMode.GameMode.OnLoaded();
     }
 
-    public void SpawnPlayer()
-    {
-        PlayerController.Spawn(characterPrefab, uiPrefab, 
-            Camera.main, mainCanvas.transform, CharacterPosition(
-            new Vector2Int(MapRoom.spacing + (MapRoom.borderWidth * 2), width / 4)));
-    }
-
-    public void HandleWave()
-    {
-        if (spawnMobs && Wave.CheckEnemySpawns(out Vector2Int coords))
-        {
-            AIController mob = Wave.SpawnMob(Instantiate(characterPrefab));
-            mob.transform.position = CharacterPosition(coords + current.StartV);
-        }
-    }
-
-    private Vector2 CharacterPosition(Vector2Int coords)
+    public Vector2 CharacterPosition(Vector2Int coords)
     => new Vector3((coords.x + transform.position.x) * transform.localScale.x,
         (coords.y + transform.position.y) * transform.localScale.y);
+
+    public MapTileType RandomTile(out Vector2Int pos)
+        => current.RandomTile(out pos);
 
     public void Clear()
     {
@@ -122,7 +106,7 @@ public class MapHandler : MonoBehaviour
         for (int i = 0; i < c; i++)
             Destroy(transform.GetChild(i).gameObject);
 
-        if (Wave != null) Wave.Clear();
+        AGameMode.GameMode?.Clear();
 
         enabled = false;
     }

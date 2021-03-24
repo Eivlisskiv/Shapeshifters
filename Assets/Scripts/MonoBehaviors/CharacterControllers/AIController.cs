@@ -1,8 +1,9 @@
 ﻿using Scripts.OOP.Utils;
 using UnityEngine;
-using Scripts.OOP.TileMaps;
 using Scripts.OOP.Perks;
 using UnityEngine.U2D;
+using Scripts.OOP.GameModes;
+using System.Collections.Generic;
 
 public class AIController : BaseController
 {
@@ -41,7 +42,7 @@ public class AIController : BaseController
     public override void OnStart()
     {
         GenerateBuild();
-        target = GetNearestPlayer();
+        target = GetNearestTarget();
     }
 
     public void GenerateBuild()
@@ -52,7 +53,7 @@ public class AIController : BaseController
 
     public override void OnUpdate()
     {
-        if (!target) target = GetNearestPlayer();
+        if (!target) target = GetNearestTarget();
         GainPerk();
     }
 
@@ -88,7 +89,7 @@ public class AIController : BaseController
 
     public override bool OnDeath()
     {
-        WaveData.Wave.RemoveMob(this);
+        AGameMode.GameMode.MemberDestroyed(this);
         return true;
     }
 
@@ -112,12 +113,13 @@ public class AIController : BaseController
         return false;
     }
 
-    private PlayerController GetNearestPlayer()
+    private BaseController GetNearestTarget()
     {
-        if (PlayerController.players.Count == 0) return null;
+        List<BaseController> targets = AGameMode.GameMode.GetEnemies(team);
+        if (targets.Count == 0) return null;
         //Temporary
-        return PlayerController.players[0] == null ? 
-            null : PlayerController.players[0];
+        return targets[0] == null ? 
+            null : targets[0];
         /*
         PlayerController nearest = players[0];
         float distance = (nearest.transform.position - transform.position).magnitude;

@@ -1,4 +1,5 @@
 ﻿using Scripts.OOP.Character.Stats;
+using Scripts.OOP.GameModes;
 using Scripts.OOP.Perks;
 using Scripts.OOP.TileMaps;
 using Scripts.OOP.UI;
@@ -7,9 +8,8 @@ using UnityEngine;
 
 public class PlayerController : BaseController
 {
-    public static List<PlayerController> players = new List<PlayerController>();
-    public static PlayerController Spawn(GameObject bodyPrefab,
-        GameObject uiPrefab, Camera cam, Transform uiCanvas, Vector3 position)
+    public static PlayerController Instantiate(GameObject bodyPrefab,
+        GameObject uiPrefab, Camera cam, Transform uiCanvas)
     {
         GameObject body = Instantiate(bodyPrefab);
         body.name = "Player";
@@ -19,15 +19,12 @@ public class PlayerController : BaseController
         PlayerController player = body.AddComponent<PlayerController>();
         player.cam = new PlayerCamera(cam, 15f);
 
-        player.transform.position = position;
         player.Color = Color.green;
 
         player.ui = ui.GetComponent<CharacterUIHandler>();
         var uit = player.ui.GetComponent<RectTransform>();
         uit.anchoredPosition = Vector3.zero;
         uit.localScale = new Vector3(1, 1, 1);
-
-        players.Add(player);
 
         return player;
     }
@@ -83,7 +80,6 @@ public class PlayerController : BaseController
         {
             if (isUp)
             {
-                WaveData.Wave.level++;
                 ui.LevelUp(level);
                 if (level == 1 || level % 5 == 0)
                 {
@@ -98,8 +94,7 @@ public class PlayerController : BaseController
 
     public override bool OnDeath()
     {
-        players.Remove(this);
-        cam.Detach();
+        AGameMode.GameMode.MemberDestroyed(this);
         return true;
     }
 
