@@ -51,26 +51,58 @@ namespace Scripts.OOP.Perks.Character
         }
     }
 
-    public class Shield : EmitterPerk, IProjectileTaken
+    public class Shield : EmitterPerk, IControllerUpdate, IProjectileTaken
     {
-        protected override int ToBuffCharge => 1;
+        private float shield = 0;
+        private float cooldown = 0;
+
+        protected override int ToBuffCharge => 25;
 
         protected override string RessourcePath => "Particles/Shields";
 
         protected override string GetDescription()
-            => $"Has a ({Intensity}%) chance to block incoming projectiles.";
+            => $"Grants ({Intensity * 5}) Shields with a 5 seconds recharge rate.";
 
         public bool OnHit(BaseController self, ProjectileHandler projectile)
         {
-            if (projectile && Randomf.Chance(Intensity))
+            cooldown = 5;
+
+            if (!projectile) return false;
+
+            if(shield >= projectile.damage)
             {
-                var pos = projectile.transform.position;
-                pos.z = -5;
-                Object.Destroy(SpawnPrefab(pos), 1f);
+                shield -= projectile.damage;
                 projectile.active = false;
-                return true;
+                Shielded(projectile);
+                return false;
             }
+
+            projectile.damage -= shield;
+            shield = 0;
+            Shielded(projectile);
             return false;
+        }
+
+        private void Shielded(ProjectileHandler projectile)
+        {
+            var pos = projectile.transform.position;
+            pos.z = -5;
+            Object.Destroy(SpawnPrefab(pos), 1f);
+        }
+
+        public bool OnControllerUpdate(BaseController controller, float delta)
+        {
+            if (cooldown > 0)
+            {
+                cooldown -= delta;
+                if(cooldown > 0) return false;
+            }
+
+            float max = Intensity * 5;
+            if (shield >= max) return false;
+
+            shield = System.Math.Min(max, shield + delta);
+            return true;
         }
     }
 }

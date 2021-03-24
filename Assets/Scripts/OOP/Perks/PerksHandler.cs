@@ -25,8 +25,8 @@ namespace Scripts.OOP.Perks
 
         public static Perk Random()
         {
-            int count = perksTypes.Keys.Count - 1;
-            string key = perksTypes.Keys.ElementAt(UnityEngine.Random.Range(0, count));
+            string key = perksTypes.Keys.ElementAt(UnityEngine.Random
+                .Range(0, perksTypes.Keys.Count));
             return Load(key);
         }
 
