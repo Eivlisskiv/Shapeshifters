@@ -1,4 +1,5 @@
-﻿using Scripts.OOP.GameModes;
+﻿using Assets.Scripts.OOP.Game_Modes.Rogue;
+using Scripts.OOP.GameModes;
 using Scripts.OOP.GameModes.Arena;
 using Scripts.OOP.Perks;
 using System;
@@ -73,7 +74,7 @@ public class MainMenuHandler : MonoBehaviour
 
     public void OnClick_Start(Button button)
     {
-        ArenaGameMode gamemode = new ArenaGameMode(this, map);
+        AGameMode gamemode = new Rogue(this, map);
         gamemode.StartMap();
 
         CheckButtons(button);
@@ -109,9 +110,9 @@ public class MainMenuHandler : MonoBehaviour
         if(img) img.sprite = Resources.Load<Sprite>($"Sprites/Perks/{perk.Name}");
 
         Transform texts = desc.transform.GetChild(1);
-        Text title = texts.GetChild(0)?.GetComponent<Text>();
+        Text title = texts.GetChild(0).GetComponent<Text>();
         if (title) title.text = perk.Name;
-        Text description = texts.GetChild(1)?.GetComponent<Text>();
+        Text description = texts.GetChild(1).GetComponent<Text>();
         if (description) description.text = perk.Description;
 
         RectTransform rect = desc.GetComponent<RectTransform>();

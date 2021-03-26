@@ -78,16 +78,7 @@ public class PlayerController : BaseController
     {
         if (ui)
         {
-            if (isUp)
-            {
-                ui.LevelUp(level);
-                if (level == 1 || level % 5 == 0)
-                {
-                    Perk perk = PerksHandler.Random();
-                    perk.LevelUp();
-                    perks.Add(perk, ui);
-                }
-            }
+            if (isUp) ui.LevelUp(level);
             ui.UpdateXP(xp / XPRequired);
         }
     }

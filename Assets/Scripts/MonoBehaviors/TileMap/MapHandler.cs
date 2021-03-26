@@ -1,6 +1,4 @@
 ﻿using Scripts.OOP.GameModes;
-using Scripts.OOP.TileMaps;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -20,8 +18,9 @@ public class MapHandler : MonoBehaviour
 
     List<RoomHandler> rooms;
 
-    RoomHandler current;
-    RoomHandler loading;
+    private RoomHandler previous;
+    internal RoomHandler current;
+    internal RoomHandler loading;
 
     public void StartMap()
     {
@@ -51,6 +50,22 @@ public class MapHandler : MonoBehaviour
         }
 
         GenerateRoom(size, size / 2, current);
+    }
+
+    public void NextRoom(int size)
+    {
+        if(loading != null && loading.Loaded)
+        {
+            Debug.LogWarning($"Loading room is still laoding");
+            return;
+        }
+
+        if (previous) Destroy(previous.gameObject);
+        previous = current;
+        current = loading;
+        loading = null;
+
+        QueuRoom(size);
     }
 
     private void GenerateRoom(int width, int height, RoomHandler previous)
@@ -89,13 +104,6 @@ public class MapHandler : MonoBehaviour
         loading = null;
         AGameMode.GameMode.OnLoaded();
     }
-
-    public Vector2 CharacterPosition(Vector2Int coords)
-    => new Vector3((coords.x + transform.position.x) * transform.localScale.x,
-        (coords.y + transform.position.y) * transform.localScale.y);
-
-    public MapTileType RandomTile(out Vector2Int pos)
-        => current.RandomTile(out pos);
 
     public void Clear()
     {

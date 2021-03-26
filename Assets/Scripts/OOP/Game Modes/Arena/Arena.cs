@@ -1,14 +1,15 @@
-﻿using Scripts.OOP.TileMaps;
+﻿using Scripts.OOP.Perks;
+using Scripts.OOP.TileMaps;
 using UnityEngine;
 
 namespace Scripts.OOP.GameModes.Arena
 {
-    public class ArenaGameMode : AGameMode, IControllerLevelUp
+    public class Arena : AGameMode, IControllerLevelUp, IElimination
     {
         private float spawnCooldown;
         private int level;
 
-        public ArenaGameMode(MainMenuHandler menu, MapHandler map) 
+        public Arena(MainMenuHandler menu, MapHandler map) 
             : base(menu, map, Color.green, Color.red)
         {
             spawnCooldown = 5;
@@ -31,18 +32,21 @@ namespace Scripts.OOP.GameModes.Arena
             {
                 player.cam.Detach();
             }
-            else
-            {
-                score += member.Level;
-            }
 
             base.MemberDestroyed(member);
+        }
+
+        public void Elimenation(BaseController victim, BaseController killer)
+        {
+            if (!victim || !killer) return;
+
+            if (victim.perks.Count > 0)
+                killer.perks.Add(victim.perks.RandomDrop(), killer is PlayerController player ? player.UI : null);
         }
 
         public override void OnLoaded()
         {
             base.OnLoaded();
-            //map.QueuRoom(Random.Range(40, 161));
             SpawnPlayer();
         }
 
@@ -52,8 +56,8 @@ namespace Scripts.OOP.GameModes.Arena
                 (map.characterPrefab, map.uiPrefab,
                 Camera.main, map.mainCanvas.transform);
 
-            player.transform.position = map.CharacterPosition(new Vector2Int
-                (MapRoom.spacing + (MapRoom.borderWidth * 2), map.width / 4));
+            player.transform.position = map.current.CharacterPosition(new Vector2Int
+                (MapRoom.spacing + (MapRoom.borderWidth * 2) - 1, map.width / 4));
 
             AddMember(0, player);
         }
@@ -64,7 +68,7 @@ namespace Scripts.OOP.GameModes.Arena
             {
                 GameObject obj = Object.Instantiate(map.characterPrefab);
                 AIController mob = AIController.Spawn(obj, $"Enemy", level);
-                mob.transform.position = map.CharacterPosition(coords);
+                mob.transform.position = map.current.CharacterPosition(coords);
                 AddMember(1, mob);
             }
         }
@@ -75,7 +79,7 @@ namespace Scripts.OOP.GameModes.Arena
 
             if (GetTeam(1).Count < 3)
             {
-                MapTileType type = map.RandomTile(out pos);
+                MapTileType type = map.current.RandomTile(out pos);
 
                 if (type == MapTileType.Empty)
                     return true;
@@ -86,8 +90,17 @@ namespace Scripts.OOP.GameModes.Arena
 
         public void ControllerLevelUp(BaseController controller)
         {
-            if(controller is PlayerController)
+            if (controller is PlayerController player)
+            { 
                 level = controller.Level;
+
+                if (player.Level == 1 || player.Level % 5 == 0)
+                {
+                    Perk perk = PerksHandler.Random();
+                    perk.LevelUp();
+                    player.perks.Add(perk, player.UI);
+                }
+            }
         }
     }
 }

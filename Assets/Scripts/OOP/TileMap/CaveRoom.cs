@@ -17,14 +17,16 @@ namespace Scripts.OOP.TileMaps
         public override void Initialize()
         {
             density = LoadDensity(0.3f);
+            float maxPerlin = 1f - density;
 
-            perlinOffset = new Vector2(Random.Range(-0.5f, 0.5f),
-                Random.Range(-0.5f, 0.5f));
+            perlinOffset = new Vector2(
+                Random.Range(0, maxPerlin),
+                Random.Range(0, maxPerlin));
 
             int s = size.x / segment;
             int m = (size.y / 6) + borderWidth;
             ceilling = GetBorder(s, end.y, m, -1);
-            floor = GetBorder(s, 0, m, 1);
+            floor = GetBorder(s, start.y, m, 1);
             Close();
         }
 
@@ -130,21 +132,34 @@ namespace Scripts.OOP.TileMaps
 
         private MapTileType GetTile(Vector2Int v, Vector2Int border)
         {
+            //Assure floor and ceilling
             if (v.y <= border.y || v.y >= border.x) return MapTileType.Wall;
-            else if (v.y <= border.y + spacing || v.y >= border.x - spacing) 
+            //Assure space between floor/ceilling and middle
+            else if (v.y <= border.y + spacing || v.y >= border.x - spacing
+                || SideSpace(v)) //Assure left/right space
                 return MapTileType.Empty;
 
-            float p = Mathf.PerlinNoise(
-                (v.x / (size.x * density)) + perlinOffset.x,
-                (v.y / (size.y * density)) + perlinOffset.y);
+            Vector2 perlinPos = GetPerlinPosition(v);
 
-            return p > (0.4 + (density / 2.5)) && SideSpace(v) ? MapTileType.Wall 
+            float p = Mathf.PerlinNoise(perlinPos.x, perlinPos.y);
+
+            return p > (0.3 + (density / 2.5)) ? MapTileType.Wall 
                 : MapTileType.Empty;
         }
 
+        private Vector2 GetPerlinPosition(Vector2Int v)
+            => perlinOffset + (new Vector2((v.x - start.x) / (float)size.x,
+                (v.y - start.y) / (float)size.y) / density);
+
         private bool SideSpace(Vector2Int v)
-            => !(v.x >= size.x - (spacing + borderWidth * 2)) &&
-                (v.x > spacing + (borderWidth * 2));
+        {
+            float x = v.x - start.x;
+                    //x is still too close to left wall
+            return x < spacing + (borderWidth * 2) ||
+                    //x is too close to right wall
+                    v.x > size.x - (spacing + borderWidth * 2); 
+        }
+                
 
         public bool Next(Vector2Int border)
         {

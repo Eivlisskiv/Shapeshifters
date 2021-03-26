@@ -28,6 +28,7 @@ namespace Scripts.OOP.GameModes
         protected MapHandler map;
         private readonly MainMenuHandler menu;
 
+        public int TeamCount => teams.Length;
 
         private readonly List<BaseController>[] teams;
         private readonly Color[] teamColors;
@@ -56,9 +57,24 @@ namespace Scripts.OOP.GameModes
 
             Transform parent = new GameObject($"Team {i}").transform;
             parent.SetParent(gameTransform);
+            SetDebrisTransform(i, parent);
+        }
+
+        private void SetDebrisTransform(int i, Transform parent)
+        {
             Transform debris = new GameObject("Debris").transform;
             debris.SetParent(parent.transform);
-            teamTransforms[i] = (parent.transform, debris.transform);
+            teamTransforms[i] = (parent, debris);
+        }
+
+        protected void ClearDebris()
+        {
+            for (int i = 0; i < teamTransforms.Length; i++)
+            {
+                (Transform parent, Transform debris) = teamTransforms[i];
+                UnityEngine.Object.Destroy(debris.gameObject);
+                SetDebrisTransform(i, parent);
+            }
         }
 
         public abstract void OnUpdate();

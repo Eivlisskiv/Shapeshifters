@@ -13,8 +13,9 @@ public class RoomHandler : MonoBehaviour
 
     Vector2Int lastEnd = Vector2Int.zero;
 
-    GameObject roomContent;
     MapRoom current;
+
+    public int tilesPerFrame = 5;
 
     bool loaded = false;
     public bool Loaded
@@ -28,21 +29,23 @@ public class RoomHandler : MonoBehaviour
         width = w;
         height = h;
         this.tile = tile;
-        if (prev) lastEnd = new Vector2Int
-                (prev.EndV.x, (height - prev.height) / 2);
+        if (prev)
+        {
+            lastEnd = new Vector2Int(prev.EndV.x,
+                ((prev.height - height) / 2));
+        }
 
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        roomContent = new GameObject("RoomContent");
         map = GetComponent<Tilemap>();
         transform.localScale = new Vector3(1, 1, 0);
         map.ClearAllTiles();
 
         current = new CaveRoom(lastEnd, new Vector2Int(width, height))
-        { previousBorder = new Vector2Int(0, height) };
+        { previousBorder = new Vector2Int(lastEnd.y, height) };
     }
 
     void Update()
@@ -52,15 +55,18 @@ public class RoomHandler : MonoBehaviour
 
     private void LoadRoom()
     {
-        if (!current.DrawAmount(10, map, tile))
+        if (!current.DrawAmount(tilesPerFrame, map, tile))
         {
-            //After the map is loaded, load the collider. Thus doind this only once.
+            //After the map is loaded, load the collider. Thus doing this only once.
             TilemapCollider2D collider = GetComponent<TilemapCollider2D>();
             if (collider) collider.enabled = true;
 
             loaded = true;
         }
     }
+
+    public void SetTilesPerFrame(int tpf)
+        => tilesPerFrame = tpf;
 
     public MapTileType RandomTile(out Vector2Int pos)
     {
@@ -71,7 +77,7 @@ public class RoomHandler : MonoBehaviour
         return content[pos.x, pos.y];
     }
 
-    private void OnDestroy() => Destroy(roomContent);
-
-
+    public Vector2 CharacterPosition(Vector2Int coords)
+    => new Vector3((coords.x + StartV.x) * transform.parent.transform.localScale.x,
+        (coords.y + StartV.y) * transform.parent.transform.localScale.y);
 }

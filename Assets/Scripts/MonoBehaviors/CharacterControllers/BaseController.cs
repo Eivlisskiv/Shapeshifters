@@ -3,7 +3,6 @@ using Scripts.OOP.GameModes;
 using Scripts.OOP.Perks;
 using Scripts.OOP.Perks.Character.Triggers;
 using Scripts.OOP.Perks.Weapon;
-using Scripts.OOP.TileMaps;
 using Scripts.OOP.Utils;
 using System;
 using UnityEngine;
@@ -41,6 +40,7 @@ public abstract class BaseController : MonoBehaviour
         }
     }
 
+    bool controllerEnabled = true;
     float? dying = null;
 
     // Start is called before the first frame update
@@ -62,6 +62,8 @@ public abstract class BaseController : MonoBehaviour
     {
         if (CheckDying()) return;
 
+        if (!controllerEnabled) return;
+
         OnUpdate();
 
         perks.Activate<IControllerUpdate>(Time.deltaTime, 
@@ -76,6 +78,9 @@ public abstract class BaseController : MonoBehaviour
                 new Vector3(hpp, hpp, 1) : Vector3.Lerp(transform.localScale,
                 new Vector3(hpp, hpp, 1), Time.deltaTime);
     }
+
+    public void DisableController(bool value)
+        => controllerEnabled = !value;
 
     private bool CheckDying()
     {
@@ -208,8 +213,7 @@ public abstract class BaseController : MonoBehaviour
     public void OnKill(BaseController target)
     {
         AddXP(target.xp + (target.XPRequired / (level + 2) ));
-        if(target is AIController && target.perks.Count > 0)
-            perks.Add(target.perks.RandomDrop(), this is PlayerController player ? player.UI : null);
+        AGameMode.Run<IElimination>(mode => mode.Elimenation(target, this));
     }
 
     private void AddXP(float amount)
