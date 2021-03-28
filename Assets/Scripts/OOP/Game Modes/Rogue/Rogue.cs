@@ -1,5 +1,4 @@
-﻿using Scripts.OOP.Game_Modes;
-using Scripts.OOP.TileMaps;
+﻿using Scripts.OOP.TileMaps;
 using Scripts.OOP.Utils;
 using UnityEngine;
 
@@ -23,7 +22,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
         {
             cooldown = 5;
             level = 1;
-            spawnsLeft = 1;
+            spawnsLeft = 5;
 
             GameObject shopPrefab = Resources.Load<GameObject>(RessourcePath + "Shop");
             shop = Object.Instantiate(shopPrefab, menu.transform.parent).GetComponent<ShopHandler>();
@@ -51,7 +50,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
                     ReachNext(); return;
 
                 case Stage.PassGate:
-                    if(PlayerReady()) NextWave();
+                    if (PlayerReady()) NextWave();
                     return;
             }
 

@@ -9,9 +9,11 @@ namespace Scripts.OOP.TileMaps
         public const int borderWidth = 3;
         public const int segment = 10;
 
-        public static int MinHeight => (borderWidth + spacing) * 3;
         public static int RandomSize()
-            => Random.Range(MinHeight * 2, MinHeight * 6);
+        {
+            int min = (spacing / 2);
+            return Random.Range(min, min * 3) * segment;
+        }
 
         protected Vector2Int start;
         public Vector2Int Start

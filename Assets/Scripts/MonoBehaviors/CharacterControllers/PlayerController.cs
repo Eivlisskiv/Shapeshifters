@@ -90,6 +90,6 @@ public class PlayerController : BaseController
     {
         base.OnDeathEnded();
         if (ui) Destroy(ui.gameObject);
-        MainMenuHandler.GameOver(level);
+        MainMenuHandler.GameOver();
     }
 }

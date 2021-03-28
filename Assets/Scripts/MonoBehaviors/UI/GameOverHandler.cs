@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Scripts.OOP.Game_Modes;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class GameOverHandler : MonoBehaviour
@@ -8,8 +9,6 @@ public class GameOverHandler : MonoBehaviour
 
     UITextHandler top;
     UITextHandler current;
-
-    public int score;
 
     private void Start()
     {
@@ -25,10 +24,10 @@ public class GameOverHandler : MonoBehaviour
         }
     }
 
-    public void SetScores(int top, int score)
+    public void SetScores(int top)
     {
         Init();
-        this.score = score;
+        int score = GameModes.GameMode.Score;
         this.top.SetScore(top);
         current.SetScore(score);
         current.number.color = score > top ? Color.green : Color.red;

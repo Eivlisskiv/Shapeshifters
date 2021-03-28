@@ -12,7 +12,7 @@ namespace Scripts.OOP.TileMaps
         Vector2 perlinOffset;
 
         float density;
-        List<Vector2Int> gates = new List<Vector2Int>();
+        readonly List<Vector2Int> gates = new List<Vector2Int>();
         (Vector2, int)[] clusters;
 
         public CaveRoom(Vector2Int start, Vector2Int size, bool entrance)
@@ -53,10 +53,12 @@ namespace Scripts.OOP.TileMaps
         private void Close()
         {
             int l = ceilling.Length - 1;
-            ceilling[l] = start.y;
-            ceilling[l - 1] = start.y;
-            floor[l] = size.y;
-            floor[l - 1] = size.y;
+            int mid = size.y / 2;
+            const int offset = 2;
+            ceilling[l - 1] = mid - offset;
+            ceilling[l] = ceilling[l - 1];
+            floor[l - 1] = mid + offset;
+            floor[l] = floor[l - 1];
         }
 
         private void GenerateClusters()
@@ -78,7 +80,9 @@ namespace Scripts.OOP.TileMaps
         public override bool DrawOne(Tilemap map, TileBase tilebase, out MapTileType tile)
         {
             Vector2Int border = CurrentBorder();
-            tile = GetTile(new Vector2Int(current.x, current.y), border);
+            tile = GetTile(current, border);
+            if (tile != MapTileType.Empty && IsGate(current))
+                tile = MapTileType.Gate;
             HandleTileDraw(map, tilebase, tile);
 
             return Next(border);
@@ -151,7 +155,7 @@ namespace Scripts.OOP.TileMaps
         private MapTileType GetTile(Vector2Int v, Vector2Int border)
         {
             //Leave empty space for entrance
-            if (IsGate(v, out MapTileType r)) return r;
+            if (IsEntrance(v)) return MapTileType.Empty;
             //Assure   floor    and       ceilling
             else if (v.y <= border.y || v.y >= border.x) return MapTileType.Wall;
             //Assure space between floor/ceilling and middle
@@ -163,6 +167,14 @@ namespace Scripts.OOP.TileMaps
             if (PerlinWall(v)) return MapTileType.Wall;
 
             return MapTileType.Empty;
+        }
+
+        private bool IsEntrance(Vector2Int v)
+        {
+            if (!entrance) return false;
+            int midY = size.y / 2;
+            if (v.y > midY + 3 || v.y < midY - 3) return false;
+            return  v.x < spacing;
         }
 
         private bool ClusterWall(Vector2Int v)
@@ -186,15 +198,10 @@ namespace Scripts.OOP.TileMaps
             return p > (0.3 + (density / 2.5));
         }
 
-        private bool IsGate(Vector2 v, out MapTileType tile)
+        private bool IsGate(Vector2 v)
         {
-            tile = MapTileType.Empty;
             int midY = size.y / 2;
             if (v.y > midY + 3 || v.y < midY - 3) return false;
-
-            if (entrance && v.x < spacing) return true;
-
-            tile = MapTileType.Gate;
             return v.x > size.x - spacing;
         }
 

@@ -1,5 +1,4 @@
 ﻿using Scripts.OOP.Game_Modes;
-using Scripts.OOP.Game_Modes.Rogue;
 using Scripts.OOP.UI;
 using Scripts.Tweening.Tweeners;
 using System;
@@ -13,10 +12,10 @@ public class MainMenuHandler : MonoBehaviour
 
     private static MainMenuHandler instance;
 
-    public static void GameOver(int level)
+    public static void GameOver()
     {
         //Play a game over animation
-        instance.GameOverUI(level);
+        instance.GameOverUI();
     }
 
     public GameOverHandler gameOver;
@@ -67,15 +66,14 @@ public class MainMenuHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (action != MenuAction.None)
-        {
-            switch (action)
-            {
-                case MenuAction.GameOver: EndGame(); break;
-            }
+        if (action == MenuAction.None) return;
 
-            cooldown = Math.Max(0, cooldown - Time.deltaTime);
-            if (cooldown == 0) action = MenuAction.None;
+        cooldown = Math.Max(0, cooldown - Time.deltaTime);
+        if (cooldown == 0) 
+        {
+            if (action == MenuAction.GameOver)
+                EndGame();
+            action = MenuAction.None; 
         }
     }
 
@@ -158,25 +156,25 @@ public class MainMenuHandler : MonoBehaviour
 
     public void OnClick_Quit() => Application.Quit();
 
-    private void GameOverUI(int newScore)
+    private void GameOverUI()
     {
         if(sounds) sounds.PlayRandom("Game Over");
         gameOver.gameObject.SetActive(true);
-        gameOver.SetScores(GameModes.LoadScore(), newScore);
+        gameOver.SetScores(GameModes.LoadScore());
         cooldown = 5;
         action = MenuAction.GameOver;
     }
 
     private void EndGame()
     {
-        action = MenuAction.None;
         gameOver.gameObject.SetActive(false);
-        int newScore = gameOver.score;
+        int newScore = GameModes.GameMode.Score;
         int topScore = GameModes.LoadScore();
         container.SetActive(true);
         if (newScore > topScore)
         {
-            Text score = modes.First(m => m.mode == GameModes.GameMode.GetType()).score;
+            Text score = modes.First(m => 
+                m.mode == GameModes.GameMode.GetType()).score;
             score.text = newScore.ToString();
             GameModes.SaveScore(newScore);
         }

@@ -16,6 +16,8 @@ namespace Scripts.OOP.Game_Modes
         protected bool Loaded { get => loaded; }
         private bool loaded;
         
+        public int Score 
+        { get => score; }
         protected int score;
 
         protected MapHandler map;

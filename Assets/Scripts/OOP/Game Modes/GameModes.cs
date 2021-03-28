@@ -19,7 +19,7 @@ namespace Scripts.OOP.Game_Modes
             {
                 typeof(Arena.Arena),
                 "Survive enemy spawns." +
-                "\n Gain a random every 5 levels." +
+                "\n Gain a random perk every 5 levels." +
                 "\n Gain a temporary buff when elimenating an enemy."
             },
 
