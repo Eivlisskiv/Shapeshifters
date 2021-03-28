@@ -75,7 +75,12 @@ namespace Scripts.OOP.Perks
             else 
             { 
                 existing.Add(perk);
-                if(existing.ui) existing.ui.SetBuff(existing.Intensity, existing.Charge);
+                if (existing.ui)
+                {
+                    if (perk.Buff > 0)
+                        existing.ui.SetBuff(existing.Intensity, existing.Charge);
+                    else existing.ui.SetLevel(existing.Level);
+                }
             }
         }
 

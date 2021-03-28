@@ -1,5 +1,5 @@
 ﻿using Scripts.OOP.Character.Stats;
-using Scripts.OOP.GameModes;
+using Scripts.OOP.Game_Modes;
 using Scripts.OOP.Perks;
 using Scripts.OOP.Perks.Character.Triggers;
 using Scripts.OOP.Perks.Weapon;
@@ -169,10 +169,7 @@ public abstract class BaseController : MonoBehaviour
     {
         if (direction.HasValue) SpawnHitParticles(direction.Value);
         if (HitHealth(-damage))
-        {
             if(attacker) attacker.OnKill(this);
-            OnDeath();
-        }
     }
 
     private void SpawnHitParticles(Vector2 position)
@@ -180,7 +177,7 @@ public abstract class BaseController : MonoBehaviour
         sounds.PlayRandom("Hit");
         if (body && body.hitPrefab)
         {
-            var debris = Instantiate(body.hitPrefab, AGameMode.GetDebrisTransform(team));
+            var debris = Instantiate(body.hitPrefab, GameModes.GetDebrisTransform(team));
             debris.transform.position = position;
             debris.transform.rotation = Quaternion.Euler(0, 0, 
                 Vectors2.TrueAngle(transform.position, position));
@@ -205,15 +202,21 @@ public abstract class BaseController : MonoBehaviour
         return false;
     }
 
-    public abstract void OnHealthChange();
+    public virtual void OnHealthChange()
+    {
 
-    public abstract bool OnDeath();
-    public abstract void OnDeathEnded();
+    }
+
+    public virtual bool OnDeath() => true;
+    public virtual void OnDeathEnded()
+    {
+        GameModes.GameMode.MemberDestroyed(this);
+    }
 
     public void OnKill(BaseController target)
     {
         AddXP(target.xp + (target.XPRequired / (level + 2) ));
-        AGameMode.Run<IElimination>(mode => mode.Elimenation(target, this));
+        GameModes.Run<IElimination>(mode => mode.Elimenation(target, this));
     }
 
     private void AddXP(float amount)
@@ -230,7 +233,7 @@ public abstract class BaseController : MonoBehaviour
 
         if (up)
         {
-            AGameMode.Run<IControllerLevelUp>(mode =>
+            GameModes.Run<IControllerLevelUp>(mode =>
                 mode.ControllerLevelUp(this));
         }
         OnXPChange(up);

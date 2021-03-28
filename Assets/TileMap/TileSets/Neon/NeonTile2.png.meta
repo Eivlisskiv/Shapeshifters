@@ -1,0 +1,1244 @@
+fileFormatVersion: 2
+guid: 60b5a3211dc8565489ee1f84e1329be7
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5371008885331949191
+    second: NeonTile2_0
+  - first:
+      213: 3896298274675183006
+    second: NeonTile2_1
+  - first:
+      213: 2272365537441841023
+    second: NeonTile2_2
+  - first:
+      213: 4898427444222794329
+    second: NeonTile2_3
+  - first:
+      213: 8779263460827807516
+    second: NeonTile2_4
+  - first:
+      213: -2865705842056413579
+    second: NeonTile2_5
+  - first:
+      213: -4547575343091463346
+    second: NeonTile2_6
+  - first:
+      213: 3118237486117905179
+    second: NeonTile2_7
+  - first:
+      213: 2627960470286075085
+    second: NeonTile2_8
+  - first:
+      213: 2250706364901071860
+    second: NeonTile2_9
+  - first:
+      213: -4096012167898206560
+    second: NeonTile2_10
+  - first:
+      213: 2903449440064873889
+    second: NeonTile2_11
+  - first:
+      213: -7209707801090871679
+    second: NeonTile2_12
+  - first:
+      213: 1912925613801461281
+    second: NeonTile2_13
+  - first:
+      213: -7867264128331807184
+    second: NeonTile2_14
+  - first:
+      213: 2575096931401817114
+    second: NeonTile2_15
+  - first:
+      213: -7997176180264449090
+    second: NeonTile2_16
+  - first:
+      213: 8054407005881566229
+    second: NeonTile2_17
+  - first:
+      213: -7653145273074430313
+    second: NeonTile2_18
+  - first:
+      213: -4140874729294021949
+    second: NeonTile2_19
+  - first:
+      213: 8989767274010986917
+    second: NeonTile2_20
+  - first:
+      213: 3475929124465883909
+    second: NeonTile2_21
+  - first:
+      213: 2044893348980684669
+    second: NeonTile2_22
+  - first:
+      213: 4651620033955351169
+    second: NeonTile2_23
+  - first:
+      213: 829575462313050681
+    second: NeonTile2_24
+  - first:
+      213: -5138881651745674875
+    second: NeonTile2_25
+  - first:
+      213: 4826826098239606078
+    second: NeonTile2_26
+  - first:
+      213: -5688220332820103681
+    second: NeonTile2_27
+  - first:
+      213: 1167799036900060233
+    second: NeonTile2_28
+  - first:
+      213: 4961635658647658055
+    second: NeonTile2_29
+  - first:
+      213: 2792670300352000220
+    second: NeonTile2_30
+  - first:
+      213: -1049027181895214569
+    second: NeonTile2_31
+  - first:
+      213: -2689162654075925404
+    second: NeonTile2_0
+  - first:
+      213: -2145823107967943139
+    second: NeonTile2_1
+  - first:
+      213: 4639932971289009735
+    second: NeonTile2_2
+  - first:
+      213: -6470475858870820790
+    second: NeonTile2_3
+  - first:
+      213: 6682822237927195224
+    second: NeonTile2_4
+  - first:
+      213: -3090032428297014188
+    second: NeonTile2_5
+  - first:
+      213: -6083988048379272588
+    second: NeonTile2_6
+  - first:
+      213: 56593755232253564
+    second: NeonTile2_7
+  - first:
+      213: -3839296008731502869
+    second: NeonTile2_8
+  - first:
+      213: -5132308374430966186
+    second: NeonTile2_9
+  - first:
+      213: -8586745471416558122
+    second: NeonTile2_10
+  - first:
+      213: -8808631476740583321
+    second: NeonTile2_11
+  - first:
+      213: -1189607249827737047
+    second: NeonTile2_12
+  - first:
+      213: -6290762394914452584
+    second: NeonTile2_13
+  - first:
+      213: -5927636664949924516
+    second: NeonTile2_14
+  - first:
+      213: -4832260592950665538
+    second: NeonTile2_15
+  - first:
+      213: -1531284821039989609
+    second: NeonTile2_16
+  - first:
+      213: -5987237030161689491
+    second: NeonTile2_17
+  - first:
+      213: -3106001666014198755
+    second: NeonTile2_18
+  - first:
+      213: 7053251500048365686
+    second: NeonTile2_19
+  - first:
+      213: 5050323303311995632
+    second: NeonTile2_20
+  - first:
+      213: 3675745260859670623
+    second: NeonTile2_21
+  - first:
+      213: -2799536281302656454
+    second: NeonTile2_22
+  - first:
+      213: 6098691433988673977
+    second: NeonTile2_23
+  - first:
+      213: -3594491948818363561
+    second: NeonTile2_24
+  - first:
+      213: 5014978269782045727
+    second: NeonTile2_25
+  - first:
+      213: -3441724177062246056
+    second: NeonTile2_26
+  - first:
+      213: -5639734921324381711
+    second: NeonTile2_27
+  - first:
+      213: 3928361965357369702
+    second: NeonTile2_28
+  - first:
+      213: 6947601106472673466
+    second: NeonTile2_29
+  - first:
+      213: -3847851453410200813
+    second: NeonTile2_30
+  - first:
+      213: -6576080473992753827
+    second: NeonTile2_31
+  - first:
+      213: -5968115294335739739
+    second: NeonTile2_32
+  - first:
+      213: -5073076149168256697
+    second: NeonTile2_33
+  - first:
+      213: 6525592204642938238
+    second: NeonTile2_34
+  - first:
+      213: 8904632636526646461
+    second: NeonTile2_35
+  - first:
+      213: -2055210125646072717
+    second: NeonTile2_36
+  - first:
+      213: 4355365532175721032
+    second: NeonTile2_37
+  - first:
+      213: -199271453093060343
+    second: NeonTile2_38
+  - first:
+      213: 797976840365666765
+    second: NeonTile2_39
+  - first:
+      213: 615326353184117114
+    second: NeonTile2_40
+  - first:
+      213: -1549050012656550396
+    second: NeonTile2_41
+  - first:
+      213: 4924113221127080329
+    second: NeonTile2_42
+  - first:
+      213: 1353329678611136049
+    second: NeonTile2_43
+  - first:
+      213: -5669192317111525513
+    second: NeonTile2_44
+  - first:
+      213: -6413632685133853893
+    second: NeonTile2_45
+  - first:
+      213: 527927630712397119
+    second: NeonTile2_46
+  - first:
+      213: 1656654794988377018
+    second: NeonTile2_47
+  - first:
+      213: -7749885339357155952
+    second: NeonTile2_48
+  - first:
+      213: -5035792083519906522
+    second: NeonTile2_49
+  - first:
+      213: -6535886732397886836
+    second: NeonTile2_50
+  - first:
+      213: 348823704995438720
+    second: NeonTile2_51
+  - first:
+      213: 4281260061084027678
+    second: NeonTile2_52
+  - first:
+      213: 9132022067909165229
+    second: NeonTile2_53
+  - first:
+      213: -1288258488917884921
+    second: NeonTile2_54
+  - first:
+      213: -9129595194114159533
+    second: NeonTile2_55
+  - first:
+      213: -9187453640497154072
+    second: NeonTile2_56
+  - first:
+      213: -584863418510830343
+    second: NeonTile2_57
+  - first:
+      213: -6819095885586700010
+    second: NeonTile2_58
+  - first:
+      213: -8821956224989572733
+    second: NeonTile2_59
+  - first:
+      213: 241549488171135855
+    second: NeonTile2_60
+  - first:
+      213: 5252376145522417887
+    second: NeonTile2_61
+  - first:
+      213: 1744213759883761039
+    second: NeonTile2_62
+  - first:
+      213: 6930469056067509246
+    second: NeonTile2_63
+  - first:
+      213: 4897671490562999082
+    second: NeonTile2_64
+  - first:
+      213: 5239726195429217989
+    second: NeonTile2_65
+  - first:
+      213: -2586464109373366114
+    second: NeonTile2_66
+  - first:
+      213: -5500538182032431168
+    second: NeonTile2_67
+  - first:
+      213: 8582124396498112892
+    second: NeonTile2_68
+  - first:
+      213: -6142125652322568831
+    second: NeonTile2_69
+  - first:
+      213: -4046216661607873751
+    second: NeonTile2_70
+  - first:
+      213: -2247234626277451670
+    second: NeonTile2_71
+  - first:
+      213: -5754959667376198226
+    second: NeonTile2_72
+  - first:
+      213: -6595064109081069895
+    second: NeonTile2_73
+  - first:
+      213: -7001011668320443405
+    second: NeonTile2_74
+  - first:
+      213: 5958031381840110062
+    second: NeonTile2_75
+  - first:
+      213: -680666300653078653
+    second: NeonTile2_76
+  - first:
+      213: 2160872639438283468
+    second: NeonTile2_77
+  - first:
+      213: 388962329847557076
+    second: NeonTile2_78
+  - first:
+      213: -8955641044135492913
+    second: NeonTile2_79
+  - first:
+      213: 3919264643196238605
+    second: NeonTile2_80
+  - first:
+      213: -6975888689764177509
+    second: NeonTile2_81
+  - first:
+      213: 6298967208653136127
+    second: NeonTile2_82
+  - first:
+      213: -6273760970651017531
+    second: NeonTile2_83
+  - first:
+      213: -1236860694356787173
+    second: NeonTile2_84
+  - first:
+      213: -3961577011840361097
+    second: NeonTile2_85
+  - first:
+      213: -8327327643103183942
+    second: NeonTile2_86
+  - first:
+      213: -1667367403250756928
+    second: NeonTile2_87
+  - first:
+      213: 6022054673161795758
+    second: NeonTile2_88
+  - first:
+      213: 5189306979375343270
+    second: NeonTile2_89
+  - first:
+      213: 3740580209147725138
+    second: NeonTile2_90
+  - first:
+      213: 2540421906451968349
+    second: NeonTile2_91
+  - first:
+      213: 3487509187718478361
+    second: NeonTile2_92
+  - first:
+      213: -1843401465499597984
+    second: NeonTile2_93
+  - first:
+      213: 5716145487890281228
+    second: NeonTile2_94
+  - first:
+      213: -956189394384899613
+    second: NeonTile2_95
+  - first:
+      213: 8982027851939397913
+    second: NeonTile2_96
+  - first:
+      213: 548812414183574004
+    second: NeonTile2_97
+  - first:
+      213: -2034412822314955547
+    second: NeonTile2_98
+  - first:
+      213: -2287352118323413423
+    second: NeonTile2_99
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 64
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: tvOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Lumin
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: NeonTile2_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 576
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46cce8c50dc2eaad0800000000000000
+      internalID: -2689162654075925404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_1
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 576
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d1efeba90418832e0800000000000000
+      internalID: -2145823107967943139
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_2
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 576
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74edd47347a546040800000000000000
+      internalID: 4639932971289009735
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_3
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 576
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a40a3480d704436a0800000000000000
+      internalID: -6470475858870820790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_4
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 576
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8524bb41b672ebc50800000000000000
+      internalID: 6682822237927195224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_5
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 576
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4543beec0effd15d0800000000000000
+      internalID: -3090032428297014188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_6
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 576
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 472a1a6ba15519ba0800000000000000
+      internalID: -6083988048379272588
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 512
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c76bf1578bf09c000800000000000000
+      internalID: 56593755232253564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_8
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 512
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be6dbfb1f9418bac0800000000000000
+      internalID: -3839296008731502869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_9
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 512
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 65e9740c9b066c8b0800000000000000
+      internalID: -5132308374430966186
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_10
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 512
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6dd958ffc70c5d880800000000000000
+      internalID: -8586745471416558122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_11
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 448
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7609d8f875471c580800000000000000
+      internalID: -8808631476740583321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_12
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 448
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 922d9c3528aad7fe0800000000000000
+      internalID: -1189607249827737047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_13
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 448
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89b0db48ee8b2b8a0800000000000000
+      internalID: -6290762394914452584
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_14
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 448
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c5d1414fbddccbda0800000000000000
+      internalID: -5927636664949924516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_15
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 448
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ebe9e07d79c50fcb0800000000000000
+      internalID: -4832260592950665538
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_16
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 448
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 79cb6ff7198cfbae0800000000000000
+      internalID: -1531284821039989609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_17
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 320
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d64d52f84af09eca0800000000000000
+      internalID: -5987237030161689491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_18
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 320
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d14c379e0f345e4d0800000000000000
+      internalID: -3106001666014198755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_19
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 320
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 678bfdb9ede22e160800000000000000
+      internalID: 7053251500048365686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_20
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 320
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f2f9ce594a561640800000000000000
+      internalID: 5050323303311995632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_21
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 320
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f50cd5ef6ded20330800000000000000
+      internalID: 3675745260859670623
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_22
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 320
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3a1321b59c0629d0800000000000000
+      internalID: -2799536281302656454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_23
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 320
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b1dc950c87e2a450800000000000000
+      internalID: 6098691433988673977
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 256
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 75b0ea2fd9ccd1ec0800000000000000
+      internalID: -3594491948818363561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_25
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 256
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f1479a67a28c89540800000000000000
+      internalID: 5014978269782045727
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_26
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 256
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 859c453981a8c30d0800000000000000
+      internalID: -3441724177062246056
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_27
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 256
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f9381b38f2abb1b0800000000000000
+      internalID: -5639734921324381711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_28
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 192
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6690846e468548630800000000000000
+      internalID: 3928361965357369702
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_29
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 192
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab02a687566da6060800000000000000
+      internalID: 6947601106472673466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_30
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 192
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 313b30b6d7fa99ac0800000000000000
+      internalID: -3847851453410200813
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeonTile2_31
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 192
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5d874586a11db4a0800000000000000
+      internalID: -6576080473992753827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

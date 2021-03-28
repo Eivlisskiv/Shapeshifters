@@ -20,10 +20,9 @@ namespace Scripts.OOP.TileMaps
         }
 
         protected Vector2Int size;
-        protected Vector2Int end; 
-        public Vector2Int End
+        public Vector2Int Size
         {
-            get => end;
+            get => size;
         }
 
         protected Vector2Int current;
@@ -32,23 +31,23 @@ namespace Scripts.OOP.TileMaps
 
         public MapTileType[,] mapContent;
 
-        public Vector2[] enemySpawns;
-        public Vector2 playerSpawn;
+        protected bool entrance;
 
-        public MapRoom(Vector2Int start, Vector2Int size)
+        public MapRoom(Vector2Int start, Vector2Int size, bool entrance)
         {
-            current = start;
+            this.entrance = entrance;
+            current = Vector2Int.zero;
             this.start = start;
             this.size = size;
-            end = start + size;
             mapContent = new MapTileType[size.x + 1, size.y + 1];
-
+            previousBorder = new Vector2Int(0, size.y);
             Initialize();
         }
 
         public abstract void Initialize();
-        public abstract bool DrawOne(Tilemap map, TileBase tile);
+        public abstract bool DrawOne(Tilemap map, TileBase tilebase, out MapTileType tile);
         public abstract bool DrawNext(Tilemap map, TileBase tile);
         public abstract bool DrawAmount(int amount, Tilemap map, TileBase tile);
+        public abstract void OpenGate(bool open, Tilemap map, TileBase tilebase);
     }
 }

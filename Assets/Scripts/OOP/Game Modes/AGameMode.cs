@@ -1,24 +1,17 @@
-﻿
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Scripts.OOP.GameModes
+namespace Scripts.OOP.Game_Modes
 {
     public abstract class AGameMode
     {
-        
-        public static AGameMode GameMode
-        { get => _instance; }
-        private static AGameMode _instance;
+        private string _name;
+        public string Name => _name ??
+            (_name = GetType().Name.Replace('_', ' '));
 
-        public static void Run<T>(Action<T> func)
-        {
-            if (_instance is T mode) func(mode);
-        }
+        protected string RessourcePath => $"GameMode/{Name}/";
 
-        public static Transform GetDebrisTransform(int team)
-            => _instance?.teamTransforms[team].debris;
+        protected readonly string scoreNamePath;
 
         protected bool Loaded { get => loaded; }
         private bool loaded;
@@ -33,7 +26,10 @@ namespace Scripts.OOP.GameModes
         private readonly List<BaseController>[] teams;
         private readonly Color[] teamColors;
         private readonly Transform gameTransform;
-        private readonly (Transform parent, Transform debris)[] teamTransforms;
+        public readonly (Transform parent, Transform debris)[] teamTransforms;
+
+        public int SavedScore()
+            => PlayerPrefs.GetInt(scoreNamePath);
 
         public AGameMode(MainMenuHandler menu, MapHandler map, params Color[] teamColors)
         {
@@ -48,7 +44,9 @@ namespace Scripts.OOP.GameModes
             for (int i = 0; i < teams.Length; i++)
                 InitiateTeam(i);
 
-            _instance = this;
+            GameModes.SetInstance(this);
+
+            scoreNamePath = $"Score_{Name}";
         }
 
         private void InitiateTeam(int i)
@@ -72,7 +70,7 @@ namespace Scripts.OOP.GameModes
             for (int i = 0; i < teamTransforms.Length; i++)
             {
                 (Transform parent, Transform debris) = teamTransforms[i];
-                UnityEngine.Object.Destroy(debris.gameObject);
+                Object.Destroy(debris.gameObject);
                 SetDebrisTransform(i, parent);
             }
         }
@@ -81,7 +79,7 @@ namespace Scripts.OOP.GameModes
 
         public void Clear()
         {
-            UnityEngine.Object.Destroy(gameTransform.gameObject);
+            Object.Destroy(gameTransform.gameObject);
         }
 
         public void AddMember(int team, BaseController controller)
@@ -115,6 +113,20 @@ namespace Scripts.OOP.GameModes
             }
 
             return enemies;
+        }
+
+        protected void PauseControllers(bool value)
+        {
+            int teamCount = TeamCount;
+            for (int i = 0; i < teamCount; i++)
+            {
+                var team = GetTeam(i);
+                for (int i1 = 0; i1 < team.Count; i1++)
+                {
+                    BaseController m = team[i1];
+                    m.DisableController(value);
+                }
+            }
         }
 
         public virtual void MemberDestroyed(BaseController member)

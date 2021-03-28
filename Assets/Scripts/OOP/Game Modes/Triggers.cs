@@ -1,4 +1,4 @@
-﻿namespace Scripts.OOP.GameModes
+﻿namespace Scripts.OOP.Game_Modes
 {
     interface IControllerLevelUp
     {

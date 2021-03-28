@@ -1,12 +1,13 @@
-﻿using Scripts.OOP.GameModes;
+﻿using Scripts.OOP.Game_Modes;
 using Scripts.OOP.TileMaps;
 using Scripts.OOP.Utils;
 using UnityEngine;
 
-namespace Assets.Scripts.OOP.Game_Modes.Rogue
+namespace Scripts.OOP.Game_Modes.Rogue
 {
     public class Rogue : AGameMode, IRogueMenu
     {
+        public int points;
         private enum Stage { Waves, Pausing, Menu, Resuming, PassGate }
 
         private float cooldown;
@@ -15,16 +16,24 @@ namespace Assets.Scripts.OOP.Game_Modes.Rogue
 
         private Stage stage;
 
+        private readonly ShopHandler shop;
+
         public Rogue(MainMenuHandler menu, MapHandler map)
             : base(menu, map, Color.green, Color.red)
         {
             cooldown = 5;
             level = 1;
-            spawnsLeft = 3;
+            spawnsLeft = 1;
+
+            GameObject shopPrefab = Resources.Load<GameObject>(RessourcePath + "Shop");
+            shop = Object.Instantiate(shopPrefab, menu.transform.parent).GetComponent<ShopHandler>();
+            shop.gameObject.SetActive(false);
         }
 
         public override void OnUpdate()
         {
+            if (!Loaded) return;
+
             if (cooldown > 0)
             {
                 cooldown -= Time.deltaTime;
@@ -34,17 +43,15 @@ namespace Assets.Scripts.OOP.Game_Modes.Rogue
             switch (stage)
             {
                 case Stage.Pausing:
-                    if (!TimeHandler.Instance.LerpScale(0, Time.deltaTime * 5)) return;
+                    if (!TimeHandler.Instance.LerpScale(0, 0.02f)) return;
                     StartIntermission(); return;
 
                 case Stage.Resuming:
-                    if (!TimeHandler.Instance.LerpScale(1, Time.deltaTime * 5)) return;
+                    if (!TimeHandler.Instance.LerpScale(1, 0.02f)) return;
                     ReachNext(); return;
 
                 case Stage.PassGate:
-                    //Wait for player to be in next area
-                    //Close exit
-                    if(PlayerReady()) FinishIntermission();
+                    if(PlayerReady()) NextWave();
                     return;
             }
 
@@ -54,23 +61,22 @@ namespace Assets.Scripts.OOP.Game_Modes.Rogue
 
         public override void MemberDestroyed(BaseController member)
         {
+            base.MemberDestroyed(member);
+
             if (member is PlayerController player)
             {
                 player.cam.Detach();
-            }
-            else
-            {
-                score += member.Level;
-                if (GetTeam(1).Count == 0 && spawnsLeft == 0)
-                    FinishWave();
+                return;
             }
 
-            base.MemberDestroyed(member);
+            points += Mathf.Max(1, member.Level / 5);
+            if (GetTeam(1).Count == 0 && spawnsLeft == 0)
+                FinishWave(); 
         }
 
         private void FinishWave()
         {
-            //Open Gate
+            score++;
             if (!map.loading.Loaded) 
                 map.loading.tilesPerFrame = 50;
             stage = Stage.Pausing;
@@ -79,59 +85,40 @@ namespace Assets.Scripts.OOP.Game_Modes.Rogue
 
         private void StartIntermission()
         {
-            int teamCount = TeamCount;
-            for(int i = 0; i < teamCount; i++)
-            {
-                var team = GetTeam(i);
-                for (int i1 = 0; i1 < team.Count; i1++)
-                {
-                    BaseController m = team[i1];
-                    m.DisableController(true);
-                }
-            }
-
+            PauseControllers(true);
             stage = Stage.Menu;
-            //Open menu
-
-            //Close previous entrance if any
-
-            //Delete older room
-
-            //open menu
+            shop.gameObject.SetActive(true);
         }
 
-        public void MenuClosed() 
-            => stage = Stage.Resuming;
+        public void MenuClosed()
+        {
+            stage = Stage.Resuming;
+            PauseControllers(false);
+        }
 
         private void ReachNext()
         {
             stage = Stage.PassGate;
-
+            map.current.OpenGate(true);
             //Tell the player to go through gate
         }
 
         private bool PlayerReady()
         {
             var players = GetTeam(0);
-            float y = map.loading.StartV.y + 20;
+            float x = map.loading.CharacterPosition(new Vector2Int(3, 0)).x;
             for (int i = 0; i < players.Count; i++)
             {
                 BaseController player = players[i];
-                if (player.transform.position.y > y)
+                if (player.transform.position.x < x)
                     return false;
             }
             return true;
         }
 
-        private void FinishIntermission()
-        {
-            //Close previous exit;
-            NextWave();
-        }
-
         private void NextWave()
         {
-            stage = Stage.Resuming;
+            stage = Stage.Waves;
             cooldown = 10;
             level++;
             spawnsLeft = level * 5;
@@ -154,7 +141,7 @@ namespace Assets.Scripts.OOP.Game_Modes.Rogue
 
             player.transform.position = map.current.CharacterPosition(new Vector2Int
                 (MapRoom.spacing + (MapRoom.borderWidth * 2) - 1, map.width / 4));
-
+            shop.player = player;
             AddMember(0, player);
         }
 
@@ -168,6 +155,7 @@ namespace Assets.Scripts.OOP.Game_Modes.Rogue
                 AddMember(1, mob);
 
                 spawnsLeft--;
+                cooldown = 5;
             }
         }
 

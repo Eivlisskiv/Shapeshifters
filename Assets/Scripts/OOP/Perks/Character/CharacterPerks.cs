@@ -1,6 +1,5 @@
-﻿using Scripts.OOP.GameModes;
+﻿using Scripts.OOP.Game_Modes;
 using Scripts.OOP.Perks.Character.Triggers;
-using Scripts.OOP.Utils;
 using UnityEngine;
 
 namespace Scripts.OOP.Perks.Character
@@ -25,7 +24,7 @@ namespace Scripts.OOP.Perks.Character
                 time -= 5f;
                 controller.HitHealth(Intensity);
                 Object.Destroy(SpawnPrefab(controller.transform.position,
-                    null, AGameMode.GetDebrisTransform(controller.team)), 1f);
+                    null, GameModes.GetDebrisTransform(controller.team)), 1f);
             }
             return true;
         }
@@ -47,7 +46,7 @@ namespace Scripts.OOP.Perks.Character
                 other.TakeDamage(Intensity, controller, point);
                 point.z = -5;
                 Object.Destroy(SpawnPrefab(point, null,
-                    AGameMode.GetDebrisTransform(controller.team)), 1f); 
+                    GameModes.GetDebrisTransform(controller.team)), 1f); 
                 return true;
             }
             return false;
@@ -72,7 +71,7 @@ namespace Scripts.OOP.Perks.Character
 
             if (!projectile || shield <= 0) return false;
 
-            Transform debrisParent = AGameMode.GetDebrisTransform(self.team);
+            Transform debrisParent = GameModes.GetDebrisTransform(self.team);
 
             if(shield >= projectile.damage)
             {

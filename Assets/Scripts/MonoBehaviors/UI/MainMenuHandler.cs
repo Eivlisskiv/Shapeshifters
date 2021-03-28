@@ -1,14 +1,16 @@
-﻿using Assets.Scripts.OOP.Game_Modes.Rogue;
-using Scripts.OOP.GameModes;
-using Scripts.OOP.GameModes.Arena;
-using Scripts.OOP.Perks;
+﻿using Scripts.OOP.Game_Modes;
+using Scripts.OOP.Game_Modes.Rogue;
+using Scripts.OOP.UI;
+using Scripts.Tweening.Tweeners;
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MainMenuHandler : MonoBehaviour
 {
-    private static int topScore = 0;
+    private enum MenuAction { None, GameOver }
+
     private static MainMenuHandler instance;
 
     public static void GameOver(int level)
@@ -21,12 +23,15 @@ public class MainMenuHandler : MonoBehaviour
     public GameObject container;
     public MapHandler map;
 
-    public Text score;
-
     public RectTransform perkList;
     public GameObject perkDescPrefab;
 
-    float? goTime;
+    public RectTransform gameModeContainer;
+    public GameObject gameModePrefab;
+
+    private Vector3 iposition;
+    private MenuAction action;
+    private float cooldown;
 
     private Button start;
     private Text buttonText;
@@ -34,33 +39,77 @@ public class MainMenuHandler : MonoBehaviour
 
     private SoundHandler sounds;
 
+    private UIPerksList perks;
+    private GameModeUI[] modes;
+
+    private RectTransform openTab;
+    private UITween tweener;
+
     // Start is called before the first frame update
     void Start()
     {
         sounds = GetComponent<SoundHandler>();
+        tweener = GetComponent<UITween>();
 
         instance = this;
-        if (PlayerPrefs.HasKey("Score"))
-        {
-            topScore = PlayerPrefs.GetInt("Score");
-            score.text = topScore.ToString();
-        }
 
-        LoadPerks();
+        perks = new UIPerksList(perkList, perkDescPrefab);
+        perks.LoadPerks((perk, title, desc) =>
+        {
+            perk.LevelUp();
+            title.text = $"{perk.Name} lvl {perk.Level}";
+            desc.text = perk.Description;
+        });
+
+        iposition = container.transform.localPosition;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (goTime.HasValue)
+        if (action != MenuAction.None)
         {
-            goTime = Math.Max(0, goTime.Value - Time.deltaTime);
-            if (goTime == 0)
+            switch (action)
             {
-                goTime = null;
-                EndGame();
+                case MenuAction.GameOver: EndGame(); break;
             }
+
+            cooldown = Math.Max(0, cooldown - Time.deltaTime);
+            if (cooldown == 0) action = MenuAction.None;
         }
+    }
+
+    private void SwitchTab(RectTransform tab)
+    {
+        const float speed = 0.4f;
+
+        if (openTab == tab) return;
+        
+        if(openTab != null)//Close existing tab
+        {
+            tweener.Tween<RectSizeTween>(openTab,
+                new Vector2(0, openTab.sizeDelta.y), speed);
+        }
+
+        if (tab == null) //If closing tab
+        {
+            tweener.Tween<PositionTween>(container.GetComponent<RectTransform>(),
+            container.transform.localPosition + new Vector3(590 / 2, 0), speed);
+        }
+        else
+        {
+            if(openTab == null) //tab was closed
+            {
+                tweener.Tween<PositionTween>(container.GetComponent<RectTransform>(),
+                container.transform.localPosition - new Vector3(590 / 2, 0), speed);
+            }
+
+            tweener.Tween<RectSizeTween>(tab,
+                new Vector2(590, tab.sizeDelta.y), speed,
+                openTab == null ? 0 : 05f);
+        }
+
+        openTab = tab;
     }
 
     private void CheckButtons(Button button)
@@ -74,10 +123,29 @@ public class MainMenuHandler : MonoBehaviour
 
     public void OnClick_Start(Button button)
     {
-        AGameMode gamemode = new Rogue(this, map);
-        gamemode.StartMap();
+        if(modes == null)
+        {
+            modes = new GameModeUI[GameModes.modes.Count];
+            int i = 0;
+            foreach(var mode in GameModes.modes)
+            {
+                modes[i] = new GameModeUI(mode.Key, mode.Value,
+                    Instantiate(gameModePrefab, gameModeContainer), this);
+                i++;
+            }
+        }
+        SwitchTab(gameModeContainer);
 
         CheckButtons(button);
+    }
+    
+    public void StartGame(Type mode)
+    {
+        AGameMode gamemode = (AGameMode)Activator.CreateInstance(mode, this, map);
+        gamemode.StartMap();
+
+        SwitchTab(null);
+
         SetStartButton(false);
     }
 
@@ -90,55 +158,29 @@ public class MainMenuHandler : MonoBehaviour
 
     public void OnClick_Quit() => Application.Quit();
 
-    private void LoadPerks()
-    {
-        perkList.transform.DetachChildren();
-
-        foreach (var pair in PerksHandler.perksTypes)
-        {
-            Perk perk = (Perk)Activator.CreateInstance(pair.Value);
-            perk.LevelUp();
-            AddPerkDesc(perk);
-        }
-    }
-
-    private void AddPerkDesc(Perk perk)
-    {
-        GameObject desc = Instantiate(perkDescPrefab, perkList.transform);
-        Transform imgT = desc.transform.GetChild(0);
-        Image img = imgT.GetComponent<Image>();
-        if(img) img.sprite = Resources.Load<Sprite>($"Sprites/Perks/{perk.Name}");
-
-        Transform texts = desc.transform.GetChild(1);
-        Text title = texts.GetChild(0).GetComponent<Text>();
-        if (title) title.text = perk.Name;
-        Text description = texts.GetChild(1).GetComponent<Text>();
-        if (description) description.text = perk.Description;
-
-        RectTransform rect = desc.GetComponent<RectTransform>();
-        perkList.sizeDelta += new Vector2(0, rect.sizeDelta.y);
-    }
-
     private void GameOverUI(int newScore)
     {
         if(sounds) sounds.PlayRandom("Game Over");
         gameOver.gameObject.SetActive(true);
-        gameOver.SetScores(topScore, newScore);
-        goTime = 5;
+        gameOver.SetScores(GameModes.LoadScore(), newScore);
+        cooldown = 5;
+        action = MenuAction.GameOver;
     }
 
     private void EndGame()
     {
+        action = MenuAction.None;
         gameOver.gameObject.SetActive(false);
         int newScore = gameOver.score;
+        int topScore = GameModes.LoadScore();
         container.SetActive(true);
         if (newScore > topScore)
         {
-            topScore = newScore;
+            Text score = modes.First(m => m.mode == GameModes.GameMode.GetType()).score;
             score.text = newScore.ToString();
-            PlayerPrefs.SetInt("Score", topScore);
+            GameModes.SaveScore(newScore);
         }
 
-        AGameMode.GameMode?.EndGame();
+        GameModes.GameMode?.EndGame();
     }
 }

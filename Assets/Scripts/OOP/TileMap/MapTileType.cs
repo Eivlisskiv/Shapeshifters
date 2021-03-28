@@ -2,6 +2,7 @@
 {
     public enum MapTileType
     {
-        Empty, Wall, EnemySpawn
+        Empty, Wall, EnemySpawn,
+        Gate
     }
 }

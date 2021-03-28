@@ -2,7 +2,7 @@
 using Scripts.OOP.TileMaps;
 using UnityEngine;
 
-namespace Scripts.OOP.GameModes.Arena
+namespace Scripts.OOP.Game_Modes.Arena
 {
     public class Arena : AGameMode, IControllerLevelUp, IElimination
     {
@@ -18,6 +18,8 @@ namespace Scripts.OOP.GameModes.Arena
 
         public override void OnUpdate()
         {
+            if (map.current == null || !map.current.Loaded) return;
+
             if(spawnCooldown > 0)
             {
                 spawnCooldown -= Time.deltaTime;
@@ -92,7 +94,8 @@ namespace Scripts.OOP.GameModes.Arena
         {
             if (controller is PlayerController player)
             { 
-                level = controller.Level;
+                level = player.Level;
+                score = player.Level;
 
                 if (player.Level == 1 || player.Level % 5 == 0)
                 {

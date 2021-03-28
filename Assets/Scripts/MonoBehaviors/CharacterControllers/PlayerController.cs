@@ -1,9 +1,6 @@
 ﻿using Scripts.OOP.Character.Stats;
-using Scripts.OOP.GameModes;
-using Scripts.OOP.Perks;
-using Scripts.OOP.TileMaps;
+using Scripts.OOP.Game_Modes;
 using Scripts.OOP.UI;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : BaseController
@@ -85,12 +82,13 @@ public class PlayerController : BaseController
 
     public override bool OnDeath()
     {
-        AGameMode.GameMode.MemberDestroyed(this);
+        GameModes.GameMode.MemberDestroyed(this);
         return true;
     }
 
     public override void OnDeathEnded()
     {
+        base.OnDeathEnded();
         if (ui) Destroy(ui.gameObject);
         MainMenuHandler.GameOver(level);
     }

@@ -2,7 +2,7 @@
 using UnityEngine;
 using Scripts.OOP.Perks;
 using UnityEngine.U2D;
-using Scripts.OOP.GameModes;
+using Scripts.OOP.Game_Modes;
 using System.Collections.Generic;
 
 public class AIController : BaseController
@@ -72,11 +72,6 @@ public class AIController : BaseController
         return false;
     }
 
-    public override void OnHealthChange() 
-    {
-        
-    }
-
     public override void OnXPChange(bool isUp)
     {
         if(isUp)
@@ -86,14 +81,6 @@ public class AIController : BaseController
             perks.Add(perk);
         }
     }
-
-    public override bool OnDeath()
-    {
-        AGameMode.GameMode.MemberDestroyed(this);
-        return true;
-    }
-
-    public override void OnDeathEnded() { }
 
     private bool ShootTarget(out float angle)
     {
@@ -115,7 +102,7 @@ public class AIController : BaseController
 
     private BaseController GetNearestTarget()
     {
-        List<BaseController> targets = AGameMode.GameMode.GetEnemies(team);
+        List<BaseController> targets = GameModes.GameMode.GetEnemies(team);
         if (targets.Count == 0) return null;
         //Temporary
         return targets[0] == null ? 

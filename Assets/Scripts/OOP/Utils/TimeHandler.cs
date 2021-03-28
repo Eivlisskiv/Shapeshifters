@@ -34,7 +34,7 @@ namespace Scripts.OOP.Utils
         {
             float current = Time.timeScale;
             bool finish = Mathf.Abs(target - current) < 0.05;
-            float scale = finish ? target : Mathf.Lerp(Time.timeScale, target, lerp);
+            float scale = finish ? target : Mathf.Lerp(current, target, lerp);
             Time.timeScale = scale;
             SetFixedDelta(scale);
             return finish;

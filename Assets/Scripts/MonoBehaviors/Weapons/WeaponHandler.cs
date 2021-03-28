@@ -1,7 +1,6 @@
-﻿using Scripts.OOP.GameModes;
+﻿using Scripts.OOP.Game_Modes;
 using Scripts.OOP.Perks.Weapon;
 using Scripts.OOP.Stats;
-using Scripts.OOP.TileMaps;
 using UnityEngine;
 
 public class WeaponHandler : MonoBehaviour
@@ -40,7 +39,7 @@ public class WeaponHandler : MonoBehaviour
 
     private void SpawnProjectile(bool isBullet, Vector2 direction, float damage, WeaponStats stats, BaseController sender)
     {
-        GameObject projectile = Instantiate(projectilPrefab, AGameMode.GetDebrisTransform(sender.team));
+        GameObject projectile = Instantiate(projectilPrefab, GameModes.GetDebrisTransform(sender.team));
         projectile.name = $"{gameObject.name}_Projectile";
 
         int m = (isBullet ? 1 : 2);

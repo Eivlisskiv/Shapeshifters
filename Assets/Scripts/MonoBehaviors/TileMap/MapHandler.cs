@@ -1,4 +1,4 @@
-﻿using Scripts.OOP.GameModes;
+﻿using Scripts.OOP.Game_Modes;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -18,7 +18,7 @@ public class MapHandler : MonoBehaviour
 
     List<RoomHandler> rooms;
 
-    private RoomHandler previous;
+    internal RoomHandler previous;
     internal RoomHandler current;
     internal RoomHandler loading;
 
@@ -54,7 +54,7 @@ public class MapHandler : MonoBehaviour
 
     public void NextRoom(int size)
     {
-        if(loading != null && loading.Loaded)
+        if(loading != null && !loading.Loaded)
         {
             Debug.LogWarning($"Loading room is still laoding");
             return;
@@ -62,6 +62,9 @@ public class MapHandler : MonoBehaviour
 
         if (previous) Destroy(previous.gameObject);
         previous = current;
+
+        previous.OpenGate(false);
+
         current = loading;
         loading = null;
 
@@ -84,7 +87,7 @@ public class MapHandler : MonoBehaviour
     {
         VerifyLoadingRoom();
 
-        AGameMode.GameMode?.OnUpdate();
+        GameModes.GameMode?.OnUpdate();
     }
 
     private void VerifyLoadingRoom()
@@ -102,7 +105,7 @@ public class MapHandler : MonoBehaviour
     {
         current = loading;
         loading = null;
-        AGameMode.GameMode.OnLoaded();
+        GameModes.GameMode.OnLoaded();
     }
 
     public void Clear()
@@ -114,7 +117,7 @@ public class MapHandler : MonoBehaviour
         for (int i = 0; i < c; i++)
             Destroy(transform.GetChild(i).gameObject);
 
-        AGameMode.GameMode?.Clear();
+        GameModes.GameMode?.Clear();
 
         enabled = false;
     }

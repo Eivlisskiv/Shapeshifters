@@ -4,6 +4,9 @@ using UnityEngine.Tilemaps;
 
 public class RoomHandler : MonoBehaviour
 {
+    public Vector2Int StartV => current.Start;
+    public int tilesPerFrame = 5;
+
     TileBase tile;
 
     int width;
@@ -15,24 +18,25 @@ public class RoomHandler : MonoBehaviour
 
     MapRoom current;
 
-    public int tilesPerFrame = 5;
-
-    bool loaded = false;
     public bool Loaded
     { get => loaded; }
+    bool loaded = false;
 
-    public Vector2Int StartV => current.Start;
-    public Vector2Int EndV => current.End;
+    private bool entrance;
 
     public void SetSettings(int w, int h, TileBase tile, RoomHandler prev)
     {
         width = w;
         height = h;
         this.tile = tile;
+        entrance = prev;
         if (prev)
         {
-            lastEnd = new Vector2Int(prev.EndV.x,
-                ((prev.height - height) / 2));
+            var lastSize = prev.current.Size;
+            var lastPosition = prev.transform.localPosition;
+            lastEnd = new Vector2Int(
+                Mathf.RoundToInt(lastPosition.x + lastSize.x),
+                Mathf.RoundToInt(lastPosition.y + ((prev.height - height) / 2)));
         }
 
     }
@@ -44,8 +48,8 @@ public class RoomHandler : MonoBehaviour
         transform.localScale = new Vector3(1, 1, 0);
         map.ClearAllTiles();
 
-        current = new CaveRoom(lastEnd, new Vector2Int(width, height))
-        { previousBorder = new Vector2Int(lastEnd.y, height) };
+        current = new CaveRoom(lastEnd, new Vector2Int(width, height), entrance);
+        map.transform.localPosition = new Vector3(current.Start.x, current.Start.y, 0);
     }
 
     void Update()
@@ -80,4 +84,6 @@ public class RoomHandler : MonoBehaviour
     public Vector2 CharacterPosition(Vector2Int coords)
     => new Vector3((coords.x + StartV.x) * transform.parent.transform.localScale.x,
         (coords.y + StartV.y) * transform.parent.transform.localScale.y);
+
+    public void OpenGate(bool v) => current.OpenGate(v, map, tile);
 }
