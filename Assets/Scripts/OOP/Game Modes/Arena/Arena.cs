@@ -1,5 +1,6 @@
 ﻿using Scripts.OOP.Perks;
 using Scripts.OOP.TileMaps;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Scripts.OOP.Game_Modes.Arena
@@ -10,7 +11,9 @@ namespace Scripts.OOP.Game_Modes.Arena
         private int level;
 
         public Arena(MainMenuHandler menu, MapHandler map) 
-            : base(menu, map, Color.green, Color.red)
+            : base(menu, map, new Dictionary<string, (float, string[])>() {
+                { "Regular", (100, new[]{ "Regular", "Bomber", "Sniper", "Tank" }) }
+            }, Color.green, Color.red)
         {
             spawnCooldown = 5;
             level = 1;
@@ -67,12 +70,7 @@ namespace Scripts.OOP.Game_Modes.Arena
         private void SpawnEnemy()
         {
             if (CheckEnemySpawns(out Vector2Int coords))
-            {
-                GameObject obj = Object.Instantiate(map.characterPrefab);
-                AIController mob = AIController.Spawn(obj, $"Enemy", level);
-                mob.transform.position = map.current.CharacterPosition(coords);
-                AddMember(1, mob);
-            }
+                SpawnRandom(1, coords, level);
         }
 
         private bool CheckEnemySpawns(out Vector2Int pos)

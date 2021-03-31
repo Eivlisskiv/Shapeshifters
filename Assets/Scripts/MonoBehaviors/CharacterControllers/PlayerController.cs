@@ -16,8 +16,6 @@ public class PlayerController : BaseController
         PlayerController player = body.AddComponent<PlayerController>();
         player.cam = new PlayerCamera(cam, 15f);
 
-        player.Color = Color.green;
-
         player.ui = ui.GetComponent<CharacterUIHandler>();
         var uit = player.ui.GetComponent<RectTransform>();
         uit.anchoredPosition = Vector3.zero;

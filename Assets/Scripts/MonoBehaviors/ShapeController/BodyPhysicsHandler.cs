@@ -20,14 +20,11 @@ public class BodyPhysicsHandler : MonoBehaviour
     public PolygonCollider2D Collider
     { get => pcollider; }
 
-    private Color _color;
-    public Color Color
+    private readonly Color[] _colors = new Color[2];
+    public void SetColor(int i, Color color)
     {
-        get => _color;
-        set {
-            _color = value;
-            SetMatColor();
-        }
+        _colors[i] = color;
+        SetMatColor();
     }
 
     Rigidbody2D body;
@@ -58,10 +55,8 @@ public class BodyPhysicsHandler : MonoBehaviour
     {
         if (!shapeRenderer) return;
 
-        shapeRenderer.material.color = _color;
-        shapeRenderer.material.SetColor("Color", _color);
-        //for (int i = 0; i < shapeRenderer.materials.Length; i++)
-            //shapeRenderer.materials[i].color = _color;
+        for (int i = 0; i < shapeRenderer.materials.Length; i++)
+            shapeRenderer.materials[i].color = _colors[i];
     }
 
     public void Reshape(int count)

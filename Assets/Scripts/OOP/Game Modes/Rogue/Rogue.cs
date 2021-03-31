@@ -1,5 +1,6 @@
 ﻿using Scripts.OOP.TileMaps;
 using Scripts.OOP.Utils;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Scripts.OOP.Game_Modes.Rogue
@@ -18,7 +19,9 @@ namespace Scripts.OOP.Game_Modes.Rogue
         private readonly ShopHandler shop;
 
         public Rogue(MainMenuHandler menu, MapHandler map)
-            : base(menu, map, Color.green, Color.red)
+            : base(menu, map, new Dictionary<string, (float, string[])>() {
+                { "Regular", (100, new[]{ "Regular", "Bomber", "Sniper" }) }
+            }, Color.green, Color.red)
         {
             cooldown = 5;
             level = 1;
@@ -148,11 +151,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
         {
             if (CheckEnemySpawns(out Vector2Int coords))
             {
-                GameObject obj = Object.Instantiate(map.characterPrefab);
-                AIController mob = AIController.Spawn(obj, $"Enemy", level);
-                mob.transform.position = map.current.CharacterPosition(coords);
-                AddMember(1, mob);
-
+                SpawnRandom(1, coords, level);
                 spawnsLeft--;
                 cooldown = 5;
             }

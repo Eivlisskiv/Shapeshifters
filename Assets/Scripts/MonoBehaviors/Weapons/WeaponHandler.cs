@@ -19,7 +19,7 @@ public class WeaponHandler : MonoBehaviour
     public float life; //The life time of a projectile
     public float speed; //projection speed
 
-    public float Range => speed * life;
+    public float Range => (speed * life) * 0.75f;
 
     public float Fire(BaseController sender, float angle)
     {

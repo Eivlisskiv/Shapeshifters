@@ -11,7 +11,6 @@ public class AIController : BaseController
     {
         AIController ai = mob.AddComponent<AIController>();
         mob.name = name;
-        ai.Color = Color.red;
         ai.Initialize(level);
         mob.GetComponent<SpriteShapeRenderer>().color = Color.red;
         return ai;
@@ -74,7 +73,7 @@ public class AIController : BaseController
 
     public override void OnXPChange(bool isUp)
     {
-        if(isUp)
+        if(isUp && false)
         {
             Perk perk = PerksHandler.Random();
             perk.LevelUp();
@@ -89,7 +88,8 @@ public class AIController : BaseController
         Vector2 pos = transform.position;
         Vector2 direction = vt - pos;
         float distance = direction.magnitude;
-        RaycastHit2D hit = Physics2D.Raycast(pos + (direction.normalized * (body.radius + 0.1f)), direction);
+        RaycastHit2D hit = Physics2D.Raycast(pos + (direction.normalized 
+            * (body.radius + 0.1f)), direction);
         if(hit && hit.transform == target.transform)
         {
             angle = Vectors2.TrueAngle(Vector2.right, pos - vt);

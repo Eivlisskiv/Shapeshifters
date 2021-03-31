@@ -29,15 +29,11 @@ public abstract class BaseController : MonoBehaviour
     protected float xp;
     public int XPRequired => Mathf.FloorToInt((level + 1) * (float)Math.Pow(10, 2));
 
-    private Color _color;
-    public Color Color
+    private readonly Color[] _colors = new Color[2];
+    public void SetColor(int i, Color value)
     {
-        get => _color;
-        set
-        {
-            _color = value;
-            if (body) body.Color = value;
-        }
+        _colors[i] = value;
+        if (body) body.SetColor(i, value);
     }
 
     bool controllerEnabled = true;
@@ -48,14 +44,13 @@ public abstract class BaseController : MonoBehaviour
     {
         body = GetComponent<BodyPhysicsHandler>();
         sounds = GetComponent<SoundHandler>();
-        body.Color = _color;
+        body.SetColor(0, _colors[0]);
+        body.SetColor(1, _colors[1]);
         weapon = GetComponent<WeaponHandler>();
         OnStart();
         if (stats == null) stats = new Stats(50 + (level / 5));
         if (perks == null) perks = new PerksHandler();
     }
-
-    public abstract void OnStart();
 
     // Update is called once per frame
     void Update()
@@ -79,6 +74,10 @@ public abstract class BaseController : MonoBehaviour
                 new Vector3(hpp, hpp, 1), Time.deltaTime);
     }
 
+    public abstract void OnStart();
+    public abstract void OnUpdate();
+    public abstract bool IsFiring(out float angle);
+
     public void DisableController(bool value)
         => controllerEnabled = !value;
 
@@ -98,7 +97,7 @@ public abstract class BaseController : MonoBehaviour
                 var debris = Instantiate(body.deathPrefab);
                 debris.transform.position = transform.position;
                 ParticleSystem.MainModule settings = debris.GetComponent<ParticleSystem>().main;
-                settings.startColor = new ParticleSystem.MinMaxGradient(Color);
+                settings.startColor = new ParticleSystem.MinMaxGradient(_colors[0]);
                 Destroy(debris, 2f);
                 OnDeathEnded();
                 Destroy(gameObject);
@@ -109,9 +108,6 @@ public abstract class BaseController : MonoBehaviour
 
         return false;
     }
-
-    public abstract void OnUpdate();
-    public abstract bool IsFiring(out float angle);
 
     private void Fire(float angle)
     {
@@ -182,7 +178,7 @@ public abstract class BaseController : MonoBehaviour
             debris.transform.rotation = Quaternion.Euler(0, 0, 
                 Vectors2.TrueAngle(transform.position, position));
             ParticleSystem.MainModule settings = debris.GetComponent<ParticleSystem>().main;
-            settings.startColor = new ParticleSystem.MinMaxGradient(Color);
+            settings.startColor = new ParticleSystem.MinMaxGradient(_colors[0]);
             Destroy(debris, 0.5f);
         }
     }
@@ -202,16 +198,14 @@ public abstract class BaseController : MonoBehaviour
         return false;
     }
 
-    public virtual void OnHealthChange()
-    {
-
-    }
+    public virtual void OnHealthChange() { }
 
     public virtual bool OnDeath() => true;
+
     public virtual void OnDeathEnded()
-    {
-        GameModes.GameMode.MemberDestroyed(this);
-    }
+        => GameModes.GameMode.MemberDestroyed(this);
+
+    public virtual void OnXPChange(bool isUp) { }
 
     public void OnKill(BaseController target)
     {
@@ -238,6 +232,4 @@ public abstract class BaseController : MonoBehaviour
         }
         OnXPChange(up);
     }
-
-    public abstract void OnXPChange(bool isUp);
 }

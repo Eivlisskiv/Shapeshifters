@@ -17,8 +17,8 @@ namespace Scripts.OOP.Perks
             Assembly assembly = Assembly.GetAssembly(perk);
             var types = assembly.GetTypes();
 
-            var result = types.Where(t => t.IsSubclassOf(perk)
-            && !t.IsAbstract && !t.IsInterface).ToDictionary(
+            var result = types.Where(t => !t.IsAbstract && !t.IsInterface 
+            && t.IsSubclassOf(perk)).ToDictionary(
                 t => t.Name.Replace('_', ' '));
             return result;
         }
