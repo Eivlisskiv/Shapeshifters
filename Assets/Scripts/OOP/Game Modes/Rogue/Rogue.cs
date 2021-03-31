@@ -20,7 +20,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
         public Rogue(MainMenuHandler menu, MapHandler map)
             : base(menu, map, new Dictionary<string, (float, string[])>() {
-                { "Regular", (100, new[]{ "Regular", "Bomber", "Sniper" }) }
+                { "Regular", (100, new[]{ "Regular", "Bomber", "Sniper", "Tank" }) }
             }, Color.green, Color.red)
         {
             cooldown = 5;
@@ -90,6 +90,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
             PauseControllers(true);
             stage = Stage.Menu;
             shop.gameObject.SetActive(true);
+            shop.pointsDisplay.text = points.ToString();
         }
 
         public void MenuClosed()
