@@ -18,14 +18,15 @@ namespace Scripts.OOP.Game_Modes
         {
             {
                 typeof(Arena.Arena),
-                "Survive enemy spawns." +
+                  " Survive enemy spawns." +
                 "\n Gain a random perk every 5 levels." +
-                "\n Gain a temporary buff when elimenating an enemy."
+                "\n Gain a temporary buff when" +
+                "\n elimenating an enemy."
             },
 
             {
                 typeof(Rogue.Rogue),
-                "Go through rooms of enemies. " +
+                  " Go through rooms of enemies. " +
                 "\n Purchase perks after each room."
             }
         };

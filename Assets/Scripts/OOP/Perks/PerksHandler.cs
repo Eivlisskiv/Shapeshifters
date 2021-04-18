@@ -60,7 +60,7 @@ namespace Scripts.OOP.Perks
 
         private void Remove(Perk perk)
         {
-            if (perk.ui) UnityEngine.Object.Destroy(perk.ui.gameObject);
+            if (perk.ui) perk.ui.Remove();
             perks.Remove(perk);
         }
 
@@ -80,6 +80,8 @@ namespace Scripts.OOP.Perks
                     if (perk.Buff > 0)
                         existing.ui.SetBuff(existing.Intensity, existing.Charge);
                     else existing.ui.SetLevel(existing.Level);
+
+                    existing.ui.Bounce();
                 }
             }
         }

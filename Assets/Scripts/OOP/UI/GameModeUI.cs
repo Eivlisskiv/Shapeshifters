@@ -24,16 +24,21 @@ namespace Scripts.OOP.UI
         private void InitializeUI(GameObject ui, string desc)
         {
             //main = ui;
-            InitButton(ui.transform.GetChild(0));
-            InitScore(ui.transform.GetChild(1));
-            InitDescription(ui.transform.GetChild(2), desc);
+            InitScore(ui.transform.GetChild(0));
+            InitDescription(ui.transform.GetChild(1), desc);
+            InitTitle(ui.transform.GetChild(2));
+            InitButton(ui.transform.GetChild(3));
+        }
+
+        private void InitTitle(Transform child)
+        {
+            Text t = child.GetComponent<Text>();
+            t.text = mode.Name.Replace('_', ' ');
         }
 
         private void InitButton(Transform child)
         {
             Button button = child.GetComponent<Button>();
-            Text t = button.transform.GetChild(0).GetComponent<Text>();
-            t.text = mode.Name.Replace('_', ' ');
             button.onClick.AddListener(() => menu.StartGame(mode));
         }
 
@@ -46,7 +51,7 @@ namespace Scripts.OOP.UI
 
         private void InitDescription(Transform transform, string description)
         {
-            Text desc = transform.GetComponent<Text>();
+            Text desc = transform.GetChild(0).GetComponent<Text>();
             desc.text = description;
         }
     }

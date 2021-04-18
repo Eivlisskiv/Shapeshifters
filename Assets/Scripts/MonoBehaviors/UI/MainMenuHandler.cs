@@ -1,10 +1,12 @@
-﻿using Scripts.OOP.Game_Modes;
+﻿using IgnitedBox.Tweening.EasingFunctions;
+using Scripts.OOP.Game_Modes;
 using Scripts.OOP.UI;
-using Scripts.Tweening.Tweeners;
 using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using IgnitedBox.Tweening.Tweeners.VectorTweeners;
+using IgnitedBox.Tweening;
 
 public class MainMenuHandler : MonoBehaviour
 {
@@ -28,7 +30,6 @@ public class MainMenuHandler : MonoBehaviour
     public RectTransform gameModeContainer;
     public GameObject gameModePrefab;
 
-    private Vector3 iposition;
     private MenuAction action;
     private float cooldown;
 
@@ -42,13 +43,13 @@ public class MainMenuHandler : MonoBehaviour
     private GameModeUI[] modes;
 
     private RectTransform openTab;
-    private UITween tweener;
+    private RectTransform containerRect;
 
     // Start is called before the first frame update
     void Start()
     {
         sounds = GetComponent<SoundHandler>();
-        tweener = GetComponent<UITween>();
+        containerRect = container.GetComponent<RectTransform>();
 
         instance = this;
 
@@ -59,8 +60,6 @@ public class MainMenuHandler : MonoBehaviour
             title.text = $"{perk.Name} lvl {perk.Level}";
             desc.text = perk.Description;
         });
-
-        iposition = container.transform.localPosition;
     }
 
     // Update is called once per frame
@@ -79,32 +78,34 @@ public class MainMenuHandler : MonoBehaviour
 
     private void SwitchTab(RectTransform tab)
     {
-        const float speed = 0.4f;
+        const float speed = 1f;
+        const float width = 650f;
 
         if (openTab == tab) return;
         
         if(openTab != null)//Close existing tab
         {
-            tweener.Tween<RectSizeTween>(openTab,
-                new Vector2(0, openTab.sizeDelta.y), speed);
+            openTab.Tween<RectTransform, Vector3, RectSizeTween>(
+                new Vector2(-1, openTab.sizeDelta.y), speed,
+                easing: ExponentEasing.Out);
         }
 
         if (tab == null) //If closing tab
         {
-            tweener.Tween<PositionTween>(container.GetComponent<RectTransform>(),
-            container.transform.localPosition + new Vector3(590 / 2, 0), speed);
+            containerRect.Tween<Transform, Vector3, PositionTween>(
+            containerRect.localPosition + new Vector3(width / 2, 0), speed / 2.5f);
         }
         else
         {
             if(openTab == null) //tab was closed
             {
-                tweener.Tween<PositionTween>(container.GetComponent<RectTransform>(),
-                container.transform.localPosition - new Vector3(590 / 2, 0), speed);
+                containerRect.Tween<Transform, Vector3, PositionTween>(
+                containerRect.localPosition - new Vector3(width / 2, 0), speed / 2.5f);
             }
 
-            tweener.Tween<RectSizeTween>(tab,
-                new Vector2(590, tab.sizeDelta.y), speed,
-                openTab == null ? 0 : 05f);
+            tab.Tween<RectTransform, Vector3, RectSizeTween>(
+                new Vector2(width, tab.sizeDelta.y), speed,
+                openTab == null ? 0 : (speed + 0.1f), ElasticEasing.Out);
         }
 
         openTab = tab;
@@ -118,6 +119,9 @@ public class MainMenuHandler : MonoBehaviour
             buttonText = start.GetComponentInChildren<Text>();
         }
     }
+
+    public void OnClick_TabButton(RectTransform tab)
+        => SwitchTab(tab);
 
     public void OnClick_Start(Button button)
     {
