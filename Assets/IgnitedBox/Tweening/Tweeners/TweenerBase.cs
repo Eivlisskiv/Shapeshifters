@@ -34,13 +34,12 @@ namespace IgnitedBox.Tweening.Tweeners
             } 
         }
 
-        [SerializeField]
         protected float currentDelay;
 
         [SerializeField]
-        public float Duration { get; set; }
+        public float _duration;
+        public float Duration { get => _duration; set => _duration = value; }
 
-        [SerializeField]
         public float Time { get; set; }
 
         [SerializeField]
@@ -59,15 +58,18 @@ namespace IgnitedBox.Tweening.Tweeners
 
         public Func<double, double> Easing { get; set; }
 
+        public UnityEngine.Events.UnityEvent callbackEvent;
         public Action Callback { get; set; }
 
-        [SerializeField]
         public LoopType loop;
 
         public TweenerBase() { }
 
 #if UNITY_EDITOR
+        [NonSerialized]
         public bool editorOpen;
+        [NonSerialized]
+        public bool drawEasing;
 
         public virtual void EditorObjectField() 
             => UnityEditor.EditorGUILayout.LabelField("Element Field not implemented!");

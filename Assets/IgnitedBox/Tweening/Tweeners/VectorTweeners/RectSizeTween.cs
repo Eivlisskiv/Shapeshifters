@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace IgnitedBox.Tweening.Tweeners.VectorTweeners
 {
+    [Serializable]
     public class RectSizeTween : VectorTweener<RectTransform>
     {
         public RectSizeTween() { }
@@ -18,12 +19,12 @@ namespace IgnitedBox.Tweening.Tweeners.VectorTweeners
         }
 
         protected override Vector3 GetStart()
-            => Subject.sizeDelta;
+            => Element.sizeDelta;
 
         protected override void OnFinish()
-            => Subject.sizeDelta = Target;
+            => Element.sizeDelta = Target;
 
         protected override void OnMove(Vector3 current)
-            => Subject.sizeDelta = current;
+            => Element.sizeDelta = current;
     }
 }

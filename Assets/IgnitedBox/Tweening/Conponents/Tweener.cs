@@ -1,45 +1,55 @@
 ﻿using IgnitedBox.Tweening.Tweeners;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace IgnitedBox.Tweening.Conponents
 {
+    [Serializable]
     public class Tweener : MonoBehaviour
     {
         public enum BlendType { Replace, Blend, Ignore }
 
-        [SerializeField]
-        public Dictionary<Type, TweenerBase> tweens
-            = new Dictionary<Type, TweenerBase>();
+        public int Count => tweens?.Count ?? 0;
 
-        void Update()
-            => TweenTransforms();
+        [SerializeField]
+        private List<TweenerBase> tweens
+            = new List<TweenerBase>();
+
+        void Update() => TweenTransforms();
 
         private void TweenTransforms()
         {
-            if (tweens.Count == 0) return;
+            if (Count == 0) return;
             int i = 0;
             while (i < tweens.Count)
             {
-                KeyValuePair<Type, TweenerBase> pair = tweens.ElementAt(i);
-                if (pair.Value.Update(Time.deltaTime)) 
-                    tweens.Remove(pair.Key);
+                TweenerBase tween = tweens[i];
+                if (tween.Update(Time.deltaTime)) 
+                    tweens.RemoveAt(i);
                 else i++;
             }
         }
 
+        public TweenerBase Get(int i) => tweens[i];
+        public T Get<T>(out int index) where T : TweenerBase
+        {
+            index = tweens.FindIndex(t => t is T);
+            if (index > -1 && tweens[index] != null && tweens[index] is T tween) return tween;
+            return default;
+        }
+
         public A Add<A, S, T>(A tween, BlendType blend) where A : TweenData<S, T>
         {
-            Type type = typeof(A); 
-            if(tweens.TryGetValue(type, out TweenerBase cbase))
+            Type type = typeof(A);
+            int i = tweens.FindIndex(t => t is A);
+            if(i >= 0)
             {
-                A current = (A)cbase;
+                A current = (A)tweens[i];
                 switch (blend)
                 {
                     case BlendType.Replace:
-                        tweens[type] = tween;
+                        tweens[i] = tween;
                         return tween;
                     case BlendType.Blend:
                         current.Blend(tween);
@@ -49,18 +59,23 @@ namespace IgnitedBox.Tweening.Conponents
                 }
             }
 
-            tweens.Add(type, tween);
+            tweens.Add(tween);
             return tween;
         }
 
+        public bool ContainsType(Type type)
+            => tweens.Find(t => t.GetType().Equals(type)) != null;
+
         public void Add(Type type)
         {
-            if (tweens.ContainsKey(type)) return;
+            if (ContainsType(type)) return;
             TweenerBase b = (TweenerBase)Activator.CreateInstance(type);
-            tweens.Add(type, b);
+            tweens.Add(b);
         }
 
+        public void Remove(int i) => tweens.RemoveAt(i);
+
         public void Remove(Type key)
-            => tweens.Remove(key);
+            => tweens.RemoveAll(t => t.GetType().Equals(key));
     }
 }

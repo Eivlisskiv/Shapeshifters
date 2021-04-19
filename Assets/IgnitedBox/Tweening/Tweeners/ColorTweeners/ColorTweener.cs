@@ -1,33 +1,27 @@
 ﻿using System;
 using UnityEngine;
 
-namespace IgnitedBox.Tweening.Tweeners.VectorTweeners
+namespace IgnitedBox.Tweening.Tweeners.ColorTweeners
 {
-    public abstract class VectorTweener<T> : TweenData<T, Vector3>
+    public abstract class ColorTweener<T> : TweenData<T, Color>
     {
-        protected VectorTweener() { }
+        protected ColorTweener() { }
 
-        protected VectorTweener(T element, Vector3 target, float time,
+        protected ColorTweener(T element, Color target, float time,
             float delay, Func<double, double> easing, Action callback)
             : base(element, target, time, delay, easing, callback) { }
-        
-        protected override Vector3 GetTween()
-            => Target - Start;
-
-        public override Vector3 GetTweenAt(float percent)
-            => Start + (Tween * percent);
 
 #if UNITY_EDITOR
         public override void EditorValueFields()
         {
             UnityEditor.EditorGUILayout.BeginHorizontal();
-            Start = UnityEditor.EditorGUILayout.Vector3Field("Start", Start);
-            if(GUILayout.Button("Current", GUILayout.Width(55)) && Element != null)
+            Start = UnityEditor.EditorGUILayout.ColorField("Start", Start);
+            if (GUILayout.Button("Current", GUILayout.Width(55)) && Element != null)
                 Start = GetStart();
             UnityEditor.EditorGUILayout.EndHorizontal();
 
             UnityEditor.EditorGUILayout.BeginHorizontal();
-            Target = UnityEditor.EditorGUILayout.Vector3Field("Target", Target);
+            Target = UnityEditor.EditorGUILayout.ColorField("Target", Target);
             if (GUILayout.Button("Current", GUILayout.Width(55)) && Element != null)
                 Target = GetStart();
             UnityEditor.EditorGUILayout.EndHorizontal();

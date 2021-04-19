@@ -10,7 +10,7 @@ using IgnitedBox.Tweening;
 
 public class MainMenuHandler : MonoBehaviour
 {
-    private enum MenuAction { None, GameOver }
+    private enum MenuAction { None, Loading, GameOver }
 
     private static MainMenuHandler instance;
 
@@ -83,11 +83,19 @@ public class MainMenuHandler : MonoBehaviour
 
         if (openTab == tab) return;
         
-        if(openTab != null)//Close existing tab
+        if(openTab)//Close existing tab
         {
             openTab.Tween<RectTransform, Vector3, RectSizeTween>(
                 new Vector2(-1, openTab.sizeDelta.y), speed,
-                easing: ExponentEasing.Out);
+                easing: ExponentEasing.Out, callback: () => 
+                {
+                    if (tab)
+                    {
+                        tab.Tween<RectTransform, Vector3, RectSizeTween>(
+                        new Vector2(width, tab.sizeDelta.y), speed, 
+                        easing: ElasticEasing.Out);
+                    }
+                });
         }
 
         if (tab == null) //If closing tab
@@ -95,17 +103,15 @@ public class MainMenuHandler : MonoBehaviour
             containerRect.Tween<Transform, Vector3, PositionTween>(
             containerRect.localPosition + new Vector3(width / 2, 0), speed / 2.5f);
         }
-        else
+        else if(openTab == null) //tab was closed
         {
-            if(openTab == null) //tab was closed
-            {
-                containerRect.Tween<Transform, Vector3, PositionTween>(
-                containerRect.localPosition - new Vector3(width / 2, 0), speed / 2.5f);
-            }
+            containerRect.Tween<Transform, Vector3, PositionTween>(
+            containerRect.localPosition - new Vector3(width / 2, 0), speed / 2.5f);
 
-            tab.Tween<RectTransform, Vector3, RectSizeTween>(
+            if(tab)
+                tab.Tween<RectTransform, Vector3, RectSizeTween>(
                 new Vector2(width, tab.sizeDelta.y), speed,
-                openTab == null ? 0 : (speed + 0.1f), ElasticEasing.Out);
+                easing: ElasticEasing.Out);
         }
 
         openTab = tab;
@@ -143,6 +149,8 @@ public class MainMenuHandler : MonoBehaviour
     
     public void StartGame(Type mode)
     {
+        if (action == MenuAction.Loading) return;
+        action = MenuAction.Loading;
         AGameMode gamemode = (AGameMode)Activator.CreateInstance(mode, this, map);
         gamemode.StartMap();
 

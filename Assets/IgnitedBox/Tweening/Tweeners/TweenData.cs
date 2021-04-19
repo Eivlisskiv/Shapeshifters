@@ -6,7 +6,8 @@ namespace IgnitedBox.Tweening.Tweeners
     public abstract class TweenData<S, T> : TweenerBase
     {
         [SerializeField]
-        public S Subject { get; private set; }
+        private S _element;
+        public S Element => _element;
 
         [SerializeField]
         private T _start;
@@ -20,7 +21,6 @@ namespace IgnitedBox.Tweening.Tweeners
             }
         }
 
-        [SerializeField]
         private T _tween;
         public T Tween  => _tween;
 
@@ -41,7 +41,7 @@ namespace IgnitedBox.Tweening.Tweeners
         protected TweenData(S subject, T target, float time, 
             float delay, Func<double, double> easing, Action callback)
         {
-            Subject = subject;
+            _element = subject;
             _target = target;
 
             Start = GetStart();
@@ -63,14 +63,17 @@ namespace IgnitedBox.Tweening.Tweeners
 
         public override bool Update(float time)
         {
-            if (Subject == null) return true;
+            if (Element == null) return true;
 
             if (!base.Update(time)) return false;
 
             if(Check(time, out float percent))
             {
                 OnFinish();
+
                 Callback?.Invoke();
+                callbackEvent?.Invoke();
+
                 if (DoLoop()) return false;
                 State = TweenState.Finished;
                 return true;
@@ -110,8 +113,8 @@ namespace IgnitedBox.Tweening.Tweeners
             if (type.IsSubclassOf(typeof(UnityEngine.Object)))
             {
                 var obj = UnityEditor.EditorGUILayout.ObjectField(type.Name,
-                    Subject as UnityEngine.Object, type, true);
-                if (obj is S s) Subject = s;
+                    Element as UnityEngine.Object, type, true);
+                if (obj is S s) _element = s;
                 return;
             }
 
