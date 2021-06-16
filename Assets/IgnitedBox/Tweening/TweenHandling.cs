@@ -1,4 +1,4 @@
-﻿using IgnitedBox.Tweening.Conponents;
+﻿using IgnitedBox.Tweening.Components;
 using IgnitedBox.Tweening.Tweeners;
 using System;
 using UnityEngine;
@@ -16,8 +16,8 @@ namespace IgnitedBox.Tweening
         private static GlobalTweensContainer _conatiner;
 
         public static GlobalTweensContainer Conatiner
-            => _conatiner ? _conatiner :
-            (_conatiner = TweenHandler.GetComponent<GlobalTweensContainer>());
+            => _conatiner ? _conatiner : (_conatiner =
+            TweenHandler.GetComponent<GlobalTweensContainer>());
 
         private static A Construct<T, V, A>(T subject, V target,
             float time, float delay = 0, Func<double, double> easing = null,

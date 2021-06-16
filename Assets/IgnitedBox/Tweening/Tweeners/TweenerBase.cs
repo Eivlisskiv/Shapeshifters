@@ -77,7 +77,9 @@ namespace IgnitedBox.Tweening.Tweeners
             => UnityEditor.EditorGUILayout.LabelField("Values Fields not implemented!");
 #endif
 
-        public virtual bool Update(float time) 
+        public abstract void Update(float time);
+
+        protected bool ContinueDelay(float time)
             =>  State == TweenState.Playing && (currentDelay < 0 || (currentDelay -= time) < 0);
 
         protected bool Check(float time, out float percent)

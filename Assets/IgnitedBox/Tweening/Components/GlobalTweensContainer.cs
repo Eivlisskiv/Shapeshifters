@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace IgnitedBox.Tweening.Conponents
+namespace IgnitedBox.Tweening.Components
 {
     public class GlobalTweensContainer : MonoBehaviour
     {
@@ -18,8 +18,9 @@ namespace IgnitedBox.Tweening.Conponents
             int i = 0;
             while (i < tweens.Count)
             {
-                TweenerBase tween = tweens[i];
-                if (tween.Update(Time.deltaTime)) tweens.RemoveAt(i);
+                tweens[i].Update(Time.deltaTime);
+                if (tweens[i].State == TweenerBase.TweenState.Finished)
+                    tweens.RemoveAt(i);
                 else i++;
             }
         }

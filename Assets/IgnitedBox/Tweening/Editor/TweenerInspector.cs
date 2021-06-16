@@ -1,4 +1,4 @@
-﻿using IgnitedBox.Tweening.Conponents;
+﻿using IgnitedBox.Tweening.Components;
 using IgnitedBox.Tweening.Tweeners;
 using System;
 using System.Linq;

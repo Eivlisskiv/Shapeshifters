@@ -1,8 +1,8 @@
-﻿using IgnitedBox.Tweening.Conponents.Transforms;
+﻿using IgnitedBox.Tweening.Components.Transforms;
 using IgnitedBox.Tweening.Tweeners.ColorTweeners;
 using UnityEngine;
 
-namespace IgnitedBox.Tweening.Conponents.UI
+namespace IgnitedBox.Tweening.Components.UI
 {
     public class UITween : TransformTween
     {

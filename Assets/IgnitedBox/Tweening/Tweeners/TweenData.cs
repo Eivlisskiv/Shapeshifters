@@ -61,11 +61,11 @@ namespace IgnitedBox.Tweening.Tweeners
         protected abstract void OnFinish();
         protected abstract void OnMove(T current);
 
-        public override bool Update(float time)
+        public override void Update(float time)
         {
-            if (Element == null) return true;
+            if (Element == null) return;
 
-            if (!base.Update(time)) return false;
+            if (!ContinueDelay(time)) return;
 
             if(Check(time, out float percent))
             {
@@ -74,13 +74,13 @@ namespace IgnitedBox.Tweening.Tweeners
                 Callback?.Invoke();
                 callbackEvent?.Invoke();
 
-                if (DoLoop()) return false;
+                if (DoLoop()) return;
                 State = TweenState.Finished;
-                return true;
+                return;
             }
 
             OnMove(GetTweenAt(percent));
-            return false;
+            return;
         }
 
         public void SetPositions(T start, T target)

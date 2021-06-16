@@ -15,6 +15,7 @@ public class PerkUIHandler : MonoBehaviour
     Text level;
     Text charge;
 
+    RectTransform rt;
     Vector3 ogPos;
 
     // Start is called before the first frame update
@@ -34,7 +35,7 @@ public class PerkUIHandler : MonoBehaviour
         level = tBase.GetChild(0).GetComponent<Text>();
         charge = tBase.GetChild(1).GetComponent<Text>();
 
-        RectTransform rt = icon.GetComponent<RectTransform>();
+        rt = icon.GetComponent<RectTransform>();
         ogPos = rt.localPosition;
         rt.localPosition -= new Vector3(0, 40, 0);
 
@@ -74,17 +75,17 @@ public class PerkUIHandler : MonoBehaviour
 
     public void Remove()
     {
-        icon.transform.Tween<Transform, Vector3, PositionTween>(
-            icon.transform.localPosition - new Vector3(0, 30, 0), 1f, 
+        rt.Tween<Transform, Vector3, PositionTween>(
+            ogPos - new Vector3(0, 30, 0), 1f, 
             callback: () => Destroy(gameObject));
     }
 
     public void Bounce()
     {
-        icon.transform.Tween<Transform, Vector3, PositionTween>(
+        rt.Tween<Transform, Vector3, PositionTween>(
             ogPos - new Vector3(0, 30, 0), 0.8f,
             easing: ExponentEasing.Out,
-            callback: () => icon.transform.Tween
-            <Transform, Vector3, PositionTween>(ogPos, 0.8f));
+            callback: () =>
+            rt.Tween<Transform, Vector3, PositionTween>(ogPos, 0.8f));
     }
 }

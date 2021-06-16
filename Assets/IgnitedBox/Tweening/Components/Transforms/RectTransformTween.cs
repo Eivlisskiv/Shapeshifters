@@ -1,7 +1,7 @@
 ﻿using IgnitedBox.Tweening.Tweeners.VectorTweeners;
 using UnityEngine;
 
-namespace IgnitedBox.Tweening.Conponents.Transforms
+namespace IgnitedBox.Tweening.Components.Transforms
 {
     public class RectTransformTween : TransformTween
     {
