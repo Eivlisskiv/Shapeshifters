@@ -43,7 +43,7 @@ namespace Scripts.OOP.UI
 
             Transform texts = desc.transform.GetChild(1);
             Text title = texts.GetChild(0).GetComponent<Text>();
-            if (title) title.text = $"{perk.Name} lvl {perk.Level}";
+            if (title) title.text = $"{perk.Name} lvl. {perk.Level}";
             Text description = texts.GetChild(1).GetComponent<Text>();
             if (description) description.text = perk.Description;
 

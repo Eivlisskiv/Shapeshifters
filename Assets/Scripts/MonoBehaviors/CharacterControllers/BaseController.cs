@@ -119,6 +119,8 @@ public abstract class BaseController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (StuckInWall(collision)) return;
+
         perks.Activate<ICollide>(1, perk => perk.OnCollide(this, collision));
 
         sounds.PlayRandom("Collide");
@@ -231,5 +233,17 @@ public abstract class BaseController : MonoBehaviour
                 mode.ControllerLevelUp(this));
         }
         OnXPChange(up);
+    }
+
+    private bool StuckInWall(Collision2D collision)
+    {
+        var otherPos = collision.collider.transform.position;
+        var distance = (otherPos - transform.position).magnitude;
+        if (distance < 0.1f)
+        {
+            Debug.LogWarning($"{name} may be stuck");
+        }
+
+        return false;
     }
 }

@@ -24,7 +24,7 @@ namespace IgnitedBox.Tweening.Components
             int i = 0;
             while (i < tweens.Count)
             {
-                tweens[i].Update(Time.deltaTime);
+                tweens[i].Update(tweens[i].scaledTime ? Time.deltaTime : Time.unscaledDeltaTime);
                 if (tweens[i].State == TweenerBase.TweenState.Finished) 
                     tweens.RemoveAt(i);
                 else i++;

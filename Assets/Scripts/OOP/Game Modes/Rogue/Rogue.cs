@@ -38,7 +38,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
             if (cooldown > 0)
             {
-                cooldown -= Time.deltaTime;
+                cooldown -= Time.unscaledTime;
                 return;
             }
 
@@ -82,6 +82,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
             if (!map.loading.Loaded) 
                 map.loading.tilesPerFrame = 50;
             stage = Stage.Pausing;
+            PauseHandler.SetControl(false);
             cooldown = 5;
         }
 
@@ -96,7 +97,9 @@ namespace Scripts.OOP.Game_Modes.Rogue
         public void MenuClosed()
         {
             stage = Stage.Resuming;
+
             PauseControllers(false);
+            PauseHandler.SetControl(true);
         }
 
         private void ReachNext()

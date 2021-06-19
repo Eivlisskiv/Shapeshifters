@@ -1,5 +1,6 @@
 ﻿using Scripts.OOP.Game_Modes;
 using Scripts.OOP.Perks.Character.Triggers;
+using System;
 using UnityEngine;
 
 namespace Scripts.OOP.Perks.Character
@@ -23,7 +24,7 @@ namespace Scripts.OOP.Perks.Character
             {
                 time -= 5f;
                 controller.HitHealth(Intensity);
-                Object.Destroy(SpawnPrefab(controller.transform.position,
+                UnityEngine.Object.Destroy(SpawnPrefab(controller.transform.position,
                     null, GameModes.GetDebrisTransform(controller.team)), 1f);
             }
             return true;
@@ -45,7 +46,7 @@ namespace Scripts.OOP.Perks.Character
                 Vector3 point = collision.contacts[0].point;
                 other.TakeDamage(Intensity, controller, point);
                 point.z = -5;
-                Object.Destroy(SpawnPrefab(point, null,
+                UnityEngine.Object.Destroy(SpawnPrefab(point, null,
                     GameModes.GetDebrisTransform(controller.team)), 1f); 
                 return true;
             }
@@ -75,23 +76,36 @@ namespace Scripts.OOP.Perks.Character
 
             if(shield >= projectile.damage)
             {
-                shield -= projectile.damage;
+                ShieldHealth(-projectile.damage, self);
+
                 projectile.active = false;
                 Shielded(projectile, debrisParent);
                 return false;
             }
 
             projectile.damage -= shield;
-            shield = 0;
+            ShieldHealth(-shield, self);
+
             Shielded(projectile, debrisParent);
             return false;
+        }
+
+        private void ShieldHealth(float amount, BaseController controller)
+        {
+            shield += amount;
+
+            if(controller is PlayerController player)
+            {
+                var ui = player.UI;
+                ui.shield.fillAmount = Math.Min(1, shield / player.stats.MaxHealth);
+            }
         }
 
         private void Shielded(ProjectileHandler projectile, Transform debrisParent)
         {
             var pos = projectile.transform.position;
             pos.z = -5;
-            Object.Destroy(SpawnPrefab(pos, null, debrisParent), 1f);
+            UnityEngine.Object.Destroy(SpawnPrefab(pos, null, debrisParent), 1f);
         }
 
         public bool OnControllerUpdate(BaseController controller, float delta)
@@ -105,7 +119,8 @@ namespace Scripts.OOP.Perks.Character
             float max = Intensity * 5;
             if (shield >= max) return false;
 
-            shield = System.Math.Min(max, shield + delta);
+            ShieldHealth(System.Math.Min(max - shield, delta), 
+                controller);
             return true;
         }
     }

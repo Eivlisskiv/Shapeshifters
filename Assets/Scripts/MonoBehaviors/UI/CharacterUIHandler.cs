@@ -18,6 +18,8 @@ public class CharacterUIHandler : MonoBehaviour
     StatBar xp;
     public float xpp;
 
+    public Image shield;
+
     // Start is called before the first frame update
     void Start() 
     {
@@ -35,6 +37,11 @@ public class CharacterUIHandler : MonoBehaviour
         => healthp = percent;
     public void UpdateXP(float percent)
         => xpp = percent;
+
+    public void UpdateShield(float percent)
+    {
+
+    }
 
     public void LevelUp(int level)
         => this.level.text = level.ToString();

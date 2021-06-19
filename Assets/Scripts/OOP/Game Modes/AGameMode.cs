@@ -182,15 +182,13 @@ namespace Scripts.OOP.Game_Modes
             loaded = true;
             menu.SetStartButton(true);
             menu.container.SetActive(false);
-        }
 
-        public virtual void GameOver()
-        {
-
+            PauseHandler.SetControl(true);
         }
 
         public virtual void EndGame()
         {
+            PauseHandler.SetControl(false);
             map.Clear();
         }
     }

@@ -70,8 +70,7 @@ public class MainMenuHandler : MonoBehaviour
         cooldown = Math.Max(0, cooldown - Time.deltaTime);
         if (cooldown == 0) 
         {
-            if (action == MenuAction.GameOver)
-                EndGame();
+            if (action == MenuAction.GameOver) EndGame();
             action = MenuAction.None; 
         }
     }
@@ -161,7 +160,7 @@ public class MainMenuHandler : MonoBehaviour
 
     public void SetStartButton(bool active)
     {
-        buttonText.text = active ? "Start" : "Loading...";
+        buttonText.text = active ? "Select Game Mode" : "Loading...";
         if (!background) background = container.GetComponent<Image>();
         start.interactable = active;
     }

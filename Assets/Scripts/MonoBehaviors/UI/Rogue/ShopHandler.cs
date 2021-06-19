@@ -11,7 +11,12 @@ public class ShopHandler : MonoBehaviour
     public RectTransform perkList;
     public GameObject perkPrefab;
     public Text pointsDisplay;
-    public Text errors;
+
+    public Text perkTitle;
+    public Button purchase;
+    public Text info;
+
+    private (Perk perk, Text title, Text desc)? selected;
 
     internal PlayerController player;
 
@@ -23,18 +28,29 @@ public class ShopHandler : MonoBehaviour
     void Start()
     {
         perks = new UIPerksList(perkList, perkPrefab);
-        perks.LoadPerks((perk, title, description)
-            => PurchasePerk(perk, title, description));
+        perks.LoadPerks((perk, title, description) =>
+        {
+            selected = (perk, title, description);
+            SelectPerk();
+        });
 
         mode = ((Rogue)GameModes.GameMode);
         pointsDisplay.text = mode.points.ToString();
     }
 
-    private void PurchasePerk(Perk perk, Text title, Text desc)
+    private void SelectPerk()
     {
-        if(player.Level < perk.Level)
+        if (!selected.HasValue) return;
+
+        (Perk perk, _, _) = selected.Value;
+
+        perkTitle.text = $"{perk.Name} Level {perk.Level}";
+
+        purchase.enabled = false;
+
+        if (player.Level < perk.Level)
         {
-            errors.text = $"You must be level {perk.Level} to upgrade " +
+            info.text = $"You must be level {perk.Level} to upgrade " +
                 $"{perk.Name} to level {perk.Level}";
             return;
         }
@@ -42,16 +58,39 @@ public class ShopHandler : MonoBehaviour
         int cost = perk.Level * perk.Level;
         if (mode.points < cost)
         {
-            errors.text = $"Missing {mode.points}/{cost} ({cost - mode.points}) points" +
+            info.text = $"Missing {mode.points}/{cost} ({cost - mode.points}) points" +
                 $" for level {perk.Level} {perk.Name}";
             return;
         }
 
-        errors.text = "";
+        purchase.enabled = true;
+
+        Text btnTitle = purchase.transform.GetChild(0).GetComponent<Text>();
+
+        if (perk.Level == 1)
+        {
+            btnTitle.text = "Purchase";
+            info.text = $"Purchase {perk.Name} for {cost} points";
+        }
+        else
+        {
+            btnTitle.text = "Upgrade";
+            info.text = $"Upgrade {perk.Name} to level {perk.Level} for {cost} points";
+        }
+    }
+
+    public void PurchasePerk()
+    {
+        if(!selected.HasValue) return;
+
+        (Perk perk, Text title, Text desc) = selected.Value;
+
+        int cost = perk.Level * perk.Level;
 
         mode.points -= cost;
         pointsDisplay.text = mode.points.ToString();
         Purchased(perk, title, desc);
+        SelectPerk();
     }
 
     private void Purchased(Perk perk, Text title, Text desc)
@@ -61,7 +100,7 @@ public class ShopHandler : MonoBehaviour
         player.perks.Add(add, player.UI);
 
         perk.LevelUp();
-        title.text = $"{perk.Name} lvl {perk.Level}";
+        title.text = $"{perk.Name} lvl. {perk.Level}";
         desc.text = perk.Description;
     }
 

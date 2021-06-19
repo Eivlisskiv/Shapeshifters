@@ -44,6 +44,7 @@ namespace IgnitedBox.Tweening.Tweeners
 
         [SerializeField]
         private AnimationCurve _curve;
+
         public AnimationCurve Curve
         {
             get => _curve;
@@ -55,6 +56,8 @@ namespace IgnitedBox.Tweening.Tweeners
                 else Easing = null;
             }
         }
+
+        public bool scaledTime = true;
 
         public Func<double, double> Easing { get; set; }
 
@@ -86,6 +89,12 @@ namespace IgnitedBox.Tweening.Tweeners
         {
             Time += time;
             float x = Time / Duration;
+
+            if(Easing == null && _curve != null)
+            {
+                Easing = (t) => { return _curve.Evaluate((float)t); };
+            }
+
             percent = Easing == null ? x : (float)Easing(x);
             return x >= 1;
         }
