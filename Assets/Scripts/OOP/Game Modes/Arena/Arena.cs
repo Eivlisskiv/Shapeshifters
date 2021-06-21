@@ -1,14 +1,21 @@
 ﻿using Scripts.OOP.Perks;
 using Scripts.OOP.TileMaps;
+using Scripts.OOP.UI;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Scripts.OOP.Game_Modes.Arena
 {
     public class Arena : AGameMode, IControllerLevelUp, IElimination
     {
+        private bool spawns = false;
         private float spawnCooldown;
         private int level;
+
+        private ObjectiveElement mainObjective;
+        private int eliminations;
+        private Text progress;
 
         public Arena(MainMenuHandler menu, MapHandler map) 
             : base(menu, map, new Dictionary<string, (float, string[])>() {
@@ -23,6 +30,8 @@ namespace Scripts.OOP.Game_Modes.Arena
         {
             if (map.current == null || !map.current.Loaded) return;
 
+            if (!spawns) return;
+
             if(spawnCooldown > 0)
             {
                 spawnCooldown -= Time.deltaTime;
@@ -36,6 +45,11 @@ namespace Scripts.OOP.Game_Modes.Arena
             if(member is PlayerController player)
             {
                 player.cam.Detach();
+            }
+            else
+            {
+                eliminations++;
+                progress.text = eliminations.ToString();
             }
 
             base.MemberDestroyed(member);
@@ -53,6 +67,22 @@ namespace Scripts.OOP.Game_Modes.Arena
         {
             base.OnLoaded();
             SpawnPlayer();
+        }
+
+        protected override void OnReady()
+        {
+            mainObjective = Objectives.CreateObjective("Main", Color.red);
+            mainObjective.Get<Text>("Title").text = "Eliminate enemies.";
+            mainObjective.Get<Text>("Objective").text = "Eliminations: ";
+
+            progress = mainObjective.Get<Text>("Progress", t => 
+            {
+                t.text = "0";
+                t.alignment = TextAnchor.MiddleCenter;
+            });
+
+
+            spawns = true;
         }
 
         private void SpawnPlayer()

@@ -1,7 +1,9 @@
 ﻿using Scripts.OOP.TileMaps;
+using Scripts.OOP.UI;
 using Scripts.OOP.Utils;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Scripts.OOP.Game_Modes.Rogue
 {
@@ -10,8 +12,28 @@ namespace Scripts.OOP.Game_Modes.Rogue
         public int points;
         private enum Stage { Waves, Pausing, Menu, Resuming, PassGate }
 
+        private ObjectiveElement objective;
+        private Text progress;
+        private bool spawns;
+
         private float cooldown;
         private int level;
+
+        private int SpawnsLeft
+        {
+            get => spawnsLeft;
+            set
+            {
+                spawnsLeft = value;
+                UpdateProgress();
+            }
+        }
+
+        private void UpdateProgress()
+        {
+            if (progress) progress.text = (GetTeam(1).Count + spawnsLeft).ToString();
+        }
+
         private int spawnsLeft;
 
         private Stage stage;
@@ -25,7 +47,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
         {
             cooldown = 5;
             level = 1;
-            spawnsLeft = 5;
+            SpawnsLeft = 5;
 
             GameObject shopPrefab = Resources.Load<GameObject>(RessourcePath + "Shop");
             shop = Object.Instantiate(shopPrefab, menu.transform.parent).GetComponent<ShopHandler>();
@@ -57,7 +79,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
                     return;
             }
 
-            if (spawnsLeft > 0)
+            if (spawns && SpawnsLeft > 0)
                 SpawnEnemy();
         }
 
@@ -72,7 +94,10 @@ namespace Scripts.OOP.Game_Modes.Rogue
             }
 
             points += Mathf.Max(1, member.Level / 5);
-            if (GetTeam(1).Count == 0 && spawnsLeft == 0)
+
+            UpdateProgress();
+
+            if (GetTeam(1).Count == 0 && SpawnsLeft == 0)
                 FinishWave(); 
         }
 
@@ -106,7 +131,13 @@ namespace Scripts.OOP.Game_Modes.Rogue
         {
             stage = Stage.PassGate;
             map.current.OpenGate(true);
-            //Tell the player to go through gate
+
+            objective = Objectives.CreateObjective("Gate", Color.cyan);
+            objective.Get<Text>("Title", t =>
+            {
+                t.text = "Reach the next room ---->";
+                t.alignment = TextAnchor.MiddleCenter;
+            });
         }
 
         private bool PlayerReady()
@@ -125,9 +156,15 @@ namespace Scripts.OOP.Game_Modes.Rogue
         private void NextWave()
         {
             stage = Stage.Waves;
+
+            Objectives.Remove(objective);
+            objective = Objectives.Current;
+
             cooldown = 10;
             level++;
-            spawnsLeft = level * 5;
+
+            SpawnsLeft = level * 5;
+
             map.NextRoom(MapRoom.RandomSize());
             ClearDebris();
         }
@@ -137,6 +174,22 @@ namespace Scripts.OOP.Game_Modes.Rogue
             base.OnLoaded();
             map.QueuRoom(MapRoom.RandomSize());
             SpawnPlayer();
+        }
+
+        protected override void OnReady()
+        {
+            objective = Objectives.CreateObjective("Main", Color.red);
+            objective.Get<Text>("Title").text = "Eliminate all the enemies.";
+            objective.Get<Text>("Objective").text = "Enemies Left: ";
+
+            progress = objective.Get<Text>("Progress", t =>
+            {
+                t.alignment = TextAnchor.MiddleCenter;
+            });
+
+            UpdateProgress();
+
+            spawns = true;
         }
 
         private void SpawnPlayer()
@@ -156,7 +209,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
             if (CheckEnemySpawns(out Vector2Int coords))
             {
                 SpawnRandom(1, coords, level);
-                spawnsLeft--;
+                SpawnsLeft--;
                 cooldown = 5;
             }
         }

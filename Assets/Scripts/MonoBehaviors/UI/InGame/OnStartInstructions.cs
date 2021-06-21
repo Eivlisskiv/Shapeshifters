@@ -1,6 +1,7 @@
 ﻿using IgnitedBox.Tweening;
 using IgnitedBox.Tweening.EasingFunctions;
 using IgnitedBox.Tweening.Tweeners.VectorTweeners;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,8 @@ public class OnStartInstructions : MonoBehaviour
 {
     public Text front;
     public Text back;
+
+    public Action onReady;
 
     bool dying = false;
 
@@ -19,9 +22,15 @@ public class OnStartInstructions : MonoBehaviour
             dying = true;
 
             transform.Tween<Transform, Vector3, ScaleTween>
-                (new Vector3(0, 0, 0), 1, 1, BackEasing.In,
-                () => Destroy(gameObject)).scaledTime = false;
+                (new Vector3(0, 0, 0), 0.8f, 1, BackEasing.In,
+                Callback).scaledTime = false;
         }
+    }
+
+    public void Callback()
+    {
+        if (onReady != null) onReady();
+        Destroy(gameObject);
     }
 
     public void SetObjective(string text)

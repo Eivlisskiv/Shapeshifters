@@ -30,6 +30,9 @@ public class MainMenuHandler : MonoBehaviour
     public RectTransform gameModeContainer;
     public GameObject gameModePrefab;
 
+    public GameObject instructions;
+    public GameObject objectivePrefab;
+
     private MenuAction action;
     private float cooldown;
 
@@ -146,11 +149,12 @@ public class MainMenuHandler : MonoBehaviour
         CheckButtons(button);
     }
     
-    public void StartGame(Type mode)
+    public void StartGame(Type mode, string description)
     {
         if (action == MenuAction.Loading) return;
         action = MenuAction.Loading;
         AGameMode gamemode = (AGameMode)Activator.CreateInstance(mode, this, map);
+        gamemode.description = description;
         gamemode.StartMap();
 
         SwitchTab(null);
@@ -191,5 +195,20 @@ public class MainMenuHandler : MonoBehaviour
         }
 
         GameModes.GameMode?.EndGame();
+    }
+
+    internal ObjectiveHandler SpawnGameUI(string gamemodeDesc, Action onReady)
+    {
+        var o = Instantiate(instructions);
+        var i = o.GetComponent<OnStartInstructions>();
+        i.onReady = onReady;
+        i.SetObjective(gamemodeDesc);
+
+        o.transform.SetParent(transform.parent);
+        o.transform.localPosition = new Vector3(0, 0, 0);
+
+        var objectiveContainer = Instantiate(objectivePrefab);
+        objectiveContainer.transform.SetParent(transform.parent);
+        return objectiveContainer.GetComponent<ObjectiveHandler>();
     }
 }

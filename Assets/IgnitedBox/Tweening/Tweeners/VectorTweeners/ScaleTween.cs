@@ -7,7 +7,7 @@ namespace IgnitedBox.Tweening.Tweeners.VectorTweeners
     public class ScaleTween : VectorTweener<Transform>
     {
         public ScaleTween() { }
-        public ScaleTween(RectTransform element, Vector3 target, float time,
+        public ScaleTween(Transform element, Vector3 target, float time,
             float delay, Func<double, double> easing, Action callback)
             : base(element, target, time, delay, easing, callback) { }
 

@@ -1,4 +1,6 @@
-﻿using Scripts.OOP.Utils;
+﻿using IgnitedBox.Tweening;
+using IgnitedBox.Tweening.Tweeners.VectorTweeners;
+using Scripts.OOP.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +12,8 @@ namespace Scripts.OOP.Game_Modes
         public string Name => _name ??
             (_name = GetType().Name.Replace('_', ' '));
 
+        public string description = "...";
+
         protected string RessourcePath => $"GameMode/{Name}/";
 
         protected readonly string scoreNamePath;
@@ -17,8 +21,8 @@ namespace Scripts.OOP.Game_Modes
         protected bool Loaded { get => loaded; }
         private bool loaded;
         
-        public int Score 
-        { get => score; }
+
+        public int Score { get => score; }
         protected int score;
 
         protected MapHandler map;
@@ -35,6 +39,8 @@ namespace Scripts.OOP.Game_Modes
             = new ResourceCache<GameObject>("Enemies/");
 
         protected readonly Dictionary<string, (float, string[])> enemyTable;
+
+        protected ObjectiveHandler Objectives { get; private set; }
 
         public int SavedScore()
             => PlayerPrefs.GetInt(scoreNamePath);
@@ -183,7 +189,22 @@ namespace Scripts.OOP.Game_Modes
             menu.SetStartButton(true);
             menu.container.SetActive(false);
 
+            Objectives = menu.SpawnGameUI(description, OnReady);
+
             PauseHandler.SetControl(true);
+        }
+
+        protected abstract void OnReady();
+
+        public virtual void PlayerElimenated(PlayerController player)
+            => GameOver();
+
+        protected void GameOver()
+        {
+            Objectives.transform.Tween<Transform, Vector3, PositionTween>
+                (Objectives.transform.localPosition + new Vector3(0, 200, 0),
+                0.5f, callback: () => Object.Destroy(Objectives));
+            MainMenuHandler.GameOver();
         }
 
         public virtual void EndGame()

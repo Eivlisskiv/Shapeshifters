@@ -11,21 +11,24 @@ namespace Scripts.OOP.UI
         readonly MainMenuHandler menu;
         internal Text score;
 
+        private readonly string desc;
+
         public GameModeUI(Type mode, string description, GameObject ui, MainMenuHandler menu)
         {
             this.menu = menu;
             this.mode = mode;
-            InitializeUI(ui, description);
+            desc = description;
+            InitializeUI(ui);
         }
 
         public void SetScore(int score)
             => this.score.text = score.ToString();
 
-        private void InitializeUI(GameObject ui, string desc)
+        private void InitializeUI(GameObject ui)
         {
             //main = ui;
             InitScore(ui.transform.GetChild(0));
-            InitDescription(ui.transform.GetChild(1), desc);
+            InitDescription(ui.transform.GetChild(1));
             InitTitle(ui.transform.GetChild(2));
             InitButton(ui.transform.GetChild(3));
         }
@@ -39,7 +42,7 @@ namespace Scripts.OOP.UI
         private void InitButton(Transform child)
         {
             Button button = child.GetComponent<Button>();
-            button.onClick.AddListener(() => menu.StartGame(mode));
+            button.onClick.AddListener(() => menu.StartGame(mode, desc));
         }
 
         private void InitScore(Transform transform)
@@ -49,10 +52,10 @@ namespace Scripts.OOP.UI
             score.text = GameModes.LoadScore(mode).ToString();
         }
 
-        private void InitDescription(Transform transform, string description)
+        private void InitDescription(Transform transform)
         {
             Text desc = transform.GetChild(0).GetComponent<Text>();
-            desc.text = description;
+            desc.text = this.desc;
         }
     }
 }

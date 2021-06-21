@@ -47,7 +47,7 @@ public class PlayerController : BaseController
 
     public override bool IsFiring(out float angle)
     {
-        if(!Input.GetMouseButton(0))
+        if(!Input.GetMouseButton(0) && !Input.GetKey(KeyCode.Space))
         {
             angle = 0;
             return false;
@@ -88,6 +88,6 @@ public class PlayerController : BaseController
     {
         base.OnDeathEnded();
         if (ui) Destroy(ui.gameObject);
-        MainMenuHandler.GameOver();
+        GameModes.GameMode.PlayerElimenated(this);
     }
 }
