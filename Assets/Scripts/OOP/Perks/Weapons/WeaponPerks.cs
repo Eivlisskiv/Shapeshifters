@@ -1,6 +1,6 @@
 ﻿using Scripts.OOP.Stats;
 
-namespace Scripts.OOP.Perks.Weapon
+namespace Scripts.OOP.Perks.Weapons
 {
     public class Charging_Round : Perk, IProjectileHitTarget
     {
@@ -11,8 +11,8 @@ namespace Scripts.OOP.Perks.Weapon
 
         public bool OnHit(ProjectileHandler projectile, BaseController target)
         {
-            projectile.damage *= 1 + (projectile.airtime * (Intensity / 10f));
-            projectile.force += projectile.airtime;
+            projectile.damage *= 1 + (projectile.Airtime * (Intensity / 10f));
+            projectile.force += projectile.Airtime;
             return true;
         }
     }
@@ -20,11 +20,10 @@ namespace Scripts.OOP.Perks.Weapon
     public class Barrel_Buff : Perk, IWeaponFire
     {
         protected override string GetDescription()
-            => $"Increases firing radius and damage by ({Intensity}).";
+            => $"Increases damage by ({Intensity}).";
 
-        public bool OnFire(float _, WeaponHandler weapon, WeaponStats buff)
+        public bool OnFire(float _, Weapon weapon, WeaponStats buff)
         {
-            buff.angle += Intensity;
             buff.totalDamage += Intensity;
             return true;
         }

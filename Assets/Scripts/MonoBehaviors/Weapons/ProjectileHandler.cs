@@ -1,38 +1,49 @@
 ﻿using Scripts.OOP.Utils;
+using System;
 using UnityEngine;
 
 public class ProjectileHandler : MonoBehaviour
 {
     public ProjectileBody body;
-    public GameObject debrisPrefab;
+
+    public Rigidbody2D Rigidbody 
+    {
+        get
+        {
+            if (!_rigidbody) _rigidbody = GetComponent<Rigidbody2D>();
+            return _rigidbody;
+        } 
+    }
+
+    private Rigidbody2D _rigidbody;
 
     internal bool active = true;
 
     ParticleSystem particles;
 
-    BaseController sender;
+    public BaseController Sender { get; private set; }
 
-    public BaseController Sender
-    {
-        get => sender;
-    }
+    public Action<ProjectileHandler, Collider2D> onHit;
+    public Action<ProjectileHandler> onUpdate;
 
     public float damage;
     public float force;
 
-    internal float airtime;
-    float lifeSpan;
-    Vector2 velocity;
+    public float Airtime { get; private set; }
+
+    public float LifeSpan { get; private set; }
+
+    public Vector2 Velocity { get; private set; }
 
     bool dying = false;
 
     internal void SetStats(BaseController sender, 
         float damage, float range, Vector2 vector2, float force)
     {
-        this.sender = sender;
+        Sender = sender;
         this.damage = damage;
-        lifeSpan = range;
-        velocity = vector2;
+        LifeSpan = range;
+        Velocity = vector2;
         this.force = force;
     }
 
@@ -41,7 +52,9 @@ public class ProjectileHandler : MonoBehaviour
     {
         particles = GetComponent<ParticleSystem>();
         transform.rotation = Quaternion.Euler(0,0,
-            -90 + Vectors2.TrueAngle(Vector2.right, velocity));
+            -90 + Vectors2.TrueAngle(Vector2.right, Velocity));
+
+        body.handler = this;
     }
 
     // Update is called once per frame
@@ -49,20 +62,22 @@ public class ProjectileHandler : MonoBehaviour
     {
         if (dying) return;
 
-        airtime += Time.deltaTime;
-        if(lifeSpan < airtime)
-        {
-            ToDestroy();
-            return;
-        }
+        Airtime += Time.deltaTime;
 
-        transform.position += (Vector3)velocity * Time.deltaTime;
+        onUpdate?.Invoke(this);
     }
 
     public bool IsSameSender(GameObject projectile)
     {
         ProjectileBody body = projectile.GetComponent<ProjectileBody>();
-        return body && body.handler.sender == sender; 
+        return body && body.handler.Sender == Sender;
+    }
+
+    public void OnCollide(Collider2D collision)
+    {
+        if (dying) return;
+
+        onHit?.Invoke(this, collision);
     }
 
     public void ToDestroy()

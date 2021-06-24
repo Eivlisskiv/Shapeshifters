@@ -8,7 +8,7 @@ namespace Scripts.OOP.EnemyBehaviors.Fire
         public bool Fire(EnemyController self, out float angle)
         {
             angle = 0;
-            if (self.FireReady && self.weapon)
+            if (self.FireReady && self.Weapon)
             {
                 if (!self.target || !ShootTarget(self, out angle))
                 {

@@ -2,19 +2,32 @@
 using Scripts.OOP.Game_Modes;
 using Scripts.OOP.Perks;
 using Scripts.OOP.Perks.Character.Triggers;
-using Scripts.OOP.Perks.Weapon;
+using Scripts.OOP.Perks.Weapons;
 using Scripts.OOP.Utils;
 using System;
 using UnityEngine;
 
 public abstract class BaseController : MonoBehaviour
 {
-    public WeaponHandler weapon;
+    public Weapon Weapon
+        => weapon ? weapon : (weapon = GetComponent<Weapon>());
+
+    private Weapon weapon;
+
+    [NonSerialized]
     public BodyPhysicsHandler body;
 
     internal int team;
 
-    private SoundHandler sounds;
+    public SoundHandler Sounds 
+    { 
+        get
+        {
+            if (!_sounds)  _sounds = GetComponent<SoundHandler>();
+            return _sounds;
+        }
+    }
+    private SoundHandler _sounds;
 
     float cooldown = 0;
     public bool FireReady => cooldown <= 0;
@@ -43,10 +56,8 @@ public abstract class BaseController : MonoBehaviour
     void Start()
     {
         body = GetComponent<BodyPhysicsHandler>();
-        sounds = GetComponent<SoundHandler>();
         body.SetColor(0, _colors[0]);
         body.SetColor(1, _colors[1]);
-        weapon = GetComponent<WeaponHandler>();
         OnStart();
         if (stats == null) stats = new Stats(50 + (level / 5));
         if (perks == null) perks = new PerksHandler();
@@ -109,24 +120,47 @@ public abstract class BaseController : MonoBehaviour
         return false;
     }
 
+    public T SetWeapon<T>() where T : Weapon
+    {
+        if (Weapon) Destroy(weapon);
+
+        var wep = gameObject.AddComponent<T>();
+        weapon = wep;
+        return wep;
+    }
+
     private void Fire(float angle)
     {
-        sounds.PlayRandom("Fire");
-        cooldown = weapon.cooldown;
-        float strength = weapon.Fire(this, angle);
+        Sounds.PlayRandom("Fire");
+        cooldown = Weapon.cooldown;
+        float strength = Weapon.Fire(this, angle);
         body.AddForce(angle, strength, strength);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (StuckInWall(collision)) return;
-
         perks.Activate<ICollide>(1, perk => perk.OnCollide(this, collision));
 
-        sounds.PlayRandom("Collide");
+        Sounds.PlayRandom("Collide");
         //Apply collision force
         for (int i = 0; i < collision.contactCount; i++)
             ApplyCollisionForce(collision.contacts[i], 0);
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        var otherPos = collision.collider.ClosestPoint(transform.position);
+        var distance = (otherPos - (Vector2)transform.position).magnitude;
+        if (distance < 0.1f)
+        {
+            if(distance == 0)
+            {
+                TakeDamage(1, null, null);
+                return;
+            }
+
+            Debug.LogWarning($"{name} may be stuck");
+        }
     }
 
     public void ProjectileHit(ProjectileHandler projectile)
@@ -172,7 +206,7 @@ public abstract class BaseController : MonoBehaviour
 
     private void SpawnHitParticles(Vector2 position)
     {
-        sounds.PlayRandom("Hit");
+        Sounds.PlayRandom("Hit");
         if (body && body.hitPrefab)
         {
             var debris = Instantiate(body.hitPrefab, GameModes.GetDebrisTransform(team));
@@ -233,17 +267,5 @@ public abstract class BaseController : MonoBehaviour
                 mode.ControllerLevelUp(this));
         }
         OnXPChange(up);
-    }
-
-    private bool StuckInWall(Collision2D collision)
-    {
-        var otherPos = collision.collider.transform.position;
-        var distance = (otherPos - transform.position).magnitude;
-        if (distance < 0.1f)
-        {
-            Debug.LogWarning($"{name} may be stuck");
-        }
-
-        return false;
     }
 }

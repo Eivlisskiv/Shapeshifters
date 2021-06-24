@@ -2,7 +2,7 @@
 using Scripts.OOP.Utils;
 using UnityEngine;
 
-namespace Scripts.OOP.Perks.Weapon
+namespace Scripts.OOP.Perks.Weapons
 {
     class Mine_Drop : EmitterPerk, IWeaponFire
     {
@@ -12,9 +12,9 @@ namespace Scripts.OOP.Perks.Weapon
         protected override string GetDescription()
             => $"Has a ({Intensity}%) chance to drop a mine when shooting.";
 
-        public bool OnFire(float angle, WeaponHandler weapon, WeaponStats _)
+        public bool OnFire(float angle, Weapon weapon, WeaponStats _)
         {
-            if (Randomf.Chance(Intensity))
+            if (Randomf.Chance(Intensity * weapon.cooldown))
             {
                 GameObject mine = SpawnPrefab(weapon.transform.position, 
                     new Vector3(0, 0, angle), weapon.transform.parent);

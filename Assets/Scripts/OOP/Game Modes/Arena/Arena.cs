@@ -19,7 +19,7 @@ namespace Scripts.OOP.Game_Modes.Arena
 
         public Arena(MainMenuHandler menu, MapHandler map) 
             : base(menu, map, new Dictionary<string, (float, string[])>() {
-                { "Regular", (100, new[]{ "Regular", "Bomber", "Sniper", "Tank" }) }
+                { "Regular", (100, new[]{ "Regular", "Bomber", "Tank", "Sniper", "Gunner", "Pirate", "Flamer"  }) }
             }, Color.green, Color.red)
         {
             spawnCooldown = 5;

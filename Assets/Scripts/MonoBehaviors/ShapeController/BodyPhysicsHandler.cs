@@ -187,10 +187,13 @@ public class BodyPhysicsHandler : MonoBehaviour
             action(i, points[i], spline);
     }
 
+    public Vector2 ShotVector(float angle)
+        => Vectors2.FromDegAngle(angle, radius);
+
     public (Vector2, bool)[] GetPointsIn(float from, float range)
     {
         List<(Vector2, bool)> points = new List<(Vector2, bool)>();
-        Vector2 hit = Vectors2.FromDegAngle(from, radius);
+        Vector2 hit = ShotVector(from);
         AffectShape((index, point, spline) =>
         {
             Vector2 p = point.Position.Rotate(Rotation);

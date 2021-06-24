@@ -5,6 +5,6 @@
         public string name;
         public AudioEntity[] clips;
 
-        public abstract void Initialize();
+        public virtual void Initialize() { }
     }
 }

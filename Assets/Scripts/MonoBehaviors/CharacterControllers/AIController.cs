@@ -59,7 +59,7 @@ public class AIController : BaseController
     public override bool IsFiring(out float angle)
     {
         angle = 0;
-        if(FireReady && weapon)
+        if(FireReady && Weapon)
         {
             if (!target || !ShootTarget(out angle))
             {
@@ -93,7 +93,7 @@ public class AIController : BaseController
         if(hit && hit.transform == target.transform)
         {
             angle = Vectors2.TrueAngle(Vector2.right, pos - vt);
-            if (distance <= weapon.Range) angle += 180;
+            if (distance <= Weapon.Range) angle += 180;
             return true;
         }
 

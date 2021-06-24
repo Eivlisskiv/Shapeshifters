@@ -1,6 +1,6 @@
 ﻿using Scripts.OOP.Stats;
 
-namespace Scripts.OOP.Perks.Weapon
+namespace Scripts.OOP.Perks.Weapons
 {
     public interface IProjectileHitTarget
     {
@@ -14,6 +14,6 @@ namespace Scripts.OOP.Perks.Weapon
 
     public interface IWeaponFire
     {
-        bool OnFire(float angle, WeaponHandler weapon, WeaponStats buff);
+        bool OnFire(float angle, Weapon weapon, WeaponStats buff);
     }
 }

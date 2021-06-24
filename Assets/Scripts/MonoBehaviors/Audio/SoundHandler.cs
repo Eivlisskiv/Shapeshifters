@@ -1,5 +1,4 @@
 ﻿using Scripts.OOP.Audio;
-using Scripts.OOP.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +11,7 @@ public class SoundHandler : MonoBehaviour
     private Dictionary<string, HashedClips> hashed;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         randoms = HashClipLists(alts);
         hashed = HashClipLists(sounds);
@@ -33,6 +32,30 @@ public class SoundHandler : MonoBehaviour
         }
 
         return dict;
+    }
+
+    public void UpdateClips<T>(T collection)
+        where T : ClipsCollection
+    {
+        collection.Initialize();
+
+        if (UpdateDict(collection, randoms)) return;
+
+        if (UpdateDict(collection, hashed)) return;
+
+    }
+
+    private bool UpdateDict<T, D>(T collection, Dictionary<string, D> dict) 
+        where T : ClipsCollection
+        where D : ClipsCollection
+    {
+        if (typeof(T) == typeof(D))
+        {
+            dict[collection.name] = collection as D;
+            return true;
+        }
+
+        return false;
     }
 
     public void PlayRandom(string category)

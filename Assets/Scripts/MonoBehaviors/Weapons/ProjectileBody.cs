@@ -1,19 +1,51 @@
 ﻿using UnityEngine;
+using System;
 
 public class ProjectileBody : MonoBehaviour
 {
-    internal ProjectileHandler handler;
+    [NonSerialized]
+    public ProjectileHandler handler;
 
-    private void Start()
-    {
-        handler = transform.parent.GetComponent<ProjectileHandler>();
-    }
+    public bool frameCollision = false;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        BaseController controller = collision.gameObject.GetComponent<BaseController>();
-        if (controller) controller.ProjectileHit(handler);
-        else if (handler.IsSameSender(collision.gameObject)) return;
-        handler.ToDestroy();
+        if(!frameCollision) return;
+
+        handler.OnCollide(collision);
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (frameCollision) return;
+
+        handler.OnCollide(collision);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (!frameCollision) return;
+
+        handler.OnCollide(collision.collider);
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (frameCollision) return;
+
+        handler.OnCollide(collision.collider);
+    }
+
+    private void OnDestroy()
+    {
+        DestroyComponent<SpriteRenderer>();
+        DestroyComponent<Rigidbody2D>();
+        DestroyComponent<Collider2D>();
+    }
+
+    private void DestroyComponent<T>() where T : Component
+    {
+        T component = GetComponent<T>();
+        if (component) Destroy(component);
     }
 }

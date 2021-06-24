@@ -8,7 +8,7 @@ namespace Scripts.OOP.EnemyBehaviors.Fire
         public bool Fire(EnemyController self, out float angle)
         {
             angle = 0;
-            if (self.FireReady && self.weapon)
+            if (self.FireReady && self.Weapon)
             {
                 if (!self.target || !ShootTarget(self, out angle))
                 {
@@ -32,7 +32,7 @@ namespace Scripts.OOP.EnemyBehaviors.Fire
             if (hit && hit.transform == self.target.transform)
             {
                 angle = Vectors2.TrueAngle(Vector2.right, pos - vt);
-                if (distance <= self.weapon.Range) angle += 180;
+                if (distance <= self.Weapon.Range) angle += 180;
                 return true;
             }
 

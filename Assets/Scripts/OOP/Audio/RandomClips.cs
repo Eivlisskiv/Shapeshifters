@@ -6,8 +6,6 @@ namespace Scripts.OOP.Audio
     [System.Serializable]
     public class RandomClips : ClipsCollection
     {
-        public override void Initialize() { }
-
         public void PlayRandom(GameObject obj)
         {
             if(clips.Length == 0)
