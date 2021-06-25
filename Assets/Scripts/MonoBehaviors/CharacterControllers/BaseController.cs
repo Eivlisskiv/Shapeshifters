@@ -58,8 +58,10 @@ public abstract class BaseController : MonoBehaviour
         body = GetComponent<BodyPhysicsHandler>();
         body.SetColor(0, _colors[0]);
         body.SetColor(1, _colors[1]);
+
         OnStart();
-        if (stats == null) stats = new Stats(50 + (level / 5));
+
+        if (stats == null) stats = new Stats(30 + (level / 5));
         if (perks == null) perks = new PerksHandler();
     }
 
@@ -151,16 +153,7 @@ public abstract class BaseController : MonoBehaviour
     {
         var otherPos = collision.collider.ClosestPoint(transform.position);
         var distance = (otherPos - (Vector2)transform.position).magnitude;
-        if (distance < 0.1f)
-        {
-            if(distance == 0)
-            {
-                TakeDamage(1, null, null);
-                return;
-            }
-
-            Debug.LogWarning($"{name} may be stuck");
-        }
+        if (distance == 0) TakeDamage(1, null, null);
     }
 
     public void ProjectileHit(ProjectileHandler projectile)

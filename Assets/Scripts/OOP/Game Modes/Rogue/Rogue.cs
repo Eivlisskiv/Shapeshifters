@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace Scripts.OOP.Game_Modes.Rogue
 {
-    public class Rogue : AGameMode, IRogueMenu
+    public class Rogue : AGameMode, IRogueMenu, IControllerLevelUp
     {
         public int points;
         private enum Stage { Waves, Pausing, Menu, Resuming, PassGate }
@@ -163,7 +163,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
             cooldown = 10;
             level++;
 
-            SpawnsLeft = level * 5;
+            SpawnsLeft = 5 + (level * 2);
 
             map.NextRoom(MapRoom.RandomSize());
             ClearDebris();
@@ -226,6 +226,11 @@ namespace Scripts.OOP.Game_Modes.Rogue
             }
 
             return false;
+        }
+
+        public void ControllerLevelUp(BaseController controller)
+        {
+            controller.stats.MaxHealthPoints(controller.Level);
         }
     }
 }

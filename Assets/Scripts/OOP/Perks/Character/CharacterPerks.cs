@@ -64,30 +64,35 @@ namespace Scripts.OOP.Perks.Character
         protected override string RessourcePath => "Particles/Shields";
 
         protected override string GetDescription()
-            => $"Grants ({Intensity * 5}) Shields with a 5 seconds recharge rate.";
+            => $"Grants ({Intensity * 5}) Shields with a 5 seconds recharge delay.";
+
+        private bool Remaining => Charge > 0 || shield > 0;
+
+        private bool noCharge = false;
+        private float noChargeValue;
 
         public bool OnHit(BaseController self, ProjectileHandler projectile)
         {
             cooldown = 5;
 
-            if (!projectile || shield <= 0) return false;
+            if (!projectile || shield <= 0) return !Remaining;
 
             Transform debrisParent = GameModes.GetDebrisTransform(self.team);
 
             if(shield >= projectile.damage)
             {
                 ShieldHealth(-projectile.damage, self);
-
-                projectile.active = false;
                 Shielded(projectile, debrisParent);
-                return false;
+                projectile.active = false;
+
+                return !Remaining;
             }
 
             projectile.damage -= shield;
             ShieldHealth(-shield, self);
-
             Shielded(projectile, debrisParent);
-            return false;
+
+            return !Remaining;
         }
 
         private void ShieldHealth(float amount, BaseController controller)
@@ -110,6 +115,14 @@ namespace Scripts.OOP.Perks.Character
 
         public bool OnControllerUpdate(BaseController controller, float delta)
         {
+            if (Level == 0 && noCharge && shield > 0)
+            {
+                if(noChargeValue >= Charge)
+                    return false;
+
+                noCharge = false;
+            }
+
             if (cooldown > 0)
             {
                 cooldown -= delta;
@@ -119,8 +132,15 @@ namespace Scripts.OOP.Perks.Character
             float max = Intensity * 5;
             if (shield >= max) return false;
 
-            ShieldHealth(System.Math.Min(max - shield, delta), 
-                controller);
+            ShieldHealth(Math.Min(max - shield, delta), controller);
+
+            if(Level == 0 && Charge - delta <= 0)
+            {
+                noChargeValue = Charge;
+                noCharge = true;
+                return false;
+            }
+
             return true;
         }
     }

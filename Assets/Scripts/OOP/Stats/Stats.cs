@@ -14,5 +14,8 @@
             maxHealth = health;
             this.health = health;
         }
+
+        internal void MaxHealthPoints(int points)
+            => maxHealth += points;
     }
 }
