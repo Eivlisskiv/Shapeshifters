@@ -42,7 +42,8 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
         public Rogue(MainMenuHandler menu, MapHandler map)
             : base(menu, map, new Dictionary<string, (float, string[])>() {
-                { "Regular", (100, new[]{ "Regular", "Bomber", "Tank", "Sniper", "Gunner", "Pirate", "Flamer" }) }
+                { "Regular/Tier1", (60, new[]{ "Regular", "Bomber", "Tank", "Sniper", }) },
+                { "Regular/Tier2", (40, new[]{"Gunner", "Pirate", "Flamer" }) }
             }, Color.green, Color.red)
         {
             cooldown = 5;
@@ -104,8 +105,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
         private void FinishWave()
         {
             score++;
-            if (!map.loading.Loaded) 
-                map.loading.tilesPerFrame = 50;
+            if (!map.loading.Loaded) map.loading.SetTilesPerFrame(50);
             stage = Stage.Pausing;
             PauseHandler.SetControl(false);
             cooldown = 5;
@@ -165,14 +165,21 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
             SpawnsLeft = 5 + (level * 2);
 
-            map.NextRoom(MapRoom.RandomSize());
+            if (score % 5 == 0)
+            {
+                map.NextRoom(80);
+                map.loading.hasCenter = false;
+            }
+            else map.NextRoom(MapRoom.RandomSize());
             ClearDebris();
         }
 
         public override void OnLoaded()
         {
             base.OnLoaded();
-            map.QueuRoom(MapRoom.RandomSize());
+            map.QueuRoom(80);
+            map.loading.hasCenter = false;
+
             SpawnPlayer();
         }
 
@@ -230,7 +237,8 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
         public void ControllerLevelUp(BaseController controller)
         {
-            controller.stats.MaxHealthPoints(controller.Level);
+            if(controller is PlayerController)
+                controller.stats.MaxHealthPoints(controller.Level);
         }
     }
 }

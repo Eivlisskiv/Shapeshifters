@@ -12,6 +12,16 @@ class FlameThrower : Weapon
 
     public override float Range => (life * speed) / 5;
 
+    public override void DefaultPreset()
+    {
+        cooldown = 0.1f;
+        force = 1;
+        totalDamage = 1;
+        life = 0.3f;
+        speed = 10;
+        accuracy = 50;
+    }
+
     protected override void FireProjectiles(BaseController sender,
         float angle, WeaponStats stats)
     {

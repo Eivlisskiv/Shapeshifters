@@ -21,11 +21,15 @@ namespace Scripts.OOP.UI
             this.cam = cam;
             cam.orthographicSize = size;
 
-            background = cam.transform.GetChild(0).transform;
+            if(cam.transform.childCount > 0)
+                background = cam.transform.GetChild(0).transform;
+
             float s = size / 3f;
             sizeY = s * 2;
             sizeX = s * 2.5f;
-            background.localScale = new Vector3(s, s, 1);
+
+            if(background)
+                background.localScale = new Vector3(s, s, 1);
         }
 
         public Vector3 MouseToWorld()
@@ -37,17 +41,21 @@ namespace Scripts.OOP.UI
 
         public void Update(Vector2 pos)
         {
+            if(cam == null) cam = Camera.main;
             cam.transform.position = new Vector3(
                 pos.x, pos.y, -10);
 
-            Vector2 m = pos - last;
-            Vector3 c = background.localPosition;
-            background.localPosition = new Vector3(
-                Coord(c.x, m.x, sizeX),
-                Coord(c.y, m.y, sizeY), 
-                50);
+            if (background != null)
+            {
+                Vector2 m = pos - last;
+                Vector3 c = background.localPosition;
+                background.localPosition = new Vector3(
+                    Coord(c.x, m.x, sizeX),
+                    Coord(c.y, m.y, sizeY),
+                    50);
 
-            last = pos;
+                last = pos;
+            }
         }
 
         private float Coord(float c, float m, float max)

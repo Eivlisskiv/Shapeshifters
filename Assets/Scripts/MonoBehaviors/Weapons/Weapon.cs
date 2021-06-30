@@ -2,10 +2,22 @@
 using Scripts.OOP.Game_Modes;
 using Scripts.OOP.Perks.Weapons;
 using Scripts.OOP.Stats;
+using System.Linq;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+    public static System.Type[] Types = GetWeaponTypes();
+
+    private static System.Type[] GetWeaponTypes()
+    {
+        System.Type wep = typeof(Weapon);
+        return wep.Assembly.GetTypes().Where(t => 
+            !t.IsAbstract && !t.IsInterface &&
+            t.IsSubclassOf(wep)).ToArray();
+    }
+
+
     const string desc = "A single shot weapon";
 
     protected GameObject projectilPrefab;
@@ -22,6 +34,15 @@ public class Weapon : MonoBehaviour
     protected virtual string Description => desc;
 
     protected string Name { get; private set; }
+
+    public virtual void DefaultPreset()
+    {
+        cooldown = 0.8f;
+        force = 10;
+        totalDamage = 30;
+        life = 1.5f;
+        speed = 15;
+    }
 
     private void Start()
     {

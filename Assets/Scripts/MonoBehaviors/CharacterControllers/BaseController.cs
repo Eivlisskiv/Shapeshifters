@@ -123,10 +123,21 @@ public abstract class BaseController : MonoBehaviour
     }
 
     public T SetWeapon<T>() where T : Weapon
-    {
-        if (Weapon) Destroy(weapon);
+        => (T)SetWeapon(typeof(T));
 
-        var wep = gameObject.AddComponent<T>();
+    public Weapon SetWeapon(Type type)
+    {
+        if (!type.IsSubclassOf(typeof(Weapon)))
+            throw new Exception("SetWeapon Type is not a subclass of Weapon type");
+
+        if (Weapon) Destroy(Weapon);
+
+        return InitWeapon((Weapon)gameObject.AddComponent(type));
+    }
+
+    private T InitWeapon<T>(T wep) where T : Weapon
+    {
+        wep.DefaultPreset();
         weapon = wep;
         return wep;
     }

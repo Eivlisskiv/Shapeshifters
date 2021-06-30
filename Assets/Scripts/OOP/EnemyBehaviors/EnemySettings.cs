@@ -1,5 +1,7 @@
-﻿using Scripts.OOP.Perks;
+﻿using IgnitedBox.EditorDropdown.ByAttribute;
+using Scripts.OOP.Perks;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Scripts.OOP.EnemyBehaviors
@@ -7,6 +9,8 @@ namespace Scripts.OOP.EnemyBehaviors
     [Serializable]
     public class EnemySettings
     {
+        public List<Type> perkslist = PerksHandler.types;
+
         public string name;
 
         public int baseHealth;
@@ -22,8 +26,14 @@ namespace Scripts.OOP.EnemyBehaviors
         [Range(1, 5)]
         public int size;
 
-        public EnemyBehavior.Targetting targettingBehavior;
-        public EnemyBehavior.Firing firingBehavior;
+        [Dropdown(typeof(EnemyBehavior), "targets")]
+        public string targettingBehavior;
+
+        [Dropdown(typeof(EnemyBehavior), "firing")]
+        public string firingBehavior;
+
+        [Dropdown(typeof(PerksHandler), "types")]
+        public string[] perk;
 
         public string[] perks;
 

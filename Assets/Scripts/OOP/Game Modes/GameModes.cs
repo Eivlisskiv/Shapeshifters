@@ -21,7 +21,8 @@ namespace Scripts.OOP.Game_Modes
                   " Survive enemy spawns." +
                 "\n Gain a random perk every 5 levels." +
                 "\n Gain a temporary buff when" +
-                "\n elimenating an enemy."
+                "\n elimenating an enemy." +
+                "\n Your weapon randomly switches every 5 eliminations"
             },
 
             {

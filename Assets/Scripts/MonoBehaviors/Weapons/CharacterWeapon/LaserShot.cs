@@ -14,6 +14,17 @@ public class LaserShot : Weapon
 
     protected override string Description => desc;
 
+    public override void DefaultPreset()
+    {
+        cooldown = 0.8f;
+        force = 10;
+        totalDamage = 30;
+        life = 1.5f;
+        speed = 10;
+        angle = 45;
+        size = 1;
+    }
+
     protected override void OnStart()
     {
         base.OnStart();

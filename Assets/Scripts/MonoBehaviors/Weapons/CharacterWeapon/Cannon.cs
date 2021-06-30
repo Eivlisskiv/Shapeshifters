@@ -13,6 +13,15 @@ public class Cannon : Weapon
 
     public override float Range => (speed * life) * 0.5f;
 
+    public override void DefaultPreset()
+    {
+        cooldown = 1.2f;
+        force = 12;
+        totalDamage = 22;
+        life = 5;
+        speed = 15;
+    }
+
     protected override void FireProjectiles(BaseController sender, float angle, WeaponStats stats)
     {
         Vector2 hit = sender.body.ShotVector(angle);

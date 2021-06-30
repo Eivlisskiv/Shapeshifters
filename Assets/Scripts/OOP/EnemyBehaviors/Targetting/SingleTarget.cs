@@ -8,8 +8,8 @@ namespace Scripts.OOP.EnemyBehaviors.Targetting
         public BaseController Target(EnemyController self)
         {
             if (self.target) return self.target;
-            List<BaseController> targets = GameModes.GameMode.GetEnemies(self.team);
-            if (targets.Count == 0) return null;
+            List<BaseController> targets = GameModes.GameMode?.GetEnemies(self.team);
+            if (targets == null || targets.Count == 0) return null;
             return targets[0] == null ? null : targets[0];
         }
     }

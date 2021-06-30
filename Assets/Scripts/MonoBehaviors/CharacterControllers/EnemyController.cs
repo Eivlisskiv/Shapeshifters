@@ -22,7 +22,7 @@ public class EnemyController : BaseController
 
     public override void OnUpdate()
     {
-        //target = behavior.Target(this);
+        if(!target) target = behavior.Target(this);
     }
 
     public override bool IsFiring(out float angle)

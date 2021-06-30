@@ -1,7 +1,9 @@
 ﻿using Scripts.OOP.Perks;
 using Scripts.OOP.TileMaps;
 using Scripts.OOP.UI;
+using Scripts.OOP.Utils;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,9 +19,12 @@ namespace Scripts.OOP.Game_Modes.Arena
         private int eliminations;
         private Text progress;
 
+        private int switchWeapon;
+
         public Arena(MainMenuHandler menu, MapHandler map) 
             : base(menu, map, new Dictionary<string, (float, string[])>() {
-                { "Regular", (100, new[]{ "Regular", "Bomber", "Tank", "Sniper", "Gunner", "Pirate", "Flamer"  }) }
+                { "Regular/Tier1", (60, new[]{ "Regular", "Bomber", "Tank", "Sniper", }) },
+                { "Regular/Tier2", (40, new[]{"Gunner", "Pirate", "Flamer" }) }
             }, Color.green, Color.red)
         {
             spawnCooldown = 5;
@@ -45,11 +50,21 @@ namespace Scripts.OOP.Game_Modes.Arena
             if(member is PlayerController player)
             {
                 player.cam.Detach();
+                base.MemberDestroyed(member);
+                return;
             }
-            else
+
+            eliminations++;
+            progress.text = eliminations.ToString();
+
+            switchWeapon++;
+            if (switchWeapon >= 5)
             {
-                eliminations++;
-                progress.text = eliminations.ToString();
+                player = (PlayerController)GetTeam(0)[0];
+                var weps = Weapon.Types.Where(t => t != player.Weapon.GetType()).ToArray();
+                if (weps.Length > 0) player.SetWeapon(Randomf.Element(weps));
+
+                switchWeapon = 0;
             }
 
             base.MemberDestroyed(member);
@@ -121,7 +136,9 @@ namespace Scripts.OOP.Game_Modes.Arena
         public void ControllerLevelUp(BaseController controller)
         {
             if (controller is PlayerController player)
-            { 
+            {
+                controller.stats.MaxHealthPoints(controller.Level);
+
                 level = player.Level;
                 score = player.Level;
 

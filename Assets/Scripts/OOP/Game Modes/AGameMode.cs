@@ -21,7 +21,6 @@ namespace Scripts.OOP.Game_Modes
         protected bool Loaded { get => loaded; }
         private bool loaded;
         
-
         public int Score { get => score; }
         protected int score;
 
@@ -121,7 +120,7 @@ namespace Scripts.OOP.Game_Modes
                 }
             }
 
-            return enemies.Instantiate("Regular/Regular");
+            return enemies.Instantiate("Regular/Tier1/Regular");
         }
 
         public void AddMember(int team, BaseController controller)

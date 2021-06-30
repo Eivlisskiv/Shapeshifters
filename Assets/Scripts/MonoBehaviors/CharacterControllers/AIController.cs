@@ -1,4 +1,6 @@
-﻿using Scripts.OOP.Utils;
+﻿
+/*
+using Scripts.OOP.Utils;
 using UnityEngine;
 using Scripts.OOP.Perks;
 using UnityEngine.U2D;
@@ -107,7 +109,7 @@ public class AIController : BaseController
         //Temporary
         return targets[0] == null ? 
             null : targets[0];
-        /*
+        
         PlayerController nearest = players[0];
         float distance = (nearest.transform.position - transform.position).magnitude;
         for(int i = 1; i < players.Length; i++)
@@ -121,6 +123,6 @@ public class AIController : BaseController
             }
         }
 
-        return nearest;*/
+        return nearest;
     }
-}
+}*/

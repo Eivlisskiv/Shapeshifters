@@ -47,9 +47,9 @@ namespace Scripts.OOP.TileMaps
         }
 
         public abstract void Initialize();
-        public abstract bool DrawOne(Tilemap map, TileBase tilebase, out MapTileType tile);
-        public abstract bool DrawNext(Tilemap map, TileBase tile);
-        public abstract bool DrawAmount(int amount, Tilemap map, TileBase tile);
+        public abstract bool DrawOne(Tilemap map, TileBase tilebase, bool center, out MapTileType tile);
+        public abstract bool DrawNext(Tilemap map, TileBase tile, bool center);
+        public abstract bool DrawAmount(int amount, Tilemap map, TileBase tile, bool center);
         public abstract void OpenGate(bool open, Tilemap map, TileBase tilebase);
     }
 }

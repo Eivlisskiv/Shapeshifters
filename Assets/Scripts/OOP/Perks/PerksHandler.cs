@@ -8,26 +8,26 @@ namespace Scripts.OOP.Perks
 {
     public class PerksHandler
     {
-        public static readonly Dictionary<string, Type> perksTypes 
-            = LoadPerksTypes();
+        public static readonly List<Type> types = LoadPerksTypes();
 
-        private static Dictionary<string, Type> LoadPerksTypes()
+        public static readonly Dictionary<string, Type> perksTypes 
+            = types.ToDictionary(t => t.Name.Replace('_', ' '));
+
+        private static List<Type> LoadPerksTypes()
         {
             Type perk = typeof(Perk);
             Assembly assembly = Assembly.GetAssembly(perk);
             var types = assembly.GetTypes();
 
             var result = types.Where(t => !t.IsAbstract && !t.IsInterface 
-            && t.IsSubclassOf(perk)).ToDictionary(
-                t => t.Name.Replace('_', ' '));
+                && t.IsSubclassOf(perk)).ToList();
             return result;
         }
 
         public static Perk Random()
         {
-            string key = perksTypes.Keys.ElementAt(UnityEngine.Random
-                .Range(0, perksTypes.Keys.Count));
-            return Load(key);
+            Type type = Randomf.Element(types);
+            return (Perk)Activator.CreateInstance(type);
         }
 
         public static Perk Load(string key)

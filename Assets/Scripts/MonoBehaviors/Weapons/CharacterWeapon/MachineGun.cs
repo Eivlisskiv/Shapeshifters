@@ -1,6 +1,5 @@
 ﻿using Scripts.OOP.Audio;
 using Scripts.OOP.Stats;
-using Scripts.OOP.Utils;
 using UnityEngine;
 
 public class MachineGun : Weapon
@@ -12,6 +11,16 @@ public class MachineGun : Weapon
     protected override string Description => desc;
 
     public override float Range => (speed * 5) / accuracy;
+
+    public override void DefaultPreset()
+    {
+        cooldown = 0.15f;
+        force = 1.8f;
+        totalDamage = 3;
+        life = 5;
+        speed = 50;
+        accuracy = 20;
+    }
 
     protected override void FireProjectiles(BaseController sender, 
         float angle, WeaponStats stats)

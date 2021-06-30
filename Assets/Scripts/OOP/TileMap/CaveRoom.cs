@@ -77,10 +77,10 @@ namespace Scripts.OOP.TileMaps
             }
         }
 
-        public override bool DrawOne(Tilemap map, TileBase tilebase, out MapTileType tile)
+        public override bool DrawOne(Tilemap map, TileBase tilebase, bool center, out MapTileType tile)
         {
             Vector2Int border = CurrentBorder();
-            tile = GetTile(current, border);
+            tile = GetTile(current, border, center);
             if (tile != MapTileType.Empty && IsGate(current))
                 tile = MapTileType.Gate;
             HandleTileDraw(map, tilebase, tile);
@@ -88,12 +88,12 @@ namespace Scripts.OOP.TileMaps
             return Next(border);
         }
 
-        public override bool DrawNext(Tilemap map, TileBase tilebase)
+        public override bool DrawNext(Tilemap map, TileBase tilebase, bool center)
         {
             bool empty, next;
             do
             {
-                next = DrawOne(map, tilebase, out MapTileType tile);
+                next = DrawOne(map, tilebase, center, out MapTileType tile);
                 empty = tile == MapTileType.Empty;
 
             } while (next && empty);
@@ -101,12 +101,12 @@ namespace Scripts.OOP.TileMaps
             return next;
         }
 
-        public override bool DrawAmount(int amount, Tilemap map, TileBase tilebase)
+        public override bool DrawAmount(int amount, Tilemap map, TileBase tilebase, bool center)
         {
             bool next;
             do
             {
-                next = DrawOne(map, tilebase, out _);
+                next = DrawOne(map, tilebase, center, out _);
                 amount--;
 
             } while (next && amount > 0);
@@ -152,7 +152,7 @@ namespace Scripts.OOP.TileMaps
         }
 
 
-        private MapTileType GetTile(Vector2Int v, Vector2Int border)
+        private MapTileType GetTile(Vector2Int v, Vector2Int border, bool hasCenter)
         {
             //Leave empty space for entrance
             if (IsEntrance(v)) return MapTileType.Empty;
@@ -164,9 +164,8 @@ namespace Scripts.OOP.TileMaps
             //Assure left/right space
             else if (SideSpace(v.x)) return MapTileType.Empty;
 
-            if (PerlinWall(v)) return MapTileType.Wall;
-
-            return MapTileType.Empty;
+            return hasCenter && PerlinWall(v)
+                ? MapTileType.Wall : MapTileType.Empty;
         }
 
         private bool IsEntrance(Vector2Int v)

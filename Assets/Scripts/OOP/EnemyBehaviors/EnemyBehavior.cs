@@ -9,17 +9,16 @@ namespace Scripts.OOP.EnemyBehaviors
 {
     public class EnemyBehavior
     {
-        public enum Targetting { SingleTarget };
+        public readonly static List<Type> targets = GetBehaviors<ITargetBehavior>();
+        public readonly static List<Type> firing = GetBehaviors<IFireBehavior>();
 
-        private readonly static Dictionary<Targetting, Type> targettingBehaviors
-            = GetBehaviors<Targetting, ITargetBehavior>();
+        private readonly static Dictionary<string, Type> targettingBehaviors
+            = targets.ToDictionary(t => t.Name);
 
-        public enum Firing { TargetAim, ChargeTarget };
+        private readonly static Dictionary<string, Type> firingBehaviors
+            = firing.ToDictionary(t => t.Name);
 
-        private readonly static Dictionary<Firing, Type> firingBehaviors
-            = GetBehaviors<Firing, IFireBehavior>();
-
-        private static Dictionary<EnumT, Type> GetBehaviors<EnumT, IT>()
+        private static List<Type> GetBehaviors<IT>()
         {
             Type interfaceType = typeof(IT);
             Assembly assembly = Assembly.GetAssembly(interfaceType);
@@ -28,28 +27,11 @@ namespace Scripts.OOP.EnemyBehaviors
             var result = types.Where(t => !t.IsAbstract && !t.IsInterface
                 && interfaceType.IsAssignableFrom(t)).ToList();
 
-            var names = (EnumT[])Enum.GetValues(typeof(EnumT));
-
-            var dict = new Dictionary<EnumT, Type>();
-
-            for (int i = 0; i < names.Length; i++)
-            {
-                EnumT en = names[i];
-                string name = en.ToString();
-                int found = result.FindIndex(
-                    t => t.Name.Equals(name));
-                if (found > -1)
-                {
-                    dict.Add(en, result[found]);
-                    result.RemoveAt(found);
-                }
-            }
-
-            return dict;
+            return result;
         }
 
-        private static IT Load<EnumT, IT, DefaultT>(EnumT key,
-            Dictionary<EnumT, Type> values) where DefaultT : IT
+        private static IT Load<IT, DefaultT>(string key,
+            Dictionary<string, Type> values) where DefaultT : IT
             => (IT)Activator.CreateInstance(
                 values.TryGetValue(key, out Type type) ?
                 type : typeof(DefaultT));
@@ -57,12 +39,12 @@ namespace Scripts.OOP.EnemyBehaviors
         private readonly ITargetBehavior target;
         private readonly IFireBehavior fire;
 
-        public EnemyBehavior(Targetting target, Firing fire)
+        public EnemyBehavior(string target, string fire)
         {
-            this.target = Load<Targetting, ITargetBehavior, SingleTarget>
+            this.target = Load<ITargetBehavior, SingleTarget>
                 (target, targettingBehaviors);
 
-            this.fire = Load<Firing, IFireBehavior, TargetAim>
+            this.fire = Load<IFireBehavior, TargetAim>
                 (fire, firingBehaviors);
         }
 

@@ -5,7 +5,8 @@ using UnityEngine.Tilemaps;
 public class RoomHandler : MonoBehaviour
 {
     public Vector2Int StartV => current.Start;
-    public int tilesPerFrame = 5;
+    public bool hasCenter = true;
+    int tilesPerFrame = 5;
 
     TileBase tile;
 
@@ -59,7 +60,7 @@ public class RoomHandler : MonoBehaviour
 
     private void LoadRoom()
     {
-        if (!current.DrawAmount(tilesPerFrame, map, tile))
+        if (!current.DrawAmount(tilesPerFrame, map, tile, hasCenter))
         {
             //After the map is loaded, load the collider. Thus doing this only once.
             TilemapCollider2D collider = GetComponent<TilemapCollider2D>();
@@ -82,7 +83,7 @@ public class RoomHandler : MonoBehaviour
     }
 
     public Vector2 CharacterPosition(Vector2Int coords)
-    => new Vector3((coords.x + StartV.x) * transform.parent.transform.localScale.x,
+        => new Vector3((coords.x + StartV.x) * transform.parent.transform.localScale.x,
         (coords.y + StartV.y) * transform.parent.transform.localScale.y);
 
     public void OpenGate(bool v) => current.OpenGate(v, map, tile);
