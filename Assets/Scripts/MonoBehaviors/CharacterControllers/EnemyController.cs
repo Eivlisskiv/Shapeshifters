@@ -4,7 +4,7 @@ public class EnemyController : BaseController
 {
     public EnemySettings settings;
 
-    private EnemyBehavior behavior;
+    internal EnemyBehavior Behavior { get; private set; }
 
     internal BaseController target;
 
@@ -15,16 +15,17 @@ public class EnemyController : BaseController
 
     public override void OnStart()
     {
-        behavior = settings.SetSettings(this);
+        Behavior = settings.SetSettings(this);
         settings = null;
-        target = behavior.Target(this);
+        target = Behavior.Target(this);
     }
 
     public override void OnUpdate()
     {
-        if(!target) target = behavior.Target(this);
+        if(!target) target = Behavior.Target(this);
+        Behavior.Ability(this);
     }
 
     public override bool IsFiring(out float angle)
-        => behavior.Fire(this, out angle);
+        => Behavior.Fire(this, out angle);
 }

@@ -8,7 +8,7 @@ namespace Scripts.OOP.Perks
 {
     public class PerksHandler
     {
-        public static readonly List<Type> types = LoadPerksTypes();
+        private static readonly List<Type> types = LoadPerksTypes();
 
         public static readonly Dictionary<string, Type> perksTypes 
             = types.ToDictionary(t => t.Name.Replace('_', ' '));

@@ -8,7 +8,7 @@ namespace IgnitedBox.Tweening.Tweeners.ColorTweeners
     public class GraphicColorTween : ColorTweener<Graphic>
     {
         public GraphicColorTween() { }
-        public GraphicColorTween(Text element, Color target, float time,
+        public GraphicColorTween(Graphic element, Color target, float time,
             float delay, Func<double, double> easing, Action callback)
             : base(element, target, time, delay, easing, callback) { }
 

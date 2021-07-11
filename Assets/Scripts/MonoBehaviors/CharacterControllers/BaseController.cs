@@ -48,6 +48,7 @@ public abstract class BaseController : MonoBehaviour
         _colors[i] = value;
         if (body) body.SetColor(i, value);
     }
+    public Color GetColor(int i) => _colors[i];
 
     bool controllerEnabled = true;
     float? dying = null;

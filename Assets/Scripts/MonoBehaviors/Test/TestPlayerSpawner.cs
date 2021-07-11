@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class TestPlayerSpawner : MonoBehaviour
 {
@@ -23,6 +22,8 @@ public class TestPlayerSpawner : MonoBehaviour
 
     private void InitEnemy()
     {
+        if (!enemy) return;
+
         enemy.Set(enemyLevel);
 
         enemy.SetColor(0, Color.red);

@@ -1,5 +1,6 @@
 ﻿using IgnitedBox.Tweening.Components;
 using IgnitedBox.Tweening.Tweeners;
+using IgnitedBox.Tweening.Tweeners.ColorTweeners;
 using System;
 using UnityEngine;
 
@@ -25,14 +26,15 @@ namespace IgnitedBox.Tweening
             => (A)Activator.CreateInstance(typeof(A),
                 subject, target, time, delay, easing, callback);
 
-        public static A Tween<T, V, A>(this T subject, V target, 
+        public static TTweener Tween<TElement, TValue, TTweener>(this TElement subject, TValue target, 
             float time, float delay = 0, Func<double, double> easing = null,
-            Action callback = null) where A : TweenData<T, V>
+            Action callback = null) where TTweener : TweenData<TElement, TValue>
         {
-            A tween = Construct<T, V, A>(subject, target, time, delay, easing, callback);
+            TTweener tween = Construct<TElement, TValue, TTweener>(subject, target, time,
+                delay, easing, callback);
 
             if (subject is Component component)
-            return AttachComponentTween<A, T, V>(component.gameObject,
+            return AttachComponentTween<TTweener, TElement, TValue>(component.gameObject,
                 tween, Tweener.BlendType.Replace);
             
             Conatiner.Add(tween);

@@ -5,7 +5,7 @@ namespace Scripts.OOP.EnemyBehaviors.Targetting
 {
     public class SingleTarget : ITargetBehavior
     {
-        public BaseController Target(EnemyController self)
+        public virtual BaseController Target(EnemyController self)
         {
             if (self.target) return self.target;
             List<BaseController> targets = GameModes.GameMode?.GetEnemies(self.team);

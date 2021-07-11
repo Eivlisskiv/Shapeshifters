@@ -1,7 +1,6 @@
-﻿using IgnitedBox.EditorDropdown.ByAttribute;
+﻿using IgnitedBox.EditorDropdown.Attribute;
 using Scripts.OOP.Perks;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Scripts.OOP.EnemyBehaviors
@@ -9,8 +8,6 @@ namespace Scripts.OOP.EnemyBehaviors
     [Serializable]
     public class EnemySettings
     {
-        public List<Type> perkslist = PerksHandler.types;
-
         public string name;
 
         public int baseHealth;
@@ -26,15 +23,16 @@ namespace Scripts.OOP.EnemyBehaviors
         [Range(1, 5)]
         public int size;
 
-        [Dropdown(typeof(EnemyBehavior), "targets")]
+        [Dropdown(typeof(EnemyBehavior), "targettingBehaviors.Keys")]
         public string targettingBehavior;
 
-        [Dropdown(typeof(EnemyBehavior), "firing")]
+        [Dropdown(typeof(EnemyBehavior), "firingBehaviors.Keys")]
         public string firingBehavior;
 
-        [Dropdown(typeof(PerksHandler), "types")]
-        public string[] perk;
+        [Dropdown(typeof(EnemyBehavior), "abilityBehaviors.Keys")]
+        public string abilityBehavior;
 
+        [Dropdown(typeof(PerksHandler), "perksTypes.Keys")]
         public string[] perks;
 
         public EnemyBehavior SetSettings(EnemyController self)
@@ -51,7 +49,7 @@ namespace Scripts.OOP.EnemyBehaviors
 
             SetPerks(self);
 
-            return new EnemyBehavior(targettingBehavior, firingBehavior);
+            return new EnemyBehavior(targettingBehavior, firingBehavior, abilityBehavior);
         }
 
         private void SetPerks(EnemyController self)

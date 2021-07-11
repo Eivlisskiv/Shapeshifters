@@ -9,4 +9,9 @@
     {
         bool Fire(EnemyController self, out float angle);
     }
+
+    public interface IAbilitybehavior
+    {
+        void Ability(EnemyController self);
+    }
 }
