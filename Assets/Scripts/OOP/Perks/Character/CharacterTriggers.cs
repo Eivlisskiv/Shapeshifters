@@ -16,4 +16,9 @@ namespace Scripts.OOP.Perks.Character.Triggers
     {
         bool OnHit(BaseController self, ProjectileHandler projectile);
     }
+
+    public interface IReceiveDamage
+    {
+        bool OnHit(BaseController self, Vector2? direction, ref float damage);
+    }
 }

@@ -88,6 +88,11 @@ namespace Scripts.Orbiters.Eye
             }
         }
 
+        protected override void OnColorChange()
+        {
+            base.OnColorChange();
+        }
+
         protected override System.Type RandomArchetype()
         {
             System.Type[] array = EyeOrbiterType.types.Values.ToArray();

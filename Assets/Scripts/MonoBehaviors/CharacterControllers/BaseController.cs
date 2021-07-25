@@ -165,7 +165,7 @@ public abstract class BaseController : MonoBehaviour
     {
         var otherPos = collision.collider.ClosestPoint(transform.position);
         var distance = (otherPos - (Vector2)transform.position).magnitude;
-        if (distance == 0) TakeDamage(1, null, null);
+        if (distance == 0) HitHealth(-1);
     }
 
     public void ProjectileHit(ProjectileHandler projectile)
@@ -181,7 +181,7 @@ public abstract class BaseController : MonoBehaviour
             projectile.Sender.perks.Activate<IProjectileHitTarget>(1,
                 perk => perk.OnHit(projectile, this));
 
-            TakeDamage(projectile.damage, projectile.Sender,
+            ProcessDamage(projectile.damage, projectile.Sender,
                 projectile.transform.position);
         }
 
@@ -204,9 +204,23 @@ public abstract class BaseController : MonoBehaviour
 
     public void TakeDamage(float damage, BaseController attacker, Vector2? direction)
     {
+        perks.Activate<IReceiveDamage>(1,
+                perk => perk.OnHit(this, direction, ref damage));
+
+        if(damage > 0)
+            ProcessDamage(damage, attacker, direction);
+        //
+
         if (direction.HasValue) SpawnHitParticles(direction.Value);
         if (HitHealth(-damage))
             if(attacker) attacker.OnKill(this);
+    }
+
+    public void ProcessDamage(float damage, BaseController attacker, Vector2? direction)
+    {
+        if (direction.HasValue) SpawnHitParticles(direction.Value);
+        if (HitHealth(-damage))
+            if (attacker) attacker.OnKill(this);
     }
 
     private void SpawnHitParticles(Vector2 position)

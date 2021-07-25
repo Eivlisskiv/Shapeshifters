@@ -1,11 +1,10 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Scripts.Orbiters
 {
     public abstract class OrbiterArchetype
     {
-        enum OrbiterState { Cooldown, Charging, Firing, Idle }
+        protected enum OrbiterState { Cooldown, Charging, Firing, Idle }
 
         protected virtual float CooldownTime => 5;
 
@@ -15,21 +14,25 @@ namespace Scripts.Orbiters
 
         public float WaitTime { get; protected set; }
 
-        OrbiterState state;
+        protected OrbiterState State { get; private set; }
+
+        protected Orbiter SelfOrbiter { get; private set; }
 
         public virtual void Start<TOrbiter>(TOrbiter orbiter)
             where TOrbiter : Orbiter
         {
+            SelfOrbiter = orbiter;
             SetState(OrbiterState.Cooldown);
         }
 
         private void SetState(OrbiterState state)
         {
-            this.state = state;
+            var oldState = State;
+            State = state;
             WaitTime = state == OrbiterState.Idle
                 ? 0 : GetTime(state);
-            Debug.Log($"State Changed to {state}");
             OnState(state);
+            OnStateChange(oldState);
         }
 
         private void OnState(OrbiterState state)
@@ -43,13 +46,15 @@ namespace Scripts.Orbiters
             }
         }
 
+        protected virtual void OnStateChange(OrbiterState oldState) { }
+
         protected abstract void OnCharge(float time);
 
-        protected abstract void WhileCharge(Orbiter orbiter, float progress);
+        protected abstract void WhileCharge(float progress);
 
         protected abstract void OnFire(float time);
 
-        protected abstract void WhileFire(Orbiter orbiter, float progress);
+        protected abstract void WhileFire(float progress);
 
         protected abstract void OnCooldown();
 
@@ -59,18 +64,18 @@ namespace Scripts.Orbiters
 
         public abstract void SetColor(Color color);
 
-        public virtual BaseController FindTarget(Orbiter orbiter, BaseController currentTarget)
+        public virtual BaseController FindTarget(BaseController currentTarget)
         {
             if (currentTarget) return currentTarget;
 
-            if (orbiter.Owner is EnemyController enemy)
+            if (SelfOrbiter.Owner is EnemyController enemy)
                 return enemy.target;
 
             //Target Lost
 
-            if(state == OrbiterState.Charging)
+            if(State == OrbiterState.Charging)
             {
-                state = OrbiterState.Idle;
+                State = OrbiterState.Idle;
                 OnIdle();
             }
 
@@ -79,33 +84,33 @@ namespace Scripts.Orbiters
 
         public void Update(Orbiter orbiter)
         {
-            if (state != OrbiterState.Idle && !Continue(orbiter)) return;
+            if (State != OrbiterState.Idle && !Continue()) return;
 
             if (!orbiter.Target) return;
 
             //Proceed with firing process
 
-            if (state == OrbiterState.Idle ||
-                state == OrbiterState.Cooldown)
+            if (State == OrbiterState.Idle ||
+                State == OrbiterState.Cooldown)
                 SetState(OrbiterState.Charging);
 
-            else if (state == OrbiterState.Charging)
+            else if (State == OrbiterState.Charging)
                 SetState(OrbiterState.Firing);
 
-            else if (state == OrbiterState.Firing)
+            else if (State == OrbiterState.Firing)
                 SetState(OrbiterState.Cooldown);
         }
 
-        private bool Continue(Orbiter orbiter)
+        private bool Continue()
         {
             //Has finished
             if (AwaitTime(out float norm)) return true;
 
-            if (state == OrbiterState.Charging)
-                WhileCharge(orbiter, norm);
+            if (State == OrbiterState.Charging)
+                WhileCharge(norm);
 
-            if (state == OrbiterState.Firing)
-                WhileFire(orbiter, norm);
+            if (State == OrbiterState.Firing)
+                WhileFire(norm);
 
             return false;
         }
@@ -116,7 +121,7 @@ namespace Scripts.Orbiters
             {
                 WaitTime -= Time.deltaTime;
 
-                norm = 1 - (WaitTime / GetTime(state));
+                norm = 1 - (WaitTime / GetTime(State));
 
                 return false;
             }
@@ -128,6 +133,7 @@ namespace Scripts.Orbiters
 
         private float GetTime(OrbiterState state)
         {
+#pragma warning disable // Convert switch statement to expression
             switch (state)
             {
                 case OrbiterState.Cooldown: return CooldownTime;
@@ -135,6 +141,7 @@ namespace Scripts.Orbiters
                 case OrbiterState.Firing: return FireDuration;
                 default: return 1;
             };
+#pragma warning restore
         }
     }
 }

@@ -13,6 +13,15 @@ namespace IgnitedBox.UnityUtilities
             return AddComponent(obj, parent, action);
         }
 
+        public static T CreateGameObject<T>(
+            out GameObject gameObject, string name = null,
+            Transform parent = null, Action<T> action = null)
+            where T : Component
+        {
+            gameObject = new GameObject(name);
+            return AddComponent(gameObject, parent, action);
+        }
+
         public static T AddComponent<T>(this GameObject obj, Action<T> action)
              where T : Component
         {

@@ -21,13 +21,15 @@ namespace Scripts.Orbiters
         public float speed = 1;
         public float velocityLoss = 0.8f;
 
+        public float Damage = 1;
+
         public BaseController Target { get; protected set; }
 
         public OrbiterArchetype Archetype { get; private set; }
 
         protected float activeCooldown;
 
-        private Collider2D _collider;
+        public Collider2D Collider { get; private set; }
 
         private Vector3 velocity;
 
@@ -65,9 +67,9 @@ namespace Scripts.Orbiters
 
         protected virtual void OnStart()
         {
-            _collider = GetComponent<Collider2D>();
-            if (!_collider) _collider = gameObject.AddComponent<PolygonCollider2D>();
-            _collider.isTrigger = true;
+            Collider = GetComponent<Collider2D>();
+            if (!Collider) Collider = gameObject.AddComponent<PolygonCollider2D>();
+            Collider.isTrigger = true;
         }
 
         // Update is called once per frame
@@ -79,7 +81,8 @@ namespace Scripts.Orbiters
 
             Follow();
 
-            Target = Archetype.FindTarget(this, Target);
+            if(Archetype != null)
+                Target = Archetype.FindTarget(Target);
 
             Archetype?.Update(this);
         }
@@ -93,7 +96,8 @@ namespace Scripts.Orbiters
             transform.Translate(velocity * Time.deltaTime * speed);
         }
 
-        protected virtual void OnColorChange() { }
+        protected virtual void OnColorChange()
+            => Archetype?.SetColor(Color);
 
         public void SetArchetype<T>()
             where T : OrbiterArchetype
@@ -136,13 +140,14 @@ namespace Scripts.Orbiters
         protected void CheckOrbiterSpawner<TOrbiterType>()
             where TOrbiterType : Orbiter
         {
+#pragma warning disable IDE0083 // Use pattern matching
             if (!(Owner is EnemyController enemy)) return;
 
             if (!(enemy.Behavior.ability is OrbiterSpawner
                 <TOrbiterType> spawner)) return;
 
             if (!(this is TOrbiterType spawn)) return;
-
+#pragma warning restore IDE0083 
             spawner.OrbiterDestroyed(spawn);
         }
     }

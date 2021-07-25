@@ -48,7 +48,7 @@ public class Cannon : Weapon
             (projectile.Rigidbody.velocity.magnitude
                 + victim.body.Body.velocity.magnitude));
 
-        victim.TakeDamage(damage, projectile.Sender,
+        victim.ProcessDamage(damage, projectile.Sender,
             projectile.transform.position);
 
         float push = (damage * projectile.force) / 8;

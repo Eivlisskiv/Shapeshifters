@@ -9,6 +9,6 @@ namespace Scripts.OOP.EnemyBehaviors.Ability.OrbiterSpawners
 
     public class Pyramid : OrbiterSpawner<EyeOrbiter>
     {
-        public Pyramid() : base(1, 3) { }
+        public Pyramid() : base(1, 3, 2) { }
     }
 }

@@ -54,7 +54,7 @@ namespace Scripts.OOP.Perks.Character
         }
     }
 
-    public class Shield : EmitterPerk, IControllerUpdate, IProjectileTaken
+    public class Shield : EmitterPerk, IControllerUpdate, IProjectileTaken, IReceiveDamage
     {
         private float shield = 0;
         private float cooldown = 0;
@@ -82,7 +82,7 @@ namespace Scripts.OOP.Perks.Character
             if(shield >= projectile.damage)
             {
                 ShieldHealth(-projectile.damage, self);
-                Shielded(projectile, debrisParent);
+                Shielded(projectile.transform.position, debrisParent);
                 projectile.active = false;
 
                 return !Remaining;
@@ -90,7 +90,24 @@ namespace Scripts.OOP.Perks.Character
 
             projectile.damage -= shield;
             ShieldHealth(-shield, self);
-            Shielded(projectile, debrisParent);
+            Shielded(projectile.transform.position, debrisParent);
+
+            return !Remaining;
+        }
+
+        public bool OnHit(BaseController self, Vector2? attackPosition, ref float damage)
+        {
+            cooldown = 5;
+
+            if (damage <= 0 || shield <= 0) return !Remaining;
+
+            Transform debrisParent = GameModes.GetDebrisTransform(self.team);
+
+            float reduction = Math.Min(damage, shield);
+
+            damage -= reduction;
+            ShieldHealth(-reduction, self);
+            Shielded(attackPosition ?? self.transform.position, debrisParent);
 
             return !Remaining;
         }
@@ -106,9 +123,8 @@ namespace Scripts.OOP.Perks.Character
             }
         }
 
-        private void Shielded(ProjectileHandler projectile, Transform debrisParent)
+        private void Shielded(Vector3 pos, Transform debrisParent)
         {
-            var pos = projectile.transform.position;
             pos.z = -5;
             UnityEngine.Object.Destroy(SpawnPrefab(pos, null, debrisParent), 1f);
         }

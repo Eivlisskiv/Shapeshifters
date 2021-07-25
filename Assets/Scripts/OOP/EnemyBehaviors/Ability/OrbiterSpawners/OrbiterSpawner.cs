@@ -12,15 +12,18 @@ namespace Scripts.OOP.EnemyBehaviors.Ability.OrbiterSpawners
 
         private int charges;
         private float cooldown;
+        private readonly float damage;
 
         private readonly System.Type archetype; 
 
         protected OrbiterSpawner(int charges = 3, int amount = 1, 
-            float cooldown = 60, System.Type archetype = null)
+            float damage = 1, float cooldown = 60, 
+            System.Type archetype = null)
         {
             orbiters = new TOrbiterType[amount];
             this.charges = charges;
             cooldowntime = cooldown;
+            this.damage = damage;
 
             this.archetype = archetype != null && (
                 !archetype.IsSubclassOf(typeof(OrbiterArchetype))
@@ -55,6 +58,7 @@ namespace Scripts.OOP.EnemyBehaviors.Ability.OrbiterSpawners
             GameObject orbiterObject = new GameObject($"{typeof(TOrbiterType).Name}");
             TOrbiterType orbiter = orbiterObject.AddComponent<TOrbiterType>();
             orbiter.Owner = self;
+            orbiter.Damage = damage;
 
             orbiter.SetArchetype(archetype);
 

@@ -12,7 +12,10 @@ namespace Scripts.OOP.Utils
         public static Vector2 Rotate(this Vector2 vect, float angle)
             => Quaternion.Euler(0, 0, angle) * vect;
 
-        public static float TrueAngle(Vector2 a, Vector2 b)
-            => Vector2.Angle(a, b) * (a.y > b.y ? -1 : 1);
+        public static float TrueAngle(this Vector2 from)
+            => -TrueAngle(from, Vector2.right);
+
+        public static float TrueAngle(Vector2 from, Vector2 to)
+            => Vector2.Angle(from, to) * (from.y > to.y ? -1 : 1);
     }
 }
