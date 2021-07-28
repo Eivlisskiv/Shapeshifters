@@ -77,7 +77,7 @@ namespace Scripts.Orbiters
 
         protected virtual void OnUpdate()
         {
-            //if (!owner) Destroy(gameObject);
+            if (!Owner) Destroy(gameObject);
 
             Follow();
 

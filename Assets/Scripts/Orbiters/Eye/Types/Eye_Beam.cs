@@ -1,7 +1,6 @@
 ﻿using Assets.IgnitedBox.UnityUtilities;
 using IgnitedBox.Tweening.TweenPresets;
 using IgnitedBox.UnityUtilities;
-using Scripts.OOP.Perks.Character.Triggers;
 using Scripts.OOP.Utils;
 using UnityEngine;
 
@@ -13,7 +12,7 @@ namespace Scripts.Orbiters.Eye.Types
         const float growthSpeed = 8;
         const float aimSpeed = 10;
 
-        protected override float FireDuration => 30;
+        protected override float FireDuration => 10;
 
         private ParticleSystem chargeParticles;
 
@@ -22,7 +21,11 @@ namespace Scripts.Orbiters.Eye.Types
         private ParticleSystem fireParticles;
         private LineRenderer fireBeam;
 
+        private Collision2DHandler beamHandler;
+
         private SpriteRenderer[] motifs;
+
+        private float Strength { get; set; }
 
         public float QuadCurve(float x)
             => (-Mathf.Pow(x - 0.5f, 2) + 0.25f) / 0.25f;
@@ -41,8 +44,8 @@ namespace Scripts.Orbiters.Eye.Types
 
             InitializeChargeParticles(eye.Color);
 
-            InitializeFireParticles(eye.Color, out GameObject onFire);
-            InitializeFireLine(eye.Color, onFire);
+            InitializeFireParticles(eye.Color);
+            InitializeFireLine(eye.Color);
 
             base.Start(orbiter);
         }
@@ -83,10 +86,10 @@ namespace Scripts.Orbiters.Eye.Types
                 Curves.ToCurve(QuadCurve, 11));
         }
 
-        private void InitializeFireParticles(Color color, out GameObject fire)
+        private void InitializeFireParticles(Color color)
         {
             fireParticles = Components.CreateGameObject<ParticleSystem>(
-                out fire, "OnFire", Pupil.transform);
+                out GameObject fire, "OnFireParticles", Pupil.transform);
 
             fire.transform.localPosition = Vector3.zero;
             fire.transform.localScale = Vector3.one;
@@ -129,14 +132,27 @@ namespace Scripts.Orbiters.Eye.Types
             */
         }
 
-        private void InitializeFireLine(Color color, GameObject fire)
+        private void InitializeFireLine(Color color)
         {
-            fireBeam = fire.AddComponent<LineRenderer>();
+            fireBeam = Components.CreateGameObject<LineRenderer>(
+                out GameObject fire, "Beam", Pupil.transform);
+
+            fire.transform.localPosition = Vector3.zero;
+
             fireBeam.SetPositions(new Vector3[] { Vector3.zero, Vector3.zero });
+            fireBeam.useWorldSpace = false;
             fireBeam.startColor = color;
             fireBeam.endColor = color;
 
-            fireBeam.material = StaticStuff.UnlitSpriteMaterial;
+            fireBeam.textureMode = LineTextureMode.Tile;
+
+            fireBeam.material = Resources.Load<Material>(
+                "Materials/Effects/LaserBeam");
+
+            fireBeam.material.SetVector("Anim_Speed", new Vector4(growthSpeed, 0, 0, 0));
+            fireBeam.material.SetColor("Beam_Color", color);
+
+            beamHandler = fire.AddCollisionHandler<PolygonCollider2D>(true, HitTarget);
         }
 
         private void InitializeMotifs<TOrbiter>(TOrbiter orbiter) where TOrbiter : Orbiter
@@ -249,21 +265,41 @@ namespace Scripts.Orbiters.Eye.Types
             UpdateFireBeam(toTarget, QuadCurve(progress) / 2);
         }
 
-        private void HitTarget(RaycastHit2D hit2d, float strength)
+        private void HitTarget(Collider2D collider)
         {
-            var obj = hit2d.transform.gameObject;
+            if (State != OrbiterState.Firing) return;
+
+            var obj = collider.gameObject;
             if (!obj.TryGetComponent(out BaseController controller)) return;
+            if (controller == SelfOrbiter.Owner) return;
 
             bool enemy = controller.team != SelfOrbiter.Owner.team;
 
-            float damage = SelfOrbiter.Damage * strength;
+            float damage = SelfOrbiter.Damage * 5 * Strength * Time.deltaTime;
 
-            controller.ApplyCollisionForce(hit2d.point, damage,
+            Vector2 point = GetHitPoint(controller);
+
+            controller.ApplyCollisionForce(point, damage,
                 damage * (enemy ? growthSpeed : growthSpeed / 2));
 
             if (!enemy) return;
 
-            controller.TakeDamage(damage, SelfOrbiter.Owner, hit2d.point);
+            controller.TakeDamage(damage, SelfOrbiter.Owner, point);
+        }
+
+        private Vector2 GetHitPoint(BaseController target)
+        {
+            Vector2 a = fireBeam.GetPosition(1);
+            Vector2 c = target.transform.position;
+
+            Vector2 v = (Vector2)fireBeam.GetPosition(0) - a;
+            Vector2 u = c - a;
+
+            Vector2 d = v.normalized * (Mathf.Cos(
+                Mathf.Deg2Rad * Vector2.Angle(v, u))
+                * u.magnitude);
+
+            return c - ((c - d).normalized * target.body.radius);
         }
 
         private void HitParticles(RaycastHit2D hit2d, float width)
@@ -290,6 +326,8 @@ namespace Scripts.Orbiters.Eye.Types
 
         private void UpdateFireBeam(Vector2 toTarget, float width)
         {
+            Vector2 pupil = Pupil.position;
+            Strength = 0.8f + width;
             Vector2 beam = Vectors2.FromDegAngle(beamAngle, beamLength);
 
             float angle = Vector2.SignedAngle(beam, toTarget);
@@ -307,29 +345,45 @@ namespace Scripts.Orbiters.Eye.Types
                 beamAngle += change;
             }
 
-            if (Raycast.TryRaycast2d(Pupil.position, beam, 
-                out RaycastHit2D hit2d, SelfOrbiter.Owner.body.Collider,
-                SelfOrbiter.Collider))
+            if (Raycast.TryRaycast2D(pupil, beam, 
+                8, out RaycastHit2D hit2d))
             {
-                beam = hit2d.point;
-                float length = ((Vector2)Pupil.position - beam).magnitude;
-                if (beamLength > length) beamLength = length;
+                beam = hit2d.point - pupil;
+                if (beamLength > beam.magnitude) beamLength = beam.magnitude;
 
-                HitTarget(hit2d, width);
                 //HitParticles(hit2d, width);
             }
             else
             {
                 beamLength += Time.deltaTime * growthSpeed;
-                beam += (Vector2)Pupil.position;
                 Vector2.ClampMagnitude(beam, beamLength);
             }
-            
-            fireBeam.SetPositions(new Vector3[]
-                { Pupil.position, beam });
 
-            fireBeam.startWidth = width;
-            fireBeam.endWidth = width;
+            fireBeam.startWidth = width * .5f;
+            fireBeam.endWidth = width * 1.3f;
+
+            SetBeamPosition(beam);
+        }
+
+        private void SetBeamPosition(Vector2 hit)
+        {
+            fireBeam.SetPositions(new Vector3[]
+                { hit, Vector2.zero });
+
+            PolygonCollider2D collider = (PolygonCollider2D)beamHandler.Collider;
+            Vector2 perp = Vector2.Perpendicular(-hit).normalized;
+
+            Vector2 end = perp * (fireBeam.endWidth / 2);
+            Vector2 start = perp * (fireBeam.startWidth / 2);
+
+            collider.points = new Vector2[]
+            {
+                end, -end,
+
+                hit - start,
+                hit + start,
+
+            };
         }
 
         private void Shake(Transform ring)

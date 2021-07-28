@@ -6,32 +6,32 @@ public class ProjectileBody : MonoBehaviour
     [NonSerialized]
     public ProjectileHandler handler;
 
-    public bool frameCollision = false;
+    public bool isOnStay = false;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(!frameCollision) return;
+        if(isOnStay) return;
 
         handler.OnCollide(collision);
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (frameCollision) return;
+        if (!isOnStay) return;
 
         handler.OnCollide(collision);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (!frameCollision) return;
+        if (isOnStay) return;
 
         handler.OnCollide(collision.collider);
     }
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (frameCollision) return;
+        if (!isOnStay) return;
 
         handler.OnCollide(collision.collider);
     }
