@@ -42,8 +42,9 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
         public Rogue(MainMenuHandler menu, MapHandler map)
             : base(menu, map, new Dictionary<string, (float, string[])>() {
-                { "Regular/Tier1", (60, new[]{ "Regular", "Bomber", "Tank", "Sniper", }) },
-                { "Regular/Tier2", (40, new[]{"Gunner", "Pirate", "Flamer" }) }
+                { "Regular/Tier1", (50, new[]{ "Regular", "Bomber", "Tank", "Sniper", }) },
+                { "Regular/Tier2", (30, new[]{"Gunner", "Pirate", "Flamer" }) },
+                { "Special", (20, new[]{ "Eye Holder", }) }
             }, Color.green, Color.red)
         {
             cooldown = 5;

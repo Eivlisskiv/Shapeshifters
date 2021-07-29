@@ -31,7 +31,7 @@ namespace Scripts.OOP.EnemyBehaviors.Ability.OrbiterSpawners
                 null : archetype;
         }
 
-        public void Ability(EnemyController self)
+        public void Ability(BaseController self)
         {
             if (charges == 0) return;
 
@@ -53,7 +53,7 @@ namespace Scripts.OOP.EnemyBehaviors.Ability.OrbiterSpawners
             }
         }
 
-        private TOrbiterType SpawnOrbiter(EnemyController self)
+        private TOrbiterType SpawnOrbiter(BaseController self)
         {
             GameObject orbiterObject = new GameObject($"{typeof(TOrbiterType).Name}");
             TOrbiterType orbiter = orbiterObject.AddComponent<TOrbiterType>();

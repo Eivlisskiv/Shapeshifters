@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Assets.IgnitedBox.UnityUtilities;
+using Scripts.OOP.EnemyBehaviors;
+using UnityEngine;
 
 namespace Scripts.Orbiters
 {
@@ -17,6 +19,13 @@ namespace Scripts.Orbiters
         protected OrbiterState State { get; private set; }
 
         protected Orbiter SelfOrbiter { get; private set; }
+
+        private readonly ITargetBehavior targetting;
+
+        protected OrbiterArchetype(ITargetBehavior targetting)
+        {
+            this.targetting = targetting;
+        }
 
         public virtual void Start<TOrbiter>(TOrbiter orbiter)
             where TOrbiter : Orbiter
@@ -66,10 +75,8 @@ namespace Scripts.Orbiters
 
         public virtual BaseController FindTarget(BaseController currentTarget)
         {
-            if (currentTarget) return currentTarget;
-
-            if (SelfOrbiter.Owner is EnemyController enemy)
-                return enemy.target;
+            if (currentTarget && !TargetLost(currentTarget))
+                return currentTarget;
 
             //Target Lost
 
@@ -79,7 +86,16 @@ namespace Scripts.Orbiters
                 OnIdle();
             }
 
-            return null;
+            return targetting?.Target(SelfOrbiter.Owner);
+        }
+
+        protected bool TargetLost(BaseController currentTarget)
+        {
+            Vector2 position = SelfOrbiter.transform.position;
+            Vector2 target = currentTarget.transform.position;
+
+            //Hits a wall = target lost
+            return Raycast.TryRaycast2D(position, target - position, 8, out _);
         }
 
         public void Update(Orbiter orbiter)

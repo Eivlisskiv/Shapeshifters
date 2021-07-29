@@ -13,7 +13,7 @@ namespace Scripts.OOP.EnemyBehaviors.Fire
                 if (!self.target || !ShootTarget(self, out angle))
                 {
                     if (Randomf.Chance(50)) return false;
-                    angle = UnityEngine.Random.Range(0, 360);
+                    angle = Random.Range(0, 360);
                 }
                 return true;
             }

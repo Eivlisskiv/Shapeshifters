@@ -2,7 +2,7 @@
 {
     public class TestPlayerTarget : ITargetBehavior
     {
-        public BaseController Target(EnemyController self)
+        public BaseController Target(BaseController self)
             => TestPlayerSpawner.player;
     }
 }

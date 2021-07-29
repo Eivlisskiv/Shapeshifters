@@ -2,7 +2,7 @@
 {
     public interface ITargetBehavior
     {
-        BaseController Target(EnemyController self);
+        BaseController Target(BaseController self);
     }
 
     public interface IFireBehavior
@@ -12,6 +12,6 @@
 
     public interface IAbilitybehavior
     {
-        void Ability(EnemyController self);
+        void Ability(BaseController self);
     }
 }

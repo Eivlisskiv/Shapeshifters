@@ -1,16 +1,17 @@
 ﻿using Assets.IgnitedBox.UnityUtilities;
 using IgnitedBox.Tweening.TweenPresets;
 using IgnitedBox.UnityUtilities;
+using Scripts.OOP.EnemyBehaviors;
+using Scripts.OOP.EnemyBehaviors.Targetting;
 using Scripts.OOP.Utils;
 using UnityEngine;
 
 namespace Scripts.Orbiters.Eye.Types
 {
-    [System.Serializable]
     public class Eye_Beam : EyeOrbiterType
     {
         const float growthSpeed = 8;
-        const float aimSpeed = 10;
+        const float aimSpeed = 20;
 
         protected override float FireDuration => 10;
 
@@ -26,6 +27,8 @@ namespace Scripts.Orbiters.Eye.Types
         private SpriteRenderer[] motifs;
 
         private float Strength { get; set; }
+
+        public Eye_Beam() : base(new SingleTarget()) { }
 
         public float QuadCurve(float x)
             => (-Mathf.Pow(x - 0.5f, 2) + 0.25f) / 0.25f;
@@ -413,6 +416,10 @@ namespace Scripts.Orbiters.Eye.Types
 
         public override void OnRemove()
         {
+            Object.Destroy(chargeParticles.gameObject);
+            Object.Destroy(fireParticles.gameObject);
+            Object.Destroy(fireBeam.gameObject);
+
             if (motifs == null) return;
 
             for (int i = 0; i < motifs.Length; i++)

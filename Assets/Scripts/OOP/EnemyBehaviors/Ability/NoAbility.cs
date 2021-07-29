@@ -2,6 +2,6 @@
 {
     public class NoAbility : IAbilitybehavior
     {
-        public void Ability(EnemyController self) { }
+        public void Ability(BaseController self) { }
     }
 }
