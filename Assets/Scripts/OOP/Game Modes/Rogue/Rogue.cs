@@ -286,7 +286,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
         private void BossObjective(EnemyController boss)
         {
             objective = Objectives.CreateObjective("Boss Fight", new Color(255, 83, 31));
-            objective.Get<Text>("Title", txt => txt.text = $"Elimenate {boss.Name}");
+            objective.Get<Text>("Title", txt => txt.text = $"Eliminate {boss.Name}");
             objective.Get<Image>("Skull", img =>
             {
                 img.sprite = Resources.Load<Sprite>($"Sprites/Bosses/{boss.Name}/Icon");
