@@ -19,6 +19,8 @@ namespace Scripts.OOP.Game_Modes.Rogue
         private float cooldown;
         private int level;
 
+        private bool isBoss;
+
         private int SpawnsLeft
         {
             get => spawnsLeft;
@@ -39,6 +41,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
         private Stage stage;
 
         private readonly ShopHandler shop;
+        private readonly ResourceCache<GameObject> Bosses;
 
         public Rogue(MainMenuHandler menu, MapHandler map)
             : base(menu, map, new Dictionary<string, (float, string[])>() {
@@ -54,6 +57,8 @@ namespace Scripts.OOP.Game_Modes.Rogue
             GameObject shopPrefab = Resources.Load<GameObject>(RessourcePath + "Shop");
             shop = Object.Instantiate(shopPrefab, menu.transform.parent).GetComponent<ShopHandler>();
             shop.gameObject.SetActive(false);
+
+            Bosses = new ResourceCache<GameObject>("Enemies/Boss/");
         }
 
         public override void OnUpdate()
@@ -62,7 +67,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
             if (cooldown > 0)
             {
-                cooldown -= Time.unscaledTime;
+                cooldown -= Time.unscaledDeltaTime;
                 return;
             }
 
@@ -95,12 +100,14 @@ namespace Scripts.OOP.Game_Modes.Rogue
                 return;
             }
 
-            points += Mathf.Max(1, member.Level / 5);
+            points += Mathf.Max(1, (member.Level / 5) * member.body.Radius);
 
             UpdateProgress();
 
             if (GetTeam(1).Count == 0 && SpawnsLeft == 0)
-                FinishWave(); 
+            {
+                FinishWave();
+            }
         }
 
         private void FinishWave()
@@ -164,15 +171,22 @@ namespace Scripts.OOP.Game_Modes.Rogue
             cooldown = 10;
             level++;
 
-            SpawnsLeft = 5 + (level * 2);
+            const int bossEvery = 5;
 
-            if (score % 5 == 0)
-            {
-                map.NextRoom(80);
-                map.loading.hasCenter = false;
-            }
+            isBoss = (score + 3) % bossEvery == 0;
+            SpawnsLeft = isBoss ? 1 :
+                5 + (level * 2);
+
+            if ((score + 4) % bossEvery == 0) BossRoom();
             else map.NextRoom(MapRoom.RandomSize());
+
             ClearDebris();
+        }
+
+        private void BossRoom()
+        {
+            map.NextRoom(80);
+            map.loading.hasCenter = false;
         }
 
         public override void OnLoaded()
@@ -214,12 +228,88 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
         private void SpawnEnemy()
         {
-            if (CheckEnemySpawns(out Vector2Int coords))
-            {
-                SpawnRandom(1, coords, level);
-                SpawnsLeft--;
-                cooldown = 5;
+            if (!CheckEnemySpawns(out Vector2Int coords))
+                return;
+
+            if (isBoss) { 
+                if (!SpawnBoss(1, coords, level)) return;
             }
+            else SpawnRandom(1, coords, level);
+
+            SpawnsLeft--;
+            cooldown = 5;
+        }
+
+        private bool SpaceForBossSpawn(Vector2Int coords, int size)
+        {
+            var room = map.current;
+
+            bool __checkDir(Vector2Int dir)
+            {
+                for (int i = 1; i <= size; i++)
+                    if (room.GetTile(coords + (dir * i)) != MapTileType.Empty)
+                        return false;
+                return true;
+            }
+
+            return  __checkDir(Vector2Int.up) &&
+                    __checkDir(Vector2Int.down) &&
+                    __checkDir(Vector2Int.left) &&
+                    __checkDir(Vector2Int.right);
+        }
+
+        private EnemyController SpawnBoss(int team, Vector2Int pos, int level)
+        {
+            string path = "Pyramid";
+
+            if(!Bosses.TryGetPrefab(path, out GameObject bossObject)) return null;
+
+            EnemyController boss = bossObject.GetComponent<EnemyController>();
+
+            if (!boss) return null;
+
+            if (!SpaceForBossSpawn(pos, boss.settings.size)) return null;
+
+            bossObject = Bosses.Instantiate(path);
+
+            boss = bossObject.GetComponent<EnemyController>();
+            boss.Set(level);
+            boss.transform.position = map.current.CharacterPosition(pos);
+
+            AddMember(team, boss);
+
+            BossObjective(boss);
+
+            return boss;
+        }
+
+        private void BossObjective(EnemyController boss)
+        {
+            objective = Objectives.CreateObjective("Boss Fight", new Color(255, 83, 31));
+            objective.Get<Text>("Title", txt => txt.text = $"Elimenate {boss.Name}");
+            objective.Get<Image>("Skull", img =>
+            {
+                img.sprite = Resources.Load<Sprite>($"Sprites/Bosses/{boss.Name}/Icon");
+                if(!img.sprite) img.sprite = Resources.Load<Sprite>("Sprites/Bosses/Skull");
+
+                img.transform.localScale = new Vector3(0.08f, 0.5f);
+            });
+
+            GameObject bar = Resources.Load<GameObject>("UI/ShieldHealthBar");
+            if (!bar) return;
+
+            bar = Object.Instantiate(bar);
+            bar.name = $"{boss.Name} Health";
+            bar.GetComponent<AspectRatioFitter>().enabled = false;
+            var foreground = bar.transform.Find("Foreground");
+            foreground.GetComponent<Image>().sprite =
+                Resources.Load<Sprite>($"Sprites/Bosses/{boss.Name}/Foreground");
+            foreground.localScale = new Vector3(0.97f, 0.8f, 1);
+
+            objective.Add(bar);
+
+            bar.transform.localScale = new Vector3(20, 0.9f, 1);
+            boss.SetHealthBar(bar.transform);
         }
 
         private bool CheckEnemySpawns(out Vector2Int pos)

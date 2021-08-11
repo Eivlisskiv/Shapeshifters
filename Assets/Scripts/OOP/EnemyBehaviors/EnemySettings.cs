@@ -41,7 +41,7 @@ namespace Scripts.OOP.EnemyBehaviors
 
             self.body.corners = randomCorners ?
             UnityEngine.Random.Range(3, 11) : corners;
-            self.body.radius = size;
+            self.body.Radius = size;
             self.stats = new Character.Stats.Stats(baseHealth +
                 (self.Level * bonusHealth));
 

@@ -9,8 +9,11 @@ namespace Scripts.OOP.Game_Modes
     public abstract class AGameMode
     {
         private string _name;
+
+#pragma warning disable IDE0074 // Use compound assignment
         public string Name => _name ??
             (_name = GetType().Name.Replace('_', ' '));
+#pragma warning restore IDE0074 // Use compound assignment
 
         public string description = "...";
 

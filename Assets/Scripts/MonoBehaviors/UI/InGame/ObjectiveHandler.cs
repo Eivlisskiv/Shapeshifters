@@ -32,7 +32,8 @@ public class ObjectiveHandler : MonoBehaviour
 
     }
 
-    public ObjectiveElement CreateObjective(string name, Color color = default)
+    public ObjectiveElement CreateObjective(string name, Color color = default, 
+        System.Action<ObjectiveElement> func = null)
     {
         GameObject element = Instantiate(elementPrefab);
         element.name = name;
@@ -41,6 +42,9 @@ public class ObjectiveHandler : MonoBehaviour
         if(image) image.color = color;
 
         ObjectiveElement oe = new ObjectiveElement(element);
+
+        func?.Invoke(oe);
+
         Add(oe);
         return oe;
     }

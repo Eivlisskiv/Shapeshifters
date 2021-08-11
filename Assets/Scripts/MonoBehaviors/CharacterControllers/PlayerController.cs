@@ -33,11 +33,14 @@ public class PlayerController : BaseController
     {
         stats = new Stats(200);
         body.corners = Random.Range(3, 10);
+
         if (ui)
         {
-            ui.UpdateHealth(stats.HPP);
+            SetHealthBar(ui.healthContainer);
             ui.UpdateXP(xp / XPRequired);
         }
+
+        UpdateHealthBar();
     }
 
     public override void OnUpdate()
@@ -62,11 +65,6 @@ public class PlayerController : BaseController
         angle = Vector2.Angle(Vector2.left, pos - (Vector2)mousePos) * y;
 
         return true;
-    }
-
-    public override void OnHealthChange() 
-    {
-        if(ui) ui.UpdateHealth(stats.HPP);
     }
 
     public override void OnXPChange(bool isUp)

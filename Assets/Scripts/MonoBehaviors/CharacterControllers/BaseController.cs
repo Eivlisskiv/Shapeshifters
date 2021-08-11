@@ -3,6 +3,7 @@ using Scripts.OOP.Game_Modes;
 using Scripts.OOP.Perks;
 using Scripts.OOP.Perks.Character.Triggers;
 using Scripts.OOP.Perks.Weapons;
+using Scripts.OOP.UI.StatsBar;
 using Scripts.OOP.Utils;
 using System;
 using UnityEngine;
@@ -19,6 +20,12 @@ public abstract class BaseController : MonoBehaviour
 
     internal int team;
 
+    public virtual string Name
+    {
+        get => name;
+        set => name = value;
+    }
+
     public SoundHandler Sounds 
     { 
         get
@@ -28,6 +35,8 @@ public abstract class BaseController : MonoBehaviour
         }
     }
     private SoundHandler _sounds;
+
+    public ShieldHealthBar HealthBar { get; private set; }
 
     float cooldown = 0;
     public bool FireReady => cooldown <= 0;
@@ -253,7 +262,21 @@ public abstract class BaseController : MonoBehaviour
         return false;
     }
 
-    public virtual void OnHealthChange() { }
+    public void SetHealthBar(Transform container)
+    {
+        HealthBar = new ShieldHealthBar(container);
+    }
+
+    protected void UpdateHealthBar()
+        => HealthBar?.SetValue(stats.HPP);
+
+    protected void UpdateShieldBar()
+        => HealthBar?.SetShield(stats.HPP);
+
+    public virtual void OnHealthChange()
+    {
+        UpdateHealthBar();
+    }
 
     public virtual bool OnDeath() => true;
 

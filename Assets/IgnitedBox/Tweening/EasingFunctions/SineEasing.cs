@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IgnitedBox.Tweening.EasinFunctions
+namespace IgnitedBox.Tweening.EasingFunctions
 {
     public static class SineEasing
     {

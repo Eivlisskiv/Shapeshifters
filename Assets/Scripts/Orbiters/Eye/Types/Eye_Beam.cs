@@ -1,7 +1,6 @@
 ﻿using Assets.IgnitedBox.UnityUtilities;
 using IgnitedBox.Tweening.TweenPresets;
 using IgnitedBox.UnityUtilities;
-using Scripts.OOP.EnemyBehaviors;
 using Scripts.OOP.EnemyBehaviors.Targetting;
 using Scripts.OOP.Utils;
 using UnityEngine;
@@ -302,7 +301,7 @@ namespace Scripts.Orbiters.Eye.Types
                 Mathf.Deg2Rad * Vector2.Angle(v, u))
                 * u.magnitude);
 
-            return c - ((c - d).normalized * target.body.radius);
+            return c - ((c - d).normalized * target.body.Radius);
         }
 
         private void HitParticles(RaycastHit2D hit2d, float width)

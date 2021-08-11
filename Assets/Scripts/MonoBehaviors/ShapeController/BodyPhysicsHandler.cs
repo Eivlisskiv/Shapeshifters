@@ -12,7 +12,17 @@ public class BodyPhysicsHandler : MonoBehaviour
 
     public bool jelly;
 
-    public int radius = 1;
+    public int Radius
+    {
+        get => _radius;
+        set 
+        {
+            _radius = value;
+            Reshape(corners);
+        }
+    }
+    private int _radius = 1;
+
     public float flexibility = 0.1f;
     public float elasticity = 2f;
     public int corners = 3;
@@ -69,8 +79,8 @@ public class BodyPhysicsHandler : MonoBehaviour
         float angle = (360 / count) * Mathf.Deg2Rad;
 
         Vector2 getVect(int index) =>
-            new Vector2(Mathf.Cos(angle * index) * radius,
-                        Mathf.Sin(angle * index) * radius);
+            new Vector2(Mathf.Cos(angle * index) * Radius,
+                        Mathf.Sin(angle * index) * Radius);
 
         Vector2 prev = getVect(count - 1);
         Vector2 current;
@@ -136,7 +146,7 @@ public class BodyPhysicsHandler : MonoBehaviour
     {
         if (jelly)
         {
-            Vector2 hit = Vectors2.FromDegAngle(angle + transform.rotation.z, radius + 1);
+            Vector2 hit = Vectors2.FromDegAngle(angle + transform.rotation.z, Radius + 1);
             AffectShape((i, point, spline) =>
             {
                 strength -= CalculateForceToTangent(hit, i, strength, point.left, spline);
@@ -150,7 +160,7 @@ public class BodyPhysicsHandler : MonoBehaviour
         {
             Vector2 force = -Vectors2.FromDegAngle(angle, push + strength);
             body.velocity = Vector2.ClampMagnitude(body.velocity + force, 40);
-            body.angularVelocity = Mathf.Clamp(body.angularVelocity + ((points.Length - radius) * strength * -force.x), -360, 360);
+            body.angularVelocity = Mathf.Clamp(body.angularVelocity + ((points.Length - Radius) * strength * -force.x), -360, 360);
         }
     }
 
@@ -176,7 +186,7 @@ public class BodyPhysicsHandler : MonoBehaviour
     private Vector2 GetForce(Vector2 pos, Vector2 hit, float strength, out float intensity)
     {
         Vector2 force = pos - hit;
-        intensity = (radius * 2 - force.magnitude) * flexibility * strength;
+        intensity = (Radius * 2 - force.magnitude) * flexibility * strength;
         return force * intensity;
     }
 
@@ -188,7 +198,7 @@ public class BodyPhysicsHandler : MonoBehaviour
     }
 
     public Vector2 ShotVector(float angle)
-        => Vectors2.FromDegAngle(angle, radius);
+        => Vectors2.FromDegAngle(angle, Radius);
 
     public (Vector2, bool)[] GetPointsIn(float from, float range)
     {

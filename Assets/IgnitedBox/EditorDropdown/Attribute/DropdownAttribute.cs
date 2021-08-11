@@ -71,6 +71,7 @@ namespace IgnitedBox.EditorDropdown.Attribute
             return o.ToString();
         }
 
+#if UNITY_EDITOR
         public void Load(FieldInfo fieldInfo, SerializedProperty prop)
         {
             if (loaded) return;
@@ -89,6 +90,7 @@ namespace IgnitedBox.EditorDropdown.Attribute
 
             Debug.LogError($"Dropdown list {type?.Name ?? TargetObject}.{path} for {TargetObject}.{FieldInfo.Name} could not be loaded");
         }
+#endif
 
         private bool LoadList()
         {

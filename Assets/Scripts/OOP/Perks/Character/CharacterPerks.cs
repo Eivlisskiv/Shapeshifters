@@ -116,11 +116,10 @@ namespace Scripts.OOP.Perks.Character
         {
             shield += amount;
 
-            if(controller is PlayerController player)
-            {
-                var ui = player.UI;
-                ui.shield.fillAmount = Math.Min(1, shield / player.stats.MaxHealth);
-            }
+            if (controller.HealthBar == null) return;
+
+            controller.HealthBar.SetShield(Math.Min(1,
+                shield / controller.stats.MaxHealth));
         }
 
         private void Shielded(Vector3 pos, Transform debrisParent)

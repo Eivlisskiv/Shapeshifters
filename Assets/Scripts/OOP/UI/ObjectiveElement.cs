@@ -29,21 +29,30 @@ namespace Scripts.OOP.UI
 
         public T Get<T>(string name, Action<T> action = null) where T : Graphic
         {
+            T t;
             if (elements.TryGetValue(name, out GameObject element))
-                return element.GetComponent<T>() ?? element.AddComponent<T>();
+                t = element.GetComponent<T>() ?? element.AddComponent<T>();
+            else
+            {
+                element = new GameObject(name);
+                Add(element);
 
-            element = new GameObject(name, typeof(T));
-            element.transform.SetParent(container);
+                t = element.AddComponent<T>();
+            }
 
-            element.transform.localScale = new Vector3(1, 1, 1);
-
-            elements.Add(name, element);
-
-            var t = element.GetComponent<T>();
             InitializeDefaults(t);
             action?.Invoke(t);
 
             return t;
+        }
+
+        public void Add(GameObject obj)
+        {
+            obj.transform.SetParent(container);
+
+            obj.transform.localScale = new Vector3(1, 1, 1);
+
+            elements.Add(obj.name, obj);
         }
 
         private void InitializeDefaults(Graphic graph)

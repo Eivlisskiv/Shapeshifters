@@ -73,6 +73,9 @@ public class RoomHandler : MonoBehaviour
     public void SetTilesPerFrame(int tpf)
         => tilesPerFrame = tpf;
 
+    public MapTileType GetTile(Vector2Int pos)
+        => current.mapContent[pos.x, pos.y];
+
     public MapTileType RandomTile(out Vector2Int pos)
     {
         var content = current.mapContent;

@@ -1,11 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using IgnitedBox.Tweening;
+using IgnitedBox.Tweening.EasingFunctions;
+using IgnitedBox.Tweening.Tweeners.FloatTweeners;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Scripts.OOP.UI
+namespace Scripts.OOP.UI.StatsBar
 {
-    public class StatBar
+    public class StatusBar
     {
         readonly Image live;
         readonly Image delayed;
@@ -15,10 +16,39 @@ namespace Scripts.OOP.UI
 
         bool done;
 
-        public StatBar(Transform container)
+        public StatusBar(Transform container)
         {
             live = container.Find("Live").GetComponent<Image>();
             delayed = container.Find("Delay").GetComponent<Image>();
+        }
+
+        public void SetValue(float v)
+        {
+            if (v == target) return;
+
+            healing = v > target;
+            target = v;
+
+            if (healing) TweenChange(delayed, live);
+            else TweenChange(live, delayed);
+        }
+
+        private void TweenChange(Image to, Image from)
+        {
+            to.fillAmount = target;
+            TweenFill(from, target, 2.5f);
+        }
+
+        protected void TweenFill(Image img, float percent, float time)
+        {
+            float change = Mathf.Abs(img.fillAmount - percent);
+            if(change < 0.01)
+            {
+                img.fillAmount = percent;
+                return;
+            }
+
+            img.Tween<Image, float, ImageFillTween>(percent, time, easing: ExponentEasing.Out);
         }
 
         public void Update(float v)

@@ -1,5 +1,5 @@
 ﻿using Scripts.OOP.Perks;
-using Scripts.OOP.UI;
+using Scripts.OOP.UI.StatsBar;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,35 +13,16 @@ public class CharacterUIHandler : MonoBehaviour
 
     public Text level;
 
-    StatBar health;
-    public float healthp;
-    StatBar xp;
-    public float xpp;
-
-    public Image shield;
+    StatusBar xp;
 
     // Start is called before the first frame update
     void Start() 
     {
-        health = new StatBar(healthContainer.transform);
-        xp = new StatBar(xpContainer.transform);
+        xp = new StatusBar(xpContainer.transform);
     }
 
-    void LateUpdate() 
-    {
-        health.Update(healthp);
-        xp.Update(xpp);
-    }
-
-    public void UpdateHealth(float percent)
-        => healthp = percent;
     public void UpdateXP(float percent)
-        => xpp = percent;
-
-    public void UpdateShield(float percent)
-    {
-
-    }
+        => xp.SetValue(percent);
 
     public void LevelUp(int level)
         => this.level.text = level.ToString();

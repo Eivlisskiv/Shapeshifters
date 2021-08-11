@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿#if UNITY_EDITOR
+using System.Reflection;
 using UnityEditor;
 
 namespace IgnitedBox.EditorDropdown.Utilities
@@ -50,3 +51,4 @@ namespace IgnitedBox.EditorDropdown.Utilities
         }
     }
 }
+#endif

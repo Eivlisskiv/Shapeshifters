@@ -1,4 +1,5 @@
 ﻿using Scripts.OOP.EnemyBehaviors;
+using UnityEngine.UI;
 
 public class EnemyController : BaseController
 {
@@ -8,6 +9,12 @@ public class EnemyController : BaseController
 
     internal BaseController target;
 
+    public override string Name 
+    {
+        get => settings?.name ?? base.Name; 
+        set => base.Name = value; 
+    }
+
     public void Set(int level)
     {
         this.level = level;
@@ -16,6 +23,7 @@ public class EnemyController : BaseController
     public override void OnStart()
     {
         Behavior = settings.SetSettings(this);
+        Name = settings.name;
         settings = null;
         target = Behavior.Target(this);
     }
