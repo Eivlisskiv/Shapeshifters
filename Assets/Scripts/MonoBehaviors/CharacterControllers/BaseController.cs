@@ -1,4 +1,5 @@
-﻿using Scripts.OOP.Character.Stats;
+﻿using Assets.IgnitedBox.Entities;
+using Scripts.OOP.Character.Stats;
 using Scripts.OOP.Game_Modes;
 using Scripts.OOP.Perks;
 using Scripts.OOP.Perks.Character.Triggers;
@@ -8,7 +9,7 @@ using Scripts.OOP.Utils;
 using System;
 using UnityEngine;
 
-public abstract class BaseController : MonoBehaviour
+public abstract class BaseController : HealthEntity<ProjectileHandler>
 {
     public Weapon Weapon
         => weapon ? weapon : (weapon = GetComponent<Weapon>());
@@ -97,6 +98,10 @@ public abstract class BaseController : MonoBehaviour
                 new Vector3(hpp, hpp, 1), Time.deltaTime);
     }
 
+    public override float Health => stats.health;
+
+    public override float MaxHealth => stats.MaxHealth;
+
     public abstract void OnStart();
     public abstract void OnUpdate();
     public abstract bool IsFiring(out float angle);
@@ -174,10 +179,10 @@ public abstract class BaseController : MonoBehaviour
     {
         var otherPos = collision.collider.ClosestPoint(transform.position);
         var distance = (otherPos - (Vector2)transform.position).magnitude;
-        if (distance == 0) HitHealth(-1);
+        if (distance == 0) ModifyHealth(-1);
     }
 
-    public void ProjectileHit(ProjectileHandler projectile)
+    public override void ProjectileHit(ProjectileHandler projectile)
     {
         perks.Activate<IProjectileTaken>(1,
             perk => perk.OnHit(this, projectile));
@@ -221,14 +226,14 @@ public abstract class BaseController : MonoBehaviour
         //
 
         if (direction.HasValue) SpawnHitParticles(direction.Value);
-        if (HitHealth(-damage))
+        if (ModifyHealth(-damage))
             if(attacker) attacker.OnKill(this);
     }
 
     public void ProcessDamage(float damage, BaseController attacker, Vector2? direction)
     {
         if (direction.HasValue) SpawnHitParticles(direction.Value);
-        if (HitHealth(-damage))
+        if (ModifyHealth(-damage))
             if (attacker) attacker.OnKill(this);
     }
 
@@ -247,7 +252,7 @@ public abstract class BaseController : MonoBehaviour
         }
     }
 
-    public bool HitHealth(float value)
+    public override bool ModifyHealth(float value)
     {
         stats.health = Math.Min(stats.MaxHealth, stats.health + value);
         OnHealthChange();
@@ -300,7 +305,7 @@ public abstract class BaseController : MonoBehaviour
             xp -= XPRequired;
             up = true;
             level++;
-            HitHealth(stats.MaxHealth - stats.health);
+            ModifyHealth(stats.MaxHealth - stats.health);
         }
 
         if (up)

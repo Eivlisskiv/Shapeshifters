@@ -23,8 +23,8 @@ public class ProjectileHandler : MonoBehaviour
 
     public BaseController Sender { get; private set; }
 
-    public Action<ProjectileHandler, Collider2D> onHit;
-    public Action<ProjectileHandler> onUpdate;
+    public Action<ProjectileHandler, Collider2D> OnHit { private get; set; }
+    public Action<ProjectileHandler> OnUpdate { private get; set; }
 
     public float damage;
     public float force;
@@ -64,7 +64,7 @@ public class ProjectileHandler : MonoBehaviour
 
         Airtime += Time.deltaTime;
 
-        onUpdate?.Invoke(this);
+        OnUpdate?.Invoke(this);
     }
 
     public bool IsSameSender(GameObject projectile)
@@ -77,7 +77,7 @@ public class ProjectileHandler : MonoBehaviour
     {
         if (dying) return;
 
-        onHit?.Invoke(this, collision);
+        OnHit?.Invoke(this, collision);
     }
 
     public void ToDestroy()

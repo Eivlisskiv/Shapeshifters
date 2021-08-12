@@ -23,7 +23,7 @@ namespace Scripts.OOP.Perks.Character
             if ((time += delta) >= 5f)
             {
                 time -= 5f;
-                controller.HitHealth(Intensity);
+                controller.ModifyHealth(Intensity);
                 UnityEngine.Object.Destroy(SpawnPrefab(controller.transform.position,
                     null, GameModes.GetDebrisTransform(controller.team)), 1f);
             }

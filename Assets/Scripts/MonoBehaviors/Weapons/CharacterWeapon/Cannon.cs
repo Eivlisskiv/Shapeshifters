@@ -1,4 +1,5 @@
-﻿using Scripts.OOP.Audio;
+﻿using Assets.IgnitedBox.Entities;
+using Scripts.OOP.Audio;
 using Scripts.OOP.Perks.Weapons;
 using Scripts.OOP.Stats;
 using System;
@@ -36,9 +37,20 @@ public class Cannon : Weapon
     {
         if (projectile.IsSameSender(collision.gameObject)) return;
 
-        BaseController victim = collision.gameObject
-            .GetComponent<BaseController>();
+        HealthEntity<ProjectileHandler> entity = collision.gameObject
+            .GetComponent<HealthEntity<ProjectileHandler>>();
 
+        if (entity is BaseController victim)
+        {
+            TargetController(projectile, victim);
+            return;
+        }
+
+        entity.ProjectileHit(projectile);
+    }
+
+    private void TargetController(ProjectileHandler projectile, BaseController victim)
+    {
         if (!victim || victim.IsTeammate(projectile.Sender)) return;
 
         projectile.Sender.perks.Activate<IProjectileHitTarget>(1,

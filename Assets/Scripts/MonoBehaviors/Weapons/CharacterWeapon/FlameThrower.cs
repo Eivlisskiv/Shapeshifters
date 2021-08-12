@@ -1,4 +1,5 @@
-﻿using Scripts.OOP.Audio;
+﻿using Assets.IgnitedBox.Entities;
+using Scripts.OOP.Audio;
 using Scripts.OOP.Stats;
 using UnityEngine;
 
@@ -34,10 +35,8 @@ class FlameThrower : Weapon
     {
         if (projectile.IsSameSender(collision.gameObject)) return;
 
-        BaseController controller = collision.gameObject
-            .GetComponent<BaseController>();
-
-        if (controller) controller.ProjectileHit(projectile);
+        HealthEntity<ProjectileHandler>.HasHeathEntity
+            (collision.gameObject, projectile);
     }
 
     protected override AudioEntity[] GetFireClips()

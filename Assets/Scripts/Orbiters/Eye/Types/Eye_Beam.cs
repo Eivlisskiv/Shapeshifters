@@ -277,7 +277,7 @@ namespace Scripts.Orbiters.Eye.Types
 
             bool enemy = controller.team != SelfOrbiter.Owner.team;
 
-            float damage = SelfOrbiter.Damage * 5 * Strength * Time.deltaTime;
+            float damage = SelfOrbiter.damage * 5 * Strength * Time.deltaTime;
 
             Vector2 point = GetHitPoint(controller);
 

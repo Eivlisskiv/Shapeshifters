@@ -9,6 +9,8 @@ namespace Scripts.Orbiters.Eye
     {
         public Transform Pupil { get; private set; }
 
+        public override float MaxHealth => 50 + (10 * Owner.Level);
+
         protected override void OnStart()
         {
             if (Started) return;

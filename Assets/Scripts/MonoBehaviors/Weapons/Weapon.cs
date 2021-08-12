@@ -1,4 +1,5 @@
-﻿using Scripts.OOP.Audio;
+﻿using Assets.IgnitedBox.Entities;
+using Scripts.OOP.Audio;
 using Scripts.OOP.Game_Modes;
 using Scripts.OOP.Perks.Weapons;
 using Scripts.OOP.Stats;
@@ -106,10 +107,8 @@ public class Weapon : MonoBehaviour
     {
         if (projectile.IsSameSender(collision.gameObject)) return;
 
-        BaseController controller = collision.gameObject
-            .GetComponent<BaseController>();
-
-        if (controller) controller.ProjectileHit(projectile);
+        HealthEntity<ProjectileHandler>.HasHeathEntity
+            (collision.gameObject, projectile);
 
         projectile.ToDestroy();
     }
@@ -129,8 +128,8 @@ public class Weapon : MonoBehaviour
         ProjectileHandler handler = projectile
             .GetComponent<ProjectileHandler>();
 
-        handler.onUpdate = OnProjectileUpdate;
-        handler.onHit = OnProjectileHit;
+        handler.OnUpdate = OnProjectileUpdate;
+        handler.OnHit = OnProjectileHit;
 
         Collider2D collider = handler.body
             .GetComponent<Collider2D>();

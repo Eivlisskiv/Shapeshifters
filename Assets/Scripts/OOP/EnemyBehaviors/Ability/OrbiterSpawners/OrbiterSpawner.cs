@@ -58,7 +58,7 @@ namespace Scripts.OOP.EnemyBehaviors.Ability.OrbiterSpawners
             GameObject orbiterObject = new GameObject($"{typeof(TOrbiterType).Name}");
             TOrbiterType orbiter = orbiterObject.AddComponent<TOrbiterType>();
             orbiter.Owner = self;
-            orbiter.Damage = damage;
+            orbiter.damage = damage;
 
             orbiter.SetArchetype(archetype);
 
@@ -67,7 +67,7 @@ namespace Scripts.OOP.EnemyBehaviors.Ability.OrbiterSpawners
             return orbiter;
         }
 
-        public virtual void OrbiterDestroyed(TOrbiterType _)
+        public virtual void OrbiterLost(TOrbiterType _)
         {
             cooldown = cooldowntime;
         }

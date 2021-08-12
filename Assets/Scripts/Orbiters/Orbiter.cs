@@ -1,10 +1,11 @@
-﻿using Scripts.OOP.EnemyBehaviors.Ability.OrbiterSpawners;
+﻿using Assets.IgnitedBox.Entities;
+using Scripts.OOP.EnemyBehaviors.Ability.OrbiterSpawners;
 using System;
 using UnityEngine;
 
 namespace Scripts.Orbiters
 {
-    public abstract class Orbiter : MonoBehaviour
+    public abstract class Orbiter : HealthEntity<ProjectileHandler>
     {
         public BaseController Owner
         {
@@ -13,6 +14,7 @@ namespace Scripts.Orbiters
             {
                 _owner = value;
                 Color = _owner.GetColor(1);
+                health = MaxHealth;
             }
         }
 
@@ -21,7 +23,13 @@ namespace Scripts.Orbiters
         public float speed = 1;
         public float velocityLoss = 0.8f;
 
-        public float Damage = 1;
+        private float health;
+
+        public override float Health => health;
+
+        public override float MaxHealth => 25 + (5 * Owner.Level);
+
+        public float damage = 1;
 
         public BaseController Target { get; protected set; }
 
@@ -48,6 +56,8 @@ namespace Scripts.Orbiters
         }
 
         private Color _color;
+
+        protected virtual bool CanBeStolen => true;
 
         private void Awake()
         {
@@ -96,6 +106,29 @@ namespace Scripts.Orbiters
             transform.Translate(velocity * Time.deltaTime * speed);
         }
 
+        public override bool ModifyHealth(float mod)
+            => (health += mod) <= 0;
+
+        public override void ProjectileHit(ProjectileHandler projectile)
+        {
+            if (projectile.IsSameSender(Owner.gameObject)) return;
+
+            if (projectile.Sender.IsTeammate(Owner)) return;
+
+            if (ModifyHealth(-projectile.damage) && CanBeStolen)
+            {
+                OnOrbiterDestroy();
+
+                Debug.Log($"{projectile.Sender.Name} stole {Owner.Name}'s {Archetype?.GetType().Name} {GetType().Name}");
+
+                Owner = projectile.Sender;
+
+                return;
+            }
+
+            Debug.Log($"{Owner.Name}'s {Archetype?.GetType().Name} {GetType().Name} has {Health}/{MaxHealth} HP");
+        }
+
         protected virtual void OnColorChange()
             => Archetype?.SetColor(Color);
 
@@ -140,6 +173,8 @@ namespace Scripts.Orbiters
         protected void CheckOrbiterSpawner<TOrbiterType>()
             where TOrbiterType : Orbiter
         {
+            if (!Owner) return;
+
 #pragma warning disable IDE0083 // Use pattern matching
             if (!(Owner is EnemyController enemy)) return;
 
@@ -148,7 +183,7 @@ namespace Scripts.Orbiters
 
             if (!(this is TOrbiterType spawn)) return;
 #pragma warning restore IDE0083 
-            spawner.OrbiterDestroyed(spawn);
+            spawner.OrbiterLost(spawn);
         }
     }
 }
