@@ -3,6 +3,7 @@ using Scripts.OOP.Audio;
 using Scripts.OOP.Game_Modes;
 using Scripts.OOP.Perks.Weapons;
 using Scripts.OOP.Stats;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -18,6 +19,22 @@ public class Weapon : MonoBehaviour
             t.IsSubclassOf(wep)).ToArray();
     }
 
+    private static readonly Dictionary<System.Type, Sprite> icons
+        = new Dictionary<System.Type, Sprite>();
+
+    public static Sprite GetIcon(System.Type weapon)
+    {
+        if (icons.TryGetValue(weapon, out Sprite icon)) return icon;
+
+        icon = Resources.Load<Sprite>($"Weapons/{weapon.Name}/Icon");
+        if(!icon) icon = Resources.Load<Sprite>($"Weapons/Default/Icon");
+        if (!icon) return null;
+
+        icons.Add(weapon, icon);
+
+        return icon;
+
+    }
 
     const string desc = "A single shot weapon";
 
@@ -33,6 +50,8 @@ public class Weapon : MonoBehaviour
     public virtual float Range => (speed * life) * 0.75f;
 
     protected virtual string Description => desc;
+
+    public Sprite Icon => GetIcon(GetType());
 
     protected string Name { get; private set; }
 
@@ -60,10 +79,14 @@ public class Weapon : MonoBehaviour
         OnStart();
     }
 
+    private void Update() => OnUpdate();
+
     protected virtual void OnStart()
     {
         projectilPrefab = LoadRessource<GameObject>("Projectile");
     }
+
+    protected virtual void OnUpdate() { }
 
     protected T LoadRessource<T>(string name) where T : Object
     {

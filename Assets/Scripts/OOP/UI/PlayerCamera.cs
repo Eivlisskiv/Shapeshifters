@@ -13,6 +13,7 @@ namespace Scripts.OOP.UI
 
         Camera cam;
         Transform background;
+        SpriteRenderer bk;
 
         Vector2 last;
 
@@ -28,8 +29,12 @@ namespace Scripts.OOP.UI
             sizeY = s * 2;
             sizeX = s * 2.5f;
 
-            if(background)
+            if (background)
+            {
                 background.localScale = new Vector3(s, s, 1);
+                bk = background.GetComponent<SpriteRenderer>();
+                bk.color = Color.HSVToRGB(0, 0, 0.5f);
+            }
         }
 
         public Vector3 MouseToWorld()
@@ -64,6 +69,7 @@ namespace Scripts.OOP.UI
         public void Detach()
         {
             background.localPosition = new Vector3(0, 0, 50);
+            bk.color = bk.color = Color.HSVToRGB(0, 0, 1);
         }
     }
 }

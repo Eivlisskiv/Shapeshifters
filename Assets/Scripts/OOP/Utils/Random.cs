@@ -16,7 +16,11 @@ namespace Scripts.OOP.Utils
 
         public static T Element<T>(params T[] items)
             => items[rng.Next(items.Length)];
-        public static T Element<T>(List<T> items)
+
+        public static T RandomElement<T>(this T[] items)
+            => items[rng.Next(items.Length)];
+
+        public static T RandomElement<T>(this List<T> items)
             => items[rng.Next(items.Count)];
     }
 }

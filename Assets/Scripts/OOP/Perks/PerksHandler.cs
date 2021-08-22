@@ -24,10 +24,20 @@ namespace Scripts.OOP.Perks
             return result;
         }
 
-        public static Perk Random()
+        public static Perk Random(int level = 1)
         {
-            Type type = Randomf.Element(types);
-            return (Perk)Activator.CreateInstance(type);
+            Type type = Randomf.RandomElement(types);
+            Perk perk = (Perk)Activator.CreateInstance(type);
+            perk.LevelUp(level);
+            return perk;
+        }
+
+        public static Perk RandomCharge(int buff, int chargeMultiplier)
+        {
+            Type type = Randomf.RandomElement(types);
+            Perk perk = (Perk)Activator.CreateInstance(type);
+            perk.AsBuff(buff, chargeMultiplier);
+            return perk;
         }
 
         public static Perk Load(string key)
@@ -88,7 +98,7 @@ namespace Scripts.OOP.Perks
 
         public Perk RandomDrop()
         {
-            Perk perk = Randomf.Element(perks);
+            Perk perk = Randomf.RandomElement(perks);
             perk.ToBuff();
             return perk;
         }

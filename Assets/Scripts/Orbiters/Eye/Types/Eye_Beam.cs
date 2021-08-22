@@ -154,7 +154,7 @@ namespace Scripts.Orbiters.Eye.Types
             fireBeam.material.SetVector("Anim_Speed", new Vector4(growthSpeed, 0, 0, 0));
             fireBeam.material.SetColor("Beam_Color", color);
 
-            beamHandler = fire.AddCollisionHandler<PolygonCollider2D>(true, HitTarget);
+            beamHandler = fire.AddCollisionHandler<PolygonCollider2D>(0.25f, HitTarget);
         }
 
         private void InitializeMotifs<TOrbiter>(TOrbiter orbiter) where TOrbiter : Orbiter
@@ -277,7 +277,7 @@ namespace Scripts.Orbiters.Eye.Types
 
             bool enemy = controller.team != SelfOrbiter.Owner.team;
 
-            float damage = SelfOrbiter.damage * 5 * Strength * Time.deltaTime;
+            float damage = SelfOrbiter.damage * 5 * Strength;
 
             Vector2 point = GetHitPoint(controller);
 

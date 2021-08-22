@@ -40,6 +40,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
         private Stage stage;
 
+        private readonly GameObject cratePrefab;
         private readonly ShopHandler shop;
         private readonly ResourceCache<GameObject> Bosses;
 
@@ -55,6 +56,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
             SpawnsLeft = 5;
 
             GameObject shopPrefab = Resources.Load<GameObject>(RessourcePath + "Shop");
+            cratePrefab = Resources.Load<GameObject>(RessourcePath + "Crate");
             shop = Object.Instantiate(shopPrefab, menu.transform.parent).GetComponent<ShopHandler>();
             shop.gameObject.SetActive(false);
 
@@ -106,6 +108,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
             if (GetTeam(1).Count == 0 && SpawnsLeft == 0)
             {
+                if (isBoss && member is EnemyController boss) BossDrop(boss);
                 FinishWave();
             }
         }
@@ -310,6 +313,14 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
             bar.transform.localScale = new Vector3(20, 0.9f, 1);
             boss.SetHealthBar(bar.transform);
+        }
+
+        private void BossDrop(EnemyController boss)
+        {
+            Objectives.Remove(objective);
+            GameObject crate = Object.Instantiate(cratePrefab);
+            crate.transform.position = boss.transform.position;
+            crate.transform.localScale = new Vector3(0.25f, 0.25f, 1);
         }
 
         private bool CheckEnemySpawns(out Vector2Int pos)

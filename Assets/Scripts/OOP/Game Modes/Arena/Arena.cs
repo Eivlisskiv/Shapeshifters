@@ -145,7 +145,6 @@ namespace Scripts.OOP.Game_Modes.Arena
                 if (player.Level == 1 || player.Level % 5 == 0)
                 {
                     Perk perk = PerksHandler.Random();
-                    perk.LevelUp();
                     player.perks.Add(perk, player.UI);
                 }
             }

@@ -82,8 +82,7 @@ namespace Scripts.OOP.EnemyBehaviors
 
         private void RandomPerk(int level, EnemyController self)
         {
-            Perk perk = PerksHandler.Random();
-            perk.LevelUp(level);
+            Perk perk = PerksHandler.Random(level);
             self.perks.Add(perk);
         }
 

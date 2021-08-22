@@ -69,6 +69,14 @@
             description = null;
         }
 
+        public void AsBuff(int level, int chargeMultiplier)
+        {
+            buff = level;
+            charge = ToBuffCharge * chargeMultiplier;
+            this.level = 0;
+            description = null;
+        }
+
         public bool Consume(float consumed)
         {
             if (buff > 0)
