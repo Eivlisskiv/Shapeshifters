@@ -3,11 +3,9 @@ using Scripts.OOP.Audio;
 using Scripts.OOP.Stats;
 using UnityEngine;
 
-class FlameThrower : Weapon
+class FlameThrower : BurstWeapon
 {
-    const string desc = "Fires flames in short range.";
-
-    public float accuracy = 50;
+    const string desc = "Fires bursts of flames in short and inaccurate range.";
 
     protected override string Description => desc;
 
@@ -15,22 +13,15 @@ class FlameThrower : Weapon
 
     public override void DefaultPreset()
     {
-        cooldown = 0.1f;
-        force = 1;
-        totalDamage = 1;
-        life = 0.3f;
-        speed = 10;
+        cooldown = 1.2f;
+        force = 12;
+        totalDamage = 12;
+        life = 0.5f;
+        speed = 12;
         accuracy = 50;
+        totalShots = 5;
     }
 
-    protected override void FireProjectiles(BaseController sender,
-        float angle, WeaponStats stats)
-    {
-        Vector2 hit = sender.body.ShotVector(angle
-            + Random.Range(-accuracy, accuracy));
-
-        SpawnProjectile(sender, hit, stats, totalDamage);
-    }
     protected override void OnProjectileHit(ProjectileHandler projectile, Collider2D collision)
     {
         if (projectile.IsSameSender(collision.gameObject)) return;

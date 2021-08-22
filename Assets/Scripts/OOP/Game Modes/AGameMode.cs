@@ -40,7 +40,7 @@ namespace Scripts.OOP.Game_Modes
         protected readonly private ResourceCache<GameObject> enemies
             = new ResourceCache<GameObject>("Enemies/");
 
-        protected readonly Dictionary<string, (float, string[])> enemyTable;
+        protected readonly Dictionary<string, (float rate, string[] names)> enemyTable;
 
         protected ObjectiveHandler Objectives { get; private set; }
 
@@ -115,11 +115,13 @@ namespace Scripts.OOP.Game_Modes
         {
             if (enemyTable != null && enemyTable.Count > 0)
             {
+                float total = 0;
                 float r = Random.Range(0, 101);
                 foreach (var v in enemyTable)
                 {
-                    if (r <= v.Value.Item1)
-                        return enemies.Instantiate($"{v.Key}/{Randomf.Element(v.Value.Item2)}");
+                    total += v.Value.rate;
+                    if (r <= total)
+                        return enemies.Instantiate($"{v.Key}/{Randomf.Element(v.Value.names)}");
                 }
             }
 
