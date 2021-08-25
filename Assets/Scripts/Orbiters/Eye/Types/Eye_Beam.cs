@@ -275,7 +275,7 @@ namespace Scripts.Orbiters.Eye.Types
             if (!obj.TryGetComponent(out BaseController controller)) return;
             if (controller == SelfOrbiter.Owner) return;
 
-            bool enemy = controller.team != SelfOrbiter.Owner.team;
+            bool enemy = controller.Team != SelfOrbiter.Owner.Team;
 
             float damage = SelfOrbiter.damage * 5 * Strength;
 
@@ -301,7 +301,7 @@ namespace Scripts.Orbiters.Eye.Types
                 Mathf.Deg2Rad * Vector2.Angle(v, u))
                 * u.magnitude);
 
-            return c - ((c - d).normalized * target.body.Radius);
+            return c - ((c - d).normalized * target.Body.Radius);
         }
 
         private void HitParticles(RaycastHit2D hit2d, float width)

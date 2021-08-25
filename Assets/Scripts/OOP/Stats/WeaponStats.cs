@@ -1,7 +1,7 @@
 ﻿
 namespace Scripts.OOP.Stats
 {
-    public class WeaponStats
+    public struct WeaponStats
     {
         public float angle;
         public float size;

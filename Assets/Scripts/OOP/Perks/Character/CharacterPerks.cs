@@ -25,7 +25,7 @@ namespace Scripts.OOP.Perks.Character
                 time -= 5f;
                 controller.ModifyHealth(Intensity);
                 UnityEngine.Object.Destroy(SpawnPrefab(controller.transform.position,
-                    null, GameModes.GetDebrisTransform(controller.team)), 1f);
+                    null, GameModes.GetDebrisTransform(controller.Team)), 1f);
             }
             return true;
         }
@@ -47,7 +47,7 @@ namespace Scripts.OOP.Perks.Character
                 other.TakeDamage(Intensity, controller, point);
                 point.z = -5;
                 UnityEngine.Object.Destroy(SpawnPrefab(point, null,
-                    GameModes.GetDebrisTransform(controller.team)), 1f); 
+                    GameModes.GetDebrisTransform(controller.Team)), 1f); 
                 return true;
             }
             return false;
@@ -77,7 +77,7 @@ namespace Scripts.OOP.Perks.Character
 
             if (!projectile || shield <= 0) return !Remaining;
 
-            Transform debrisParent = GameModes.GetDebrisTransform(self.team);
+            Transform debrisParent = GameModes.GetDebrisTransform(self.Team);
 
             if(shield >= projectile.damage)
             {
@@ -101,7 +101,7 @@ namespace Scripts.OOP.Perks.Character
 
             if (damage <= 0 || shield <= 0) return !Remaining;
 
-            Transform debrisParent = GameModes.GetDebrisTransform(self.team);
+            Transform debrisParent = GameModes.GetDebrisTransform(self.Team);
 
             float reduction = Math.Min(damage, shield);
 

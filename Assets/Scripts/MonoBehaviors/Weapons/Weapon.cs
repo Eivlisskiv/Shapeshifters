@@ -95,22 +95,22 @@ public class Weapon : MonoBehaviour
         return item;
     }
 
-    public float Fire(BaseController sender, float angle)
+    public (float, ProjectileHandler) Fire(BaseController sender, float angle)
     {
         WeaponStats stats = new WeaponStats();
         sender.perks.Activate<IWeaponFire>(1, perk => 
             perk.OnFire(angle, this, stats));
 
-        FireProjectiles(sender, angle, stats);
+        var projectile = FireProjectiles(sender, angle, stats);
 
-        return force + stats.force;
+        return (force + stats.force, projectile);
     }
 
-    protected virtual void FireProjectiles(BaseController sender,
+    protected virtual ProjectileHandler FireProjectiles(BaseController sender,
         float angle, WeaponStats stats)
     {
-        Vector2 hit = sender.body.ShotVector(angle);
-        SpawnProjectile(sender, hit, stats, totalDamage);
+        Vector2 hit = sender.Body.ShotVector(angle);
+        return SpawnProjectile(sender, hit, stats, totalDamage);
     }
 
     protected virtual void OnProjectileUpdate(ProjectileHandler projectile)
@@ -138,10 +138,10 @@ public class Weapon : MonoBehaviour
 
     protected ProjectileHandler SpawnProjectile(
         BaseController sender, Vector2 direction,
-        WeaponStats stats, float damage, float statsMod = 1)
+        WeaponStats mods, float damage, float statsMod = 1)
     {
         GameObject projectile = Instantiate(projectilPrefab,
-            GameModes.GetDebrisTransform(sender.team));
+            GameModes.GetDebrisTransform(sender.Team));
 
         projectile.name = $"{gameObject.name}_Projectile";
 
@@ -157,12 +157,12 @@ public class Weapon : MonoBehaviour
         Collider2D collider = handler.body
             .GetComponent<Collider2D>();
 
-        Physics2D.IgnoreCollision(collider, sender.body.Collider);
+        Physics2D.IgnoreCollision(collider, sender.Body.Collider);
 
         handler.SetStats(sender, damage * statsMod,
-            (life + stats.life) / statsMod,
-            ((speed + stats.speed) / statsMod) * direction.normalized,
-            ((force + stats.force) / 4) * statsMod);
+            (life + mods.life) / statsMod,
+            ((speed + mods.speed) / statsMod) * direction.normalized,
+            ((force + mods.force) / 4) * statsMod);
 
         sender.perks.Activate<IProjectileFired>(1, perk =>
             perk.OnFire(handler));

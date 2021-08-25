@@ -39,9 +39,9 @@ namespace Scripts.OOP.EnemyBehaviors
         {
             self.gameObject.name = name;
 
-            self.body.corners = randomCorners ?
+            self.Body.corners = randomCorners ?
             UnityEngine.Random.Range(3, 11) : corners;
-            self.body.Radius = size;
+            self.Body.Radius = size;
             self.stats = new Character.Stats.Stats(baseHealth +
                 (self.Level * bonusHealth));
 
@@ -49,7 +49,9 @@ namespace Scripts.OOP.EnemyBehaviors
 
             SetPerks(self);
 
-            return new EnemyBehavior(targettingBehavior, firingBehavior, abilityBehavior);
+            EnemyBehavior behavior = new EnemyBehavior(targettingBehavior, firingBehavior, abilityBehavior);
+            behavior.ability.Initialize(self);
+            return behavior;
         }
 
         private void SetPerks(EnemyController self)

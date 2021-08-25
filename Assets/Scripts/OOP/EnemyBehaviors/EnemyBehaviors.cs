@@ -12,6 +12,8 @@
 
     public interface IAbilitybehavior
     {
-        void Ability(BaseController self);
+        void Initialize(BaseController self);
+
+        //void AbilityUpdate(BaseController self);
     }
 }

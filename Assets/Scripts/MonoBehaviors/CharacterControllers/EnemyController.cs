@@ -1,5 +1,4 @@
 ﻿using Scripts.OOP.EnemyBehaviors;
-using UnityEngine.UI;
 
 public class EnemyController : BaseController
 {
@@ -31,7 +30,7 @@ public class EnemyController : BaseController
     public override void OnUpdate()
     {
         if(!target) target = Behavior.Target(this);
-        Behavior.Ability(this);
+        //Behavior.AbilityUpdate(this);
     }
 
     public override bool IsFiring(out float angle)

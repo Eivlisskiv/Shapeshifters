@@ -23,13 +23,15 @@ public class Cannon : Weapon
         speed = 15;
     }
 
-    protected override void FireProjectiles(BaseController sender, float angle, WeaponStats stats)
+    protected override ProjectileHandler FireProjectiles(BaseController sender, float angle, WeaponStats stats)
     {
-        Vector2 hit = sender.body.ShotVector(angle);
+        Vector2 hit = sender.Body.ShotVector(angle);
         var projectile = SpawnProjectile(sender, hit, stats, totalDamage);
 
         projectile.Rigidbody.velocity += 
             projectile.Velocity * projectile.force;
+
+        return projectile;
     }
 
     protected override void OnProjectileHit
@@ -58,7 +60,7 @@ public class Cannon : Weapon
 
         float damage = Math.Min(projectile.damage,
             (projectile.Rigidbody.velocity.magnitude
-                + victim.body.Body.velocity.magnitude));
+                + victim.Body.Body.velocity.magnitude));
 
         victim.ProcessDamage(damage, projectile.Sender,
             projectile.transform.position);

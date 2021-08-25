@@ -9,7 +9,7 @@ namespace Scripts.OOP.EnemyBehaviors.Targetting
         {
             if (self is EnemyController enemy && enemy.target) return enemy.target;
 
-            List<BaseController> targets = GameModes.GameMode?.GetEnemies(self.team);
+            List<BaseController> targets = GameModes.GameMode?.GetEnemies(self.Team);
             if (targets == null || targets.Count == 0) return null;
             return targets[0] == null ? null : targets[0];
         }

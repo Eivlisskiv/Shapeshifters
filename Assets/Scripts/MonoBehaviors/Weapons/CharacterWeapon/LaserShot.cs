@@ -33,29 +33,29 @@ public class LaserShot : Weapon
         dashProjectile = LoadRessource<Sprite>("Dash");
     }
 
-    protected override void FireProjectiles(BaseController sender,
+    protected override ProjectileHandler FireProjectiles(BaseController sender,
         float angle, WeaponStats stats)
     {
-        (Vector2 barrel, bool)[] barrels = sender.body.GetPointsIn(angle,
+        (Vector2 barrel, bool)[] barrels = sender.Body.GetPointsIn(angle,
             (this.angle + stats.angle) / 2);
 
         if (barrels.Length == 0)
-        {
-            base.FireProjectiles(sender, angle, stats);
-            return;
-        }
+            return base.FireProjectiles(sender, angle, stats);
 
         float damage = Mathf.FloorToInt((totalDamage + stats.totalDamage)
             / barrels.Length);
 
+        ProjectileHandler projectile = null;
         for (int i = 0; i < barrels.Length; i++)
         {
             (Vector2 barrel, bool type) = barrels[i];
-            SpawnProjectile(type, barrel, damage, stats, sender);
+            projectile = SpawnProjectile(type, barrel, damage, stats, sender);
         }
+
+        return projectile;
     }
 
-    protected void SpawnProjectile(bool isBullet, Vector2 direction,
+    protected ProjectileHandler SpawnProjectile(bool isBullet, Vector2 direction,
         float damage, WeaponStats stats, BaseController sender)
     {
         int m = (isBullet ? 1 : 2);
@@ -70,5 +70,7 @@ public class LaserShot : Weapon
 
         SpriteRenderer image = handler.body.GetComponent<SpriteRenderer>();
         image.sprite = isBullet ? pointProjectile : dashProjectile;
+
+        return handler;
     }
 }

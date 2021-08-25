@@ -2,6 +2,6 @@
 {
     public class NoAbility : IAbilitybehavior
     {
-        public void Ability(BaseController self) { }
+        public void Initialize(BaseController self) { }
     }
 }

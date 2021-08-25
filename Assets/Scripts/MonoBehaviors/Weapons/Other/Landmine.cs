@@ -17,7 +17,7 @@ public class Landmine : MonoBehaviour
         active = true;
 
         bodyCollider = GetComponent<Collider2D>();
-        Physics2D.IgnoreCollision(bodyCollider, owner.body.Collider);
+        Physics2D.IgnoreCollision(bodyCollider, owner.Body.Collider);
 
         Destroy(gameObject, 300f);
     }

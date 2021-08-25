@@ -42,7 +42,12 @@ public class BodyPhysicsHandler : MonoBehaviour
     public Rigidbody2D Body
     { get => body; }
 
-    SpriteShapeController shapeController;
+
+    SpriteShapeController ShapeController => _shapeController != null ? _shapeController :
+            (_shapeController = GetComponent<SpriteShapeController>());
+
+    SpriteShapeController _shapeController;
+
     SpriteShapeRenderer shapeRenderer;
     PolygonCollider2D pcollider;
     SplinePoint[] points;
@@ -56,7 +61,6 @@ public class BodyPhysicsHandler : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         shapeRenderer = GetComponent<SpriteShapeRenderer>();
         SetMatColor();
-        shapeController = GetComponent<SpriteShapeController>();
         pcollider = GetComponent<PolygonCollider2D>();
         Reshape(corners);
     }
@@ -71,7 +75,7 @@ public class BodyPhysicsHandler : MonoBehaviour
 
     public void Reshape(int count)
     {
-        Spline spline = shapeController.spline;
+        Spline spline = ShapeController.spline;
         spline.Clear();
 
         points = new SplinePoint[count];
@@ -100,7 +104,7 @@ public class BodyPhysicsHandler : MonoBehaviour
 
     private void RefreshShape()
     {
-        shapeController.RefreshSpriteShape();
+        ShapeController.RefreshSpriteShape();
         //pcollider.SetPath(0, points.Select(p => p.Position).ToArray());
     }
 
@@ -192,7 +196,7 @@ public class BodyPhysicsHandler : MonoBehaviour
 
     void AffectShape(Action<int, SplinePoint, Spline> action)
     {
-        Spline spline = shapeController.spline;
+        Spline spline = ShapeController.spline;
         for (int i = 0; i < points.Length; i++)
             action(i, points[i], spline);
     }

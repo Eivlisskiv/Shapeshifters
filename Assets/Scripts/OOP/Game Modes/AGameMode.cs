@@ -128,7 +128,7 @@ namespace Scripts.OOP.Game_Modes
             return enemies.Instantiate("Regular/Tier1/Regular");
         }
 
-        public void AddMember(int team, BaseController controller)
+        public void AddMember(int team, BaseController controller, bool isExtra = false)
         {
             if(teams.Length <= team)
             {
@@ -140,8 +140,12 @@ namespace Scripts.OOP.Game_Modes
             teams[team].Add(controller);
 
             controller.SetColor(0, teamColors[team]);
-            controller.team = team;
+            controller.Team = team;
+
+            if (isExtra) ExtraMemberAdded(team, controller);
         }
+
+        protected virtual void ExtraMemberAdded(int team, BaseController controller) { }
 
         public List<BaseController> GetTeam(int team) 
             => teams[team];
@@ -177,7 +181,7 @@ namespace Scripts.OOP.Game_Modes
 
         public virtual void MemberDestroyed(BaseController member)
         {
-            var team = teams[member.team];
+            var team = teams[member.Team];
             team.Remove(member);
         }
 

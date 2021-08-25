@@ -28,7 +28,7 @@ namespace Scripts.OOP.EnemyBehaviors.Fire
             Vector2 direction = vt - pos;
             float distance = direction.magnitude;
             RaycastHit2D hit = Physics2D.Raycast(pos + (direction.normalized
-                * (self.body.Radius + 0.1f)), direction);
+                * (self.Body.Radius + 0.1f)), direction);
             if (hit && hit.transform == self.target.transform)
             {
                 angle = Vectors2.TrueAngle(Vector2.right, pos - vt);

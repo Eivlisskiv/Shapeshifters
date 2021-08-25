@@ -22,13 +22,13 @@ public class MachineGun : Weapon
         accuracy = 20;
     }
 
-    protected override void FireProjectiles(BaseController sender, 
+    protected override ProjectileHandler FireProjectiles(BaseController sender, 
         float angle, WeaponStats stats)
     {
-        Vector2 hit = sender.body.ShotVector(angle
+        Vector2 hit = sender.Body.ShotVector(angle
             + Random.Range(-accuracy, accuracy));
 
-        SpawnProjectile(sender, hit, stats, totalDamage);
+        return SpawnProjectile(sender, hit, stats, totalDamage);
     }
 
     protected override void OnProjectileUpdate(ProjectileHandler projectile)

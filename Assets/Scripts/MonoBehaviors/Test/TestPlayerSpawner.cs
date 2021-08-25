@@ -36,6 +36,6 @@ public class TestPlayerSpawner : MonoBehaviour
         player.SetColor(1, Color.green);
 
         player.transform.Translate(transform.position);
-        player.team = 1;
+        player.Team = 1;
     }
 }

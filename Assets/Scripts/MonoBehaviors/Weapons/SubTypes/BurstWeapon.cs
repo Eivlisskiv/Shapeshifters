@@ -9,7 +9,7 @@ public abstract class BurstWeapon : Weapon
 
     public float totalShots = 3;
 
-    protected float FireRate => cooldown / (totalShots * 2);
+    protected float FireRate => cooldown / (totalShots * 4);
 
     protected bool firing;
     protected BurstData data;
@@ -18,7 +18,7 @@ public abstract class BurstWeapon : Weapon
     {
         public BaseController sender;
         public float angle;
-        public WeaponStats stats;
+        public WeaponStats mods;
         public int shots;
         public float nextShot;
     }
@@ -40,24 +40,32 @@ public abstract class BurstWeapon : Weapon
             return;
         }
 
-        Vector2 hit = data.sender.body.ShotVector(data.angle
-                + Random.Range(-accuracy, accuracy));
-        SpawnProjectile(data.sender, hit, data.stats, totalDamage);
+        SpawnProjectile(data.sender, data.angle, data.mods);
 
         data.shots++;
         data.nextShot = FireRate;
     }
 
-    protected override void FireProjectiles(BaseController sender,
-        float angle, WeaponStats stats)
+    protected ProjectileHandler SpawnProjectile(BaseController sender, float angle, WeaponStats mods)
+    {
+        Vector2 hit = sender.Body.ShotVector(angle
+                + Random.Range(-accuracy, accuracy));
+        ProjectileHandler projectile = SpawnProjectile(sender, hit, mods, totalDamage);
+        return projectile;
+    }
+
+    protected override ProjectileHandler FireProjectiles(BaseController sender,
+        float angle, WeaponStats mods)
     {
         firing = true;
         data = new BurstData()
         {
             sender = sender,
             angle = angle,
-            stats = stats,
-            shots = 0,
+            mods = mods,
+            shots = 1,
         };
+
+        return SpawnProjectile(sender, angle, mods);
     }
 }

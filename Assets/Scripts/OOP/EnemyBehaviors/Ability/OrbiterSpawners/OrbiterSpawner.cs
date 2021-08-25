@@ -31,7 +31,12 @@ namespace Scripts.OOP.EnemyBehaviors.Ability.OrbiterSpawners
                 null : archetype;
         }
 
-        public void Ability(BaseController self)
+        public void Initialize(BaseController self)
+        {
+            self.Events.Subscribe<BaseController, float>(BaseController.ControllerEvents.Update, CheckSpawn);
+        }
+
+        public void CheckSpawn(BaseController self, float deltaTime)
         {
             if (charges == 0) return;
 

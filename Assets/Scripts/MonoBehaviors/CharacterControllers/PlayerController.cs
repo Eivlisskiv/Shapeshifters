@@ -32,7 +32,7 @@ public class PlayerController : BaseController
     public override void OnStart() 
     {
         stats = new Stats(200);
-        body.corners = Random.Range(3, 10);
+        Body.corners = Random.Range(3, 10);
 
         if (ui)
         {

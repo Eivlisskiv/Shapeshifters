@@ -58,8 +58,5 @@ namespace Scripts.OOP.EnemyBehaviors
 
         public bool Fire(EnemyController self, out float angle) 
             => fire.Fire(self, out angle);
-
-        public void Ability(EnemyController self)
-            => ability.Ability(self);
     }
 }

@@ -43,6 +43,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
         private readonly GameObject cratePrefab;
         private readonly ShopHandler shop;
         private readonly ResourceCache<GameObject> Bosses;
+        private readonly string[] bossesPaths;
 
         public Rogue(MainMenuHandler menu, MapHandler map)
             : base(menu, map, new Dictionary<string, (float, string[])>() {
@@ -61,6 +62,10 @@ namespace Scripts.OOP.Game_Modes.Rogue
             shop.gameObject.SetActive(false);
 
             Bosses = new ResourceCache<GameObject>("Enemies/Boss/");
+            bossesPaths = new string[]
+            {
+                "Pyramid", "Number Four"
+            };
         }
 
         public override void OnUpdate()
@@ -102,7 +107,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
                 return;
             }
 
-            points += Mathf.Max(1, (member.Level / 5) * member.body.Radius);
+            points += Mathf.Max(1, (member.Level / 5) * member.Body.Radius);
 
             UpdateProgress();
 
@@ -243,6 +248,11 @@ namespace Scripts.OOP.Game_Modes.Rogue
             cooldown = 5;
         }
 
+        protected override void ExtraMemberAdded(int team, BaseController controller)
+        {
+            SpawnsLeft++;
+        }
+
         private bool SpaceForBossSpawn(Vector2Int coords, int size)
         {
             var room = map.current;
@@ -263,9 +273,9 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
         private EnemyController SpawnBoss(int team, Vector2Int pos, int level)
         {
-            string path = "Pyramid";
+            string bossName = bossesPaths.RandomElement();
 
-            if(!Bosses.TryGetPrefab(path, out GameObject bossObject)) return null;
+            if(!Bosses.TryGetPrefab(bossName, out GameObject bossObject)) return null;
 
             EnemyController boss = bossObject.GetComponent<EnemyController>();
 
@@ -273,7 +283,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
             if (!SpaceForBossSpawn(pos, boss.settings.size)) return null;
 
-            bossObject = Bosses.Instantiate(path);
+            bossObject = Bosses.Instantiate(bossName);
 
             boss = bossObject.GetComponent<EnemyController>();
             boss.Set(level);
