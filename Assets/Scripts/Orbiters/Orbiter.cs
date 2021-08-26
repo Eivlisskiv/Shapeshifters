@@ -15,6 +15,7 @@ namespace Scripts.Orbiters
                 _owner = value;
                 Color = _owner.GetColor(1);
                 health = MaxHealth;
+                Target = null;
             }
         }
 

@@ -6,10 +6,7 @@
         public string Name => name ??
             (name = GetType().Name.Replace('_', ' '));
 
-        private string description;
-
-        public string Description => description ??
-            (description = GetDescription());
+        public string Description { get; private set; }
 
         private int level; //Owned level; If <= 0: Perk lost when decharged
         public int Level { get => level; }
@@ -35,13 +32,18 @@
         //Get\Sets
         protected abstract string GetDescription();
 
+        protected virtual void Rebuild()
+        {
+            Description = GetDescription();
+        }
+
         //Actions
         public void ChargeBuff(int buff, float charge)
         {
             this.buff += buff;
             this.charge += charge;
 
-            description = null;
+            Rebuild();
         }
 
         public void Add(Perk perk)
@@ -58,7 +60,7 @@
                 if (buff <= 1) ui.SetLevel(level);
                 else ui.SetBuff(Intensity, charge);
             }
-            description = null;
+            Rebuild();
         }
 
         public void ToBuff()
@@ -66,7 +68,7 @@
             buff = level;
             charge = ToBuffCharge;
             level = 0;
-            description = null;
+            Rebuild();
         }
 
         public void AsBuff(int level, int chargeMultiplier)
@@ -74,7 +76,7 @@
             buff = level;
             charge = ToBuffCharge * chargeMultiplier;
             this.level = 0;
-            description = null;
+            Rebuild();
         }
 
         public bool Consume(float consumed)

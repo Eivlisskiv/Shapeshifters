@@ -17,9 +17,9 @@ class FlameThrower : BurstWeapon
         force = 12;
         totalDamage = 12;
         life = 0.5f;
-        speed = 12;
+        speed = 20;
         accuracy = 50;
-        totalShots = 5;
+        totalShots = 3;
     }
 
     protected override void OnProjectileHit(ProjectileHandler projectile, Collider2D collision)
