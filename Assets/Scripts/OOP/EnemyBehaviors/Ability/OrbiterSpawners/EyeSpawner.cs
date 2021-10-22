@@ -7,7 +7,7 @@ namespace Scripts.OOP.EnemyBehaviors.Ability.OrbiterSpawners
         public EyeSpawner() : base() { }
     }
 
-    public class Pyramid : OrbiterSpawner<EyeOrbiter>
+    public class Pyramid : OrbiterSpawner<EyeOrbiter>, IBossAbility
     {
         public Pyramid() : base(1, 3, 2) { }
     }

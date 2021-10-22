@@ -33,7 +33,23 @@ public class ProjectileHandler : MonoBehaviour
 
     public float LifeSpan { get; private set; }
 
-    public Vector2 Velocity { get; private set; }
+    public float Speed => Velocity.magnitude;
+    public Vector2 Velocity 
+    {
+        get => _velocity;
+        set
+        {
+            if(_velocity == default)
+            {
+                _velocity = value;
+                return;
+            }
+
+            _velocity = value.normalized * Speed;
+        }
+    }
+
+    private Vector2 _velocity;
 
     bool dying = false;
 
@@ -80,12 +96,12 @@ public class ProjectileHandler : MonoBehaviour
         OnHit?.Invoke(this, collision);
     }
 
-    public void ToDestroy()
+    public virtual void ToDestroy()
     {
         if (!dying)
         {
             dying = true;
-            particles.Stop();
+            if(particles) particles.Stop();
             Destroy(body.gameObject);
             Destroy(gameObject, 1f);
         }

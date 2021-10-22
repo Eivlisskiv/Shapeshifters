@@ -42,6 +42,8 @@ public class Cannon : Weapon
         HealthEntity<ProjectileHandler> entity = collision.gameObject
             .GetComponent<HealthEntity<ProjectileHandler>>();
 
+        if (!entity) return;
+
         if (entity is BaseController victim)
         {
             TargetController(projectile, victim);

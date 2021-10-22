@@ -146,6 +146,9 @@ public class BodyPhysicsHandler : MonoBehaviour
         RefreshShape();
     }
 
+    public void AddForce(Vector2 direction, float strength, float push)
+        => AddForce(direction.TrueAngle(), strength, push);
+
     public void AddForce(float angle, float strength, float push)
     {
         if (jelly)

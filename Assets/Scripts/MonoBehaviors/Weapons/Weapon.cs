@@ -47,7 +47,7 @@ public class Weapon : MonoBehaviour
     public float life; //The life time of a projectile
     public float speed; //projection speed
 
-    public virtual float Range => (speed * life) * 0.75f;
+    public virtual float Range => (speed * life) * 0.72f;
 
     protected virtual string Description => desc;
 

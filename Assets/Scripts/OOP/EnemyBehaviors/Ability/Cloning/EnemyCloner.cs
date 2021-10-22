@@ -1,4 +1,5 @@
-﻿using Scripts.OOP.Game_Modes;
+﻿using IgnitedBox.Tweening.TweenPresets;
+using Scripts.OOP.Game_Modes;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,7 +25,7 @@ namespace Scripts.OOP.EnemyBehaviors.Ability.Cloning
 
         public abstract void Initialize(BaseController self);
 
-        protected EnemyController Clone(EnemyController parent)
+        protected EnemyController Clone(BaseController parent)
         {
             int size = System.Math.Max(1, parent.Body.Radius - 1);
 
@@ -40,9 +41,6 @@ namespace Scripts.OOP.EnemyBehaviors.Ability.Cloning
 
             clone.Set(System.Math.Max(1, parent.Level - 1));
 
-            if(size < 2)
-                clone.settings.abilityBehavior = "NoAbility";
-
             clone.transform.position = parent.transform.position
                 + new Vector3(0, (size * 2) + 2);
 
@@ -54,6 +52,9 @@ namespace Scripts.OOP.EnemyBehaviors.Ability.Cloning
                 clone.SetColor(0, parent.GetColor(0));
                 clone.settings.targettingBehavior = "TestPlayerTarget";
             }
+
+            clone.transform.localScale = new Vector3(0, 0, 0);
+            clone.transform.TweenScale(new Vector3(1, 1, 1), 0.25f);
 
             spawns++;
 

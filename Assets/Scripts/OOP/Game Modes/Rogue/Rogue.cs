@@ -250,7 +250,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
         protected override void ExtraMemberAdded(int team, BaseController controller)
         {
-            SpawnsLeft++;
+            UpdateProgress();
         }
 
         private bool SpaceForBossSpawn(Vector2Int coords, int size)

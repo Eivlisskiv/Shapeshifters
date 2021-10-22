@@ -1,9 +1,6 @@
-﻿using IgnitedBox.Tweening.TweenPresets;
-using UnityEngine;
-
-namespace Scripts.OOP.EnemyBehaviors.Ability.Cloning
+﻿namespace Scripts.OOP.EnemyBehaviors.Ability.Cloning
 {
-    public class Number_Four : EnemyCloner
+    public class Number_Four : EnemyCloner, IBossAbility
     {
         public Number_Four() : base("Boss/Number Four", true, 5) { }
 
@@ -15,15 +12,13 @@ namespace Scripts.OOP.EnemyBehaviors.Ability.Cloning
 
         public void DamageTaken(BaseController self, BaseController attacker)
         {
-            if (!(self is EnemyController parent)) return;
             if (spawns >= maxSpawns) return;
             float next = 1f - ((1f / maxSpawns) * (spawns + 1));
             if (self.stats.HPP > 0 && self.stats.HPP <= next)
             {
-                BaseController clone = Clone(parent);
-
-                clone.transform.localScale = new Vector3(0, 0, 0);
-                clone.transform.TweenScale(new Vector3(1, 1, 1), 0.25f);
+                EnemyController clone = Clone(self);
+                if (clone.settings.size < 2)
+                    clone.settings.abilityBehavior = "NoAbility";
             }
         }
     }

@@ -11,11 +11,13 @@ namespace Scripts.OOP.Perks.Character.Healing
         protected override int ToBuffCharge => 50;
 
         protected override string GetDescription()
-            => $"After not firing and not receiving damage for {cooldown} seconds, regenerate {Intensity} health per seconds";
+            => $"After not receiving damage for {cooldown} seconds, regenerate {Intensity / 2f} health per seconds." +
+            $" Healing doubled when also not firing for {cooldown} seconds.";
 
         private float cooldown = 30;
 
-        private float time = 30;
+        private float damageCooldown = 30;
+        private float firingCooldown = 30;
 
         protected override void Rebuild()
         {
@@ -25,25 +27,32 @@ namespace Scripts.OOP.Perks.Character.Healing
 
         public bool OnControllerUpdate(BaseController controller, float delta)
         {
-            if(time > 0)
+            if(damageCooldown > 0)
             {
-                time -= delta;
+                damageCooldown -= delta;
                 return false;
             }
 
-            controller.stats.health += delta * Intensity;
+            bool bonus = true;
+            if (firingCooldown > 0)
+            {
+                firingCooldown -= delta;
+                bonus = false;
+            }
+
+            controller.ModifyHealth(delta * Intensity * (bonus ? 1 : 0.5f));
             return true;
         }
 
         public bool OnFire(float angle, Weapon weapon, WeaponStats buff)
         {
-            time = cooldown;
+            firingCooldown = cooldown;
             return false;
         }
 
         public bool OnHit(BaseController self, Vector2? direction, ref float damage)
         {
-            time = cooldown;
+            damageCooldown = cooldown;
             return false;
         }
     }

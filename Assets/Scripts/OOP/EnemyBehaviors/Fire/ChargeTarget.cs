@@ -12,6 +12,7 @@ namespace Scripts.OOP.EnemyBehaviors.Fire
             {
                 if (!self.target || !ShootTarget(self, out angle))
                 {
+                    if(self.target) self.target = null;
                     if (Randomf.Chance(50)) return false;
                     angle = Random.Range(0, 360);
                 }
@@ -27,8 +28,12 @@ namespace Scripts.OOP.EnemyBehaviors.Fire
             Vector2 pos = self.transform.position;
             Vector2 direction = vt - pos;
             float distance = direction.magnitude;
-            RaycastHit2D hit = Physics2D.Raycast(pos + (direction.normalized
-                * (self.Body.Radius + 0.1f)), direction, distance);
+
+            Vector2 origin = pos + (direction.normalized
+                * (self.Body.Radius + 0.1f));
+
+            RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance);
+
             if (hit && hit.transform == self.target.transform)
             {
                 angle = Vectors2.TrueAngle(Vector2.right, pos - vt);

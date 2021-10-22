@@ -9,7 +9,7 @@ public class PauseHandler : MonoBehaviour
     private const float anim_speed = 0.1f;
 
     public static void ForcePause(bool pause)
-    {
+    { 
         if (!Instance) return;
 
         Instance.paused = pause;

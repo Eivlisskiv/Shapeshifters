@@ -16,4 +16,6 @@
 
         //void AbilityUpdate(BaseController self);
     }
+
+    public interface IBossAbility { }
 }

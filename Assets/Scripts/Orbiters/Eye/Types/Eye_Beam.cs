@@ -261,7 +261,10 @@ namespace Scripts.Orbiters.Eye.Types
 
         protected override void WhileFire(float progress)
         {
-            Vector2 toTarget = SelfOrbiter.Target.transform.position
+            Vector2? toTarget = null;
+
+            if (SelfOrbiter.Target)
+                toTarget = SelfOrbiter.Target.transform.position
                 - Pupil.position;
 
             UpdateFireBeam(toTarget, QuadCurve(progress) / 2);
@@ -326,12 +329,22 @@ namespace Scripts.Orbiters.Eye.Types
                 (distance - 2) / settings.startSpeed.constant;
         }
 
-        private void UpdateFireBeam(Vector2 toTarget, float width)
+        private void UpdateFireBeam(Vector2? toTarget, float width)
         {
             Vector2 pupil = Pupil.position;
             Strength = 0.8f + width;
             Vector2 beam = Vectors2.FromDegAngle(beamAngle, beamLength);
 
+            if(toTarget.HasValue) beam = ToTargetBeam(toTarget.Value, pupil, beam);
+
+            fireBeam.startWidth = width * .5f;
+            fireBeam.endWidth = width * 1.3f;
+
+            SetBeamPosition(beam);
+        }
+
+        private Vector2 ToTargetBeam(Vector2 toTarget, Vector2 pupil, Vector2 beam)
+        {
             float angle = Vector2.SignedAngle(beam, toTarget);
 
             if (angle != 0)
@@ -342,12 +355,12 @@ namespace Scripts.Orbiters.Eye.Types
                     (System.Func<float, float, float>)Mathf.Max;
 #pragma warning restore IDE0004
                 float change = minMax(angle, aimSpeed *
-                    Time.deltaTime * (angle/(Mathf.Abs(angle))));
+                    Time.deltaTime * (angle / (Mathf.Abs(angle))));
 
                 beamAngle += change;
             }
 
-            if (Raycast.TryRaycast2D(pupil, beam, 
+            if (Raycast.TryRaycast2D(pupil, beam,
                 8, out RaycastHit2D hit2d))
             {
                 beam = hit2d.point - pupil;
@@ -361,10 +374,7 @@ namespace Scripts.Orbiters.Eye.Types
                 Vector2.ClampMagnitude(beam, beamLength);
             }
 
-            fireBeam.startWidth = width * .5f;
-            fireBeam.endWidth = width * 1.3f;
-
-            SetBeamPosition(beam);
+            return beam;
         }
 
         private void SetBeamPosition(Vector2 hit)
