@@ -174,6 +174,7 @@ public abstract class BaseController : HealthEntity<ProjectileHandler>
         cooldown = Weapon.cooldown;
         (float strength, ProjectileHandler projectile) = Weapon.Fire(this, angle);
         Body.AddForce(angle, strength, strength);
+
         Events.Invoke(ControllerEvents.Fired, this, projectile);
     }
 

@@ -1,5 +1,6 @@
 ﻿using Scripts.OOP.Character.Stats;
 using Scripts.OOP.Game_Modes;
+using Scripts.OOP.Perks.Weapons;
 using Scripts.OOP.UI;
 using UnityEngine;
 
@@ -46,6 +47,15 @@ public class PlayerController : BaseController
     public override void OnUpdate()
     {
         cam.Update(transform.position);
+
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            var perk = new Mine_Drop();
+            perk.LevelUp();
+            perks.Add(perk, UI);
+        }
+#endif
     }
 
     public override bool IsFiring(out float angle)

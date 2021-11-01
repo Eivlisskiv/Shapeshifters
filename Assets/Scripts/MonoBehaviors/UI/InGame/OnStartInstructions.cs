@@ -12,7 +12,22 @@ public class OnStartInstructions : MonoBehaviour
 
     public Action onReady;
 
+    public Image a;
+    public Image b;
+
     bool dying = false;
+
+    private void Start()
+    {
+        a.transform.localScale = Vector3.one;
+        a.transform.Tween<Transform, Vector3, ScaleTween>(
+            Vector3.zero, 0.5f, 0, ElasticEasing.InOut)
+            .loop = IgnitedBox.Tweening.Tweeners.TweenerBase.LoopType.ReverseLoop;
+        b.transform.localScale = Vector3.zero;
+        b.transform.Tween<Transform, Vector3, ScaleTween>(
+            Vector3.one, 0.5f, 0, ElasticEasing.InOut)
+            .loop = IgnitedBox.Tweening.Tweeners.TweenerBase.LoopType.ReverseLoop;
+    }
 
     // Update is called once per frame
     void Update() 

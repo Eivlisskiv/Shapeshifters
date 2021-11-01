@@ -1,4 +1,6 @@
-﻿using IgnitedBox.EditorDropdown.Attribute;
+﻿#if UNITY_EDITOR
+using IgnitedBox.EditorDropdown.Attribute;
+#endif
 using Scripts.OOP.Perks;
 using System;
 using UnityEngine;
@@ -23,16 +25,21 @@ namespace Scripts.OOP.EnemyBehaviors
         [Range(1, 5)]
         public int size;
 
+#if UNITY_EDITOR
         [Dropdown(typeof(EnemyBehavior), "targettingBehaviors.Keys")]
+#endif
         public string targettingBehavior;
-
+#if UNITY_EDITOR
         [Dropdown(typeof(EnemyBehavior), "firingBehaviors.Keys")]
+#endif
         public string firingBehavior;
-
+#if UNITY_EDITOR
         [Dropdown(typeof(EnemyBehavior), "abilityBehaviors.Keys")]
+#endif
         public string abilityBehavior;
-
+#if UNITY_EDITOR
         [Dropdown(typeof(PerksHandler), "perksTypes.Keys")]
+#endif
         public string[] perks;
 
         public EnemyBehavior SetSettings(EnemyController self)
