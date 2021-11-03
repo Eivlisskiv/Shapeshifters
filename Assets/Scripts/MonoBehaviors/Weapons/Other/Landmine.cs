@@ -10,6 +10,10 @@ public class Landmine : MonoBehaviour
     public SpriteRenderer teamColor;
     public SpriteRenderer activeLight;
 
+    public Collider2D BodyCollider =>
+        bodyCollider ? bodyCollider :
+        (bodyCollider = GetComponent<Collider2D>());
+
     Collider2D bodyCollider;
     BaseController owner;
     float damage;
@@ -28,15 +32,15 @@ public class Landmine : MonoBehaviour
 
     public void Activate(float damage, float force, BaseController owner)
     {
-        teamColor.color = owner.GetColor(0);
+        if(owner)
+            teamColor.color = owner.GetColor(0);
 
         this.damage = damage;
         this.force = force;
         this.owner = owner;
         active = true;
 
-        bodyCollider = GetComponent<Collider2D>();
-        Physics2D.IgnoreCollision(bodyCollider, owner.Body.Collider);
+        if(owner) Physics2D.IgnoreCollision(BodyCollider, owner.Body.Collider);
 
         var tween = activeLight.Tween<SpriteRenderer, Color, SpriteRendererColorTween>
             (new Color(1, 66f/255, 66f/255, 1), 2, 0.2f);
@@ -65,10 +69,9 @@ public class Landmine : MonoBehaviour
 
         active = false;
 
-        bodyCollider.enabled = false;
+        BodyCollider.enabled = false;
         GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         GetComponent<SpriteRenderer>().enabled = false;
-        bodyCollider.enabled = false;
 
         Destroy(teamColor.gameObject);
         Destroy(activeLight.gameObject);
