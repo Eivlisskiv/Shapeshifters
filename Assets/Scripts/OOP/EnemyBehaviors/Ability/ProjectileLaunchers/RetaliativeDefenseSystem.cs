@@ -1,10 +1,8 @@
-﻿using Assets.IgnitedBox.Entities;
-using Scripts.OOP.ProjectileFunctions;
-using UnityEngine;
+﻿using Scripts.MonoBehaviors.Weapons.Other;
 
 namespace Scripts.OOP.EnemyBehaviors.Ability.ProjectileLaunchers
 {
-    public class RetaliativeDefenseSystem : ProjectileLauncher
+    public class RetaliativeDefenseSystem : GameObjectSpawner<Missile>
     {
         readonly float cooldownTime;
 
@@ -21,9 +19,9 @@ namespace Scripts.OOP.EnemyBehaviors.Ability.ProjectileLaunchers
         private int charges;
 
         public RetaliativeDefenseSystem(float cooldownTime = 15, int maxCharges = 3,
-            float damage = 20, float range = 10, float force = 20,
+            float damage = 20, float range = 10, float force = 1,
             float statsMultiplier = 0.1f,
-            string projectile = "Missile") 
+            string projectile = "Projectiles/Missile") 
             : base(projectile) 
         {
             this.cooldownTime = cooldownTime;
@@ -65,31 +63,13 @@ namespace Scripts.OOP.EnemyBehaviors.Ability.ProjectileLaunchers
 
             float m = 1 + (statsMultiplier * self.Level);
 
-            ProjectileHandler projectile = Fire(self, m * damage, m * range, 
-                (attacker.transform.position - self.transform.position)
-                .normalized, m * force);
+            if (!base.TryInstantiate(out _, out Missile missile)) return;
 
-            if (!projectile) return;
+            missile.transform.position = self.transform.position;
+            missile.Activate(damage * m, force * m, self, attacker.transform);
+            missile.explosion.Range = range * m;
 
-            projectile.active = false;
-            projectile.OnUpdate = ProjectileUpdate.Missile(attacker.transform);
-
-            projectile.body.transform.GetComponent<SpriteRenderer>().color = Color.white;
-            projectile.transform.localScale = new Vector3(0.4f, 0.4f, 1);
+            charges--;
         }
-
-        protected override void OnProjectileHit(ProjectileHandler projectile, Collider2D collider)
-        {
-            if (!projectile.active) return;
-
-            if (projectile.IsSameSender(collider.gameObject)) return;
-
-            if(!HealthEntity<ProjectileHandler>.HasHeathEntity
-                (collider.gameObject, projectile)) return;
-
-            projectile.ToDestroy();
-        }
-
-        protected override void OnProjectileUpdate(ProjectileHandler projectile) { }
     }
 }

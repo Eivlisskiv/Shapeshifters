@@ -1,4 +1,4 @@
-﻿using Assets.IgnitedBox.Entities;
+﻿using IgnitedBox.Entities;
 using Scripts.OOP.Audio;
 using Scripts.OOP.Game_Modes;
 using Scripts.OOP.Perks.Weapons;

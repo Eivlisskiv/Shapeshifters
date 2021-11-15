@@ -1,51 +1,53 @@
 ﻿using IgnitedBox.Tweening;
 using IgnitedBox.Tweening.EasingFunctions;
 using IgnitedBox.Tweening.Tweeners.VectorTweeners;
+using Unity.VectorGraphics;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameModeButton : MonoBehaviour
+public class GameModeButton : GeneralButton
 {
     private RectTransform desc;
     private Text text;
-    private Vector3 size;
+    private SVGImage image;
 
-    private bool mouseIn;
-
-    void Init()
+    protected override void OnStart()
     {
-        if (!desc)
-        {
-            var panel = transform.parent.GetChild(1);
-            desc = panel.GetComponent<RectTransform>();
+        var panel = transform.parent.GetChild(1);
+        desc = panel.GetComponent<RectTransform>();
 
-            var t = panel.GetChild(0);
-            var t2 = t.GetComponent<RectTransform>();
-            text = t.GetComponent<Text>();
-            size = t2.sizeDelta;
-        }
+        var t = panel.GetChild(0);
+        var t2 = t.GetComponent<RectTransform>();
+        text = t.GetComponent<Text>();
+        desc.sizeDelta = t2.sizeDelta + new Vector2(5, 5);
+        desc.localScale = new Vector3(0, 1, 1);
+        image = transform.parent.GetComponent<SVGImage>();
+
     }
 
-    public void MouseEnter()
+    protected override void OnSelect()
     {
-        mouseIn = true;
-        Init();
-
-        desc.Tween<RectTransform, Vector3, RectSizeTween>
-            (size + new Vector3(5, 5, 0), 0.2f,
-            easing: BackEasing.Out, 
-            callback: () => 
+        base.OnSelect();
+        desc.Tween<Transform, Vector3, ScaleTween>
+            (new Vector3(1, 1, 1), 0.2f,
+            easing: BackEasing.Out,
+            callback: () =>
             {
-                if (mouseIn) text.color = Color.white;
-            });
+                if (Selected) text.color = Color.white;
+                if(desc.sizeDelta.y == 5)
+                {
+                    var t2 = text.GetComponent<RectTransform>();
+                    desc.sizeDelta = t2.sizeDelta + new Vector2(5, 5);
+                }
+            }
+        );
     }
 
-    public void MouseExit()
+    protected override void OnDeselect()
     {
-        mouseIn = false;
-        Init();
+        base.OnDeselect();
         text.color = new Color(0, 0, 0, 0);
-        desc.Tween<RectTransform, Vector3, RectSizeTween>(
-            new Vector3(0, 0, 0), 0.2f);
+        desc.Tween<Transform, Vector3, ScaleTween>(
+            new Vector3(0, 1, 1), 0.2f);
     }
 }

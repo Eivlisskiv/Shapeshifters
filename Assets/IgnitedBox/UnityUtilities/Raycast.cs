@@ -34,5 +34,11 @@ namespace Assets.IgnitedBox.UnityUtilities
         {
             return (raycast = Physics2D.Raycast(startPosition, vectorRay, vectorRay.magnitude, 1 << layerNumber));
         }
+
+        public static bool TryRaycast2D(Vector2 startPosition, Vector2 vectorRay,
+            out RaycastHit2D raycast)
+        {
+            return (raycast = Physics2D.Raycast(startPosition, vectorRay, vectorRay.magnitude));
+        }
     }
 }

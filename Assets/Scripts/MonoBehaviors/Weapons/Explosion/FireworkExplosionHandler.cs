@@ -19,7 +19,7 @@ namespace Scripts.Explosion
         protected override void SetIntensity(float value)
         {
             var burst = Secondary.emission.GetBurst(0);
-            burst.count = (int)value * 15;
+            burst.count = Mathf.Max((int)value, 5);
             Secondary.emission.SetBurst(0, burst);
         }
 

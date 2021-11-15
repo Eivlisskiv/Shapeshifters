@@ -36,10 +36,6 @@ public class MainMenuHandler : MonoBehaviour
     private MenuAction action;
     private float cooldown;
 
-    private Button start;
-    private Text buttonText;
-    private Image background;
-
     private SoundHandler sounds;
 
     private UIPerksList perks;
@@ -47,6 +43,9 @@ public class MainMenuHandler : MonoBehaviour
 
     private RectTransform openTab;
     private RectTransform containerRect;
+
+    private GeneralButton arcade;
+    private GeneralButton story;
 
     // Start is called before the first frame update
     void Start()
@@ -84,9 +83,11 @@ public class MainMenuHandler : MonoBehaviour
         const float width = 650f;
 
         if (openTab == tab) return;
-        
-        if(openTab)//Close existing tab
+
+        if (openTab)//Close existing tab
         {
+            GeneralButton.DeselectGroup(openTab.name);
+
             openTab.Tween<RectTransform, Vector3, RectSizeTween>(
                 new Vector2(-1, openTab.sizeDelta.y), speed,
                 easing: ExponentEasing.Out, callback: () => 
@@ -100,12 +101,12 @@ public class MainMenuHandler : MonoBehaviour
                 });
         }
 
-        if (tab == null) //If closing tab
+        if (tab == null) //If closing current tab
         {
             containerRect.Tween<Transform, Vector3, PositionTween>(
             containerRect.localPosition + new Vector3(width / 2, 0), speed / 2.5f);
         }
-        else if(openTab == null) //tab was closed
+        else if(openTab == null) //opening from no tab
         {
             containerRect.Tween<Transform, Vector3, PositionTween>(
             containerRect.localPosition - new Vector3(width / 2, 0), speed / 2.5f);
@@ -119,20 +120,12 @@ public class MainMenuHandler : MonoBehaviour
         openTab = tab;
     }
 
-    private void CheckButtons(Button button)
-    {
-        if (!start)
-        {
-            start = button;
-            buttonText = start.GetComponentInChildren<Text>();
-        }
-    }
-
     public void OnClick_TabButton(RectTransform tab)
         => SwitchTab(tab);
 
-    public void OnClick_Start(Button button)
+    public void OnClick_Arcade(GeneralButton button)
     {
+        if (!arcade) arcade = button;
         if(modes == null)
         {
             modes = new GameModeUI[GameModes.modes.Count];
@@ -145,14 +138,13 @@ public class MainMenuHandler : MonoBehaviour
             }
         }
         SwitchTab(gameModeContainer);
-
-        CheckButtons(button);
     }
     
     public void StartGame(Type mode, string description)
     {
         if (action == MenuAction.Loading) return;
         action = MenuAction.Loading;
+
         AGameMode gamemode = (AGameMode)Activator.CreateInstance(mode, this, map);
         gamemode.description = description;
         gamemode.StartMap();
@@ -164,9 +156,8 @@ public class MainMenuHandler : MonoBehaviour
 
     public void SetStartButton(bool active)
     {
-        buttonText.text = active ? "Select Game Mode" : "Loading...";
-        if (!background) background = container.GetComponent<Image>();
-        start.interactable = active;
+        if (arcade) arcade.enabled = active;
+        if (story) story.enabled = active;
     }
 
     public void OnClick_Quit() => Application.Quit();

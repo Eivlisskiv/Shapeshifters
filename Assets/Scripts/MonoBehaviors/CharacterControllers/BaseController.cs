@@ -1,4 +1,4 @@
-﻿using Assets.IgnitedBox.Entities;
+﻿using IgnitedBox.Entities;
 using IgnitedBox.EventSystem;
 using Scripts.OOP.Character.Stats;
 using Scripts.OOP.Game_Modes;
@@ -233,7 +233,7 @@ public abstract class BaseController : HealthEntity<ProjectileHandler>
     private void ApplyCollisionForce(ContactPoint2D contact, float push)
         => ApplyCollisionForce(contact.point,
             contact.relativeVelocity.magnitude, push);
-    public void ApplyCollisionForce(Vector2 hit, float magnitude, float push)
+    public override void ApplyCollisionForce(Vector2 hit, float magnitude, float push)
     {
         Vector2 pos = transform.position;
         int y = pos.y > hit.y ? -1 : 1;

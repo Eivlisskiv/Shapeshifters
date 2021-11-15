@@ -68,7 +68,7 @@ namespace IgnitedBox.Tweening.Tweeners
 
         public TweenerBase() { }
 
-//#if UNITY_EDITOR
+#if UNITY_EDITOR
         [NonSerialized]
         public bool editorOpen;
         [NonSerialized]
@@ -78,7 +78,7 @@ namespace IgnitedBox.Tweening.Tweeners
             => UnityEditor.EditorGUILayout.LabelField("Element Field not implemented!");
         public virtual void EditorValueFields()
             => UnityEditor.EditorGUILayout.LabelField("Values Fields not implemented!");
-//#endif
+#endif
 
         public abstract void Update(float time);
 

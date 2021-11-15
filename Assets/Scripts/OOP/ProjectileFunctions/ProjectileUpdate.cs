@@ -25,9 +25,9 @@ namespace Scripts.OOP.ProjectileFunctions
 
         public static Action<ProjectileHandler> Missile(Transform target)
         {
-            return (projectile) =>
-            {
-                if (projectile.Airtime < 0.5f) return;
+            return (projectile) => SeekTarget(projectile, target);
+            /*{
+                if (projectile.Airtime < 0.1f) return;
 
                 if (!projectile.active)
                 {
@@ -38,7 +38,7 @@ namespace Scripts.OOP.ProjectileFunctions
                 }
 
                 SeekTarget(projectile, target);
-            };
+            };*/
         }
 
         public static void Rotate(ProjectileHandler projectile, float rotation)

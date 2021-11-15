@@ -41,8 +41,8 @@ namespace Scripts.OOP.UI
 
         private void InitButton(Transform child)
         {
-            Button button = child.GetComponent<Button>();
-            button.onClick.AddListener(() => menu.StartGame(mode, desc));
+            GeneralButton button = child.GetComponent<GeneralButton>();
+            button.OnPress.AddListener(() => menu.StartGame(mode, desc));
         }
 
         private void InitScore(Transform transform)

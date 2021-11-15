@@ -86,7 +86,7 @@ namespace Scripts.Orbiters.Eye
                 Vector3 dir = Target.transform.position
                     - transform.position;
 
-                Pupil.localPosition = Vector3.ClampMagnitude(dir, 4) * 0.25f;
+                Pupil.localPosition = Vector3.ClampMagnitude(dir, 1);
             }
         }
 

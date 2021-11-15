@@ -1,4 +1,4 @@
-﻿using Assets.IgnitedBox.Entities;
+﻿using IgnitedBox.Entities;
 using UnityEngine;
 
 namespace Scripts.OOP.ProjectileFunctions

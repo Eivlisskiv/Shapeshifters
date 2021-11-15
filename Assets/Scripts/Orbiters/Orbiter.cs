@@ -1,4 +1,4 @@
-﻿using Assets.IgnitedBox.Entities;
+﻿using IgnitedBox.Entities;
 using Scripts.OOP.EnemyBehaviors.Ability.OrbiterSpawners;
 using System;
 using UnityEngine;
@@ -186,6 +186,11 @@ namespace Scripts.Orbiters
             if (!(this is TOrbiterType spawn)) return;
 #pragma warning restore IDE0083 
             spawner.OrbiterLost(spawn);
+        }
+
+        public override void ApplyCollisionForce(Vector2 hit, float magnitude, float push)
+        {
+            velocity += ((Vector3)hit * magnitude * push);
         }
     }
 }
