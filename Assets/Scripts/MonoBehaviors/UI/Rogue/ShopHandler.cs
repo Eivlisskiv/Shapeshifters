@@ -5,6 +5,9 @@ using Scripts.OOP.UI;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using IgnitedBox.Tweening.Tweeners.ColorTweeners;
+using IgnitedBox.Tweening;
+using IgnitedBox.Tweening.Tweeners;
 
 public class ShopHandler : MonoBehaviour
 {
@@ -15,6 +18,8 @@ public class ShopHandler : MonoBehaviour
     public Text perkTitle;
     public GeneralButton purchase;
     public Text info;
+
+    Text btnTitle;
 
     private (Perk perk, Text title, Text desc)? selected;
 
@@ -36,6 +41,9 @@ public class ShopHandler : MonoBehaviour
 
         mode = ((Rogue)GameModes.GameMode);
         pointsDisplay.text = mode.points.ToString();
+
+        btnTitle = purchase.transform.GetChild(0).GetComponent<Text>();
+        purchase.Enabled = false;
     }
 
     private void SelectPerk()
@@ -50,32 +58,32 @@ public class ShopHandler : MonoBehaviour
 
         if (player.Level < perk.Level)
         {
-            info.text = $"You must be level {perk.Level} to upgrade " +
-                $"{perk.Name} to level {perk.Level}";
+            InfoTextRed($"You must be level {perk.Level} to upgrade " +
+                $"{perk.Name} to level {perk.Level}");
             return;
         }
 
         int cost = perk.Level * perk.Level;
         if (mode.points < cost)
         {
-            info.text = $"Missing {mode.points}/{cost} ({cost - mode.points}) points" +
-                $" for level {perk.Level} {perk.Name}";
+            InfoTextRed($"Missing {mode.points}/{cost} ({cost - mode.points}) points" +
+                $" for level {perk.Level} {perk.Name}");
             return;
         }
 
         purchase.Enabled = true;
 
-        Text btnTitle = purchase.transform.GetChild(0).GetComponent<Text>();
-
         if (perk.Level == 1)
         {
             btnTitle.text = "Purchase";
-            info.text = $"Purchase {perk.Name} for {cost} points";
+            purchase.ChangeSelect(false);
+            InfoTextGreen($"Purchase {perk.Name} for {cost} points");
         }
         else
         {
             btnTitle.text = "Upgrade";
-            info.text = $"Upgrade {perk.Name} to level {perk.Level} for {cost} points";
+            purchase.ChangeSelect(false);
+            InfoTextGreen($"Upgrade {perk.Name} to level {perk.Level} for {cost} points");
         }
     }
 
@@ -108,5 +116,32 @@ public class ShopHandler : MonoBehaviour
     {
         mode.MenuClosed();
         gameObject.SetActive(false);
+    }
+
+    private void InfoTextGreen(string text)
+    {
+        TweenTitleColor(Color.green);
+        info.text = text;
+        var tween = info.Tween<Graphic, Color, GraphicColorTween>
+            (Color.green, 1f);
+        tween.scaledTime = false;
+    }
+
+    private void InfoTextRed(string text)
+    {
+        TweenTitleColor(Color.red);
+        info.color = Color.clear;
+        info.text = text;
+        var tween = info.Tween<Graphic, Color, GraphicColorTween>
+            (Color.red, 1f, 1.5f, easing: (t) => 4*Math.Pow(t - 0.5, 2));
+        tween.scaledTime = false;
+        tween.loop = TweenerBase.LoopType.ResetLoop;
+    }
+
+    private void TweenTitleColor(Color color)
+    {
+        if (perkTitle.color == color) return;
+        perkTitle.Tween<Graphic, Color, GraphicColorTween>(color, 0.5f)
+            .scaledTime = false;
     }
 }
