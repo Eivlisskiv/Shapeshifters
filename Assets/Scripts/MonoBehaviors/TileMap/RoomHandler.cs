@@ -10,8 +10,8 @@ public class RoomHandler : MonoBehaviour
 
     TileBase tile;
 
-    int width;
-    int height;
+    public int Width { get; private set; }
+    public int Height { get; private set; }
 
     Tilemap map;
 
@@ -25,10 +25,12 @@ public class RoomHandler : MonoBehaviour
 
     private bool entrance;
 
+    private Transform gate;
+
     public void SetSettings(int w, int h, TileBase tile, RoomHandler prev)
     {
-        width = w;
-        height = h;
+        Width = w;
+        Height = h;
         this.tile = tile;
         entrance = prev;
         if (prev)
@@ -37,7 +39,7 @@ public class RoomHandler : MonoBehaviour
             var lastPosition = prev.transform.localPosition;
             lastEnd = new Vector2Int(
                 Mathf.RoundToInt(lastPosition.x + lastSize.x),
-                Mathf.RoundToInt(lastPosition.y + ((prev.height - height) / 2)));
+                Mathf.RoundToInt(lastPosition.y + ((prev.Height - Height) / 2)));
         }
 
     }
@@ -49,7 +51,7 @@ public class RoomHandler : MonoBehaviour
         transform.localScale = new Vector3(1, 1, 0);
         map.ClearAllTiles();
 
-        current = new CaveRoom(lastEnd, new Vector2Int(width, height), entrance);
+        current = new CaveRoom(lastEnd, new Vector2Int(Width, Height), entrance);
         map.transform.localPosition = new Vector3(current.Start.x, current.Start.y, 0);
     }
 

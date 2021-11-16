@@ -148,7 +148,11 @@ namespace Scripts.OOP.Game_Modes.Rogue
             stage = Stage.PassGate;
             map.current.OpenGate(true);
 
+            int height = map.loading.Height / 2;
+            Vector2 gatePosition = map.loading.CharacterPosition(new Vector2Int(3, height));
+
             objective = Objectives.CreateObjective("Gate", Color.cyan);
+            objective.Track = gatePosition;
             objective.Get<Text>("Title", t =>
             {
                 t.text = "Reach the next room ---->";
@@ -159,11 +163,12 @@ namespace Scripts.OOP.Game_Modes.Rogue
         private bool PlayerReady()
         {
             var players = GetTeam(0);
-            float x = map.loading.CharacterPosition(new Vector2Int(3, 0)).x;
+            int height = map.loading.Height / 2;
+            Vector2 gatePosition = map.loading.CharacterPosition(new Vector2Int(3, height));
             for (int i = 0; i < players.Count; i++)
             {
                 BaseController player = players[i];
-                if (player.transform.position.x < x)
+                if (player.transform.position.x < gatePosition.x)
                     return false;
             }
             return true;

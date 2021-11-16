@@ -1,4 +1,5 @@
-﻿using IgnitedBox.Tweening;
+﻿using IgnitedBox.EventSystem;
+using IgnitedBox.Tweening;
 using IgnitedBox.Tweening.EasingFunctions;
 using IgnitedBox.Tweening.Tweeners.VectorTweeners;
 using System;
@@ -10,8 +11,58 @@ namespace Scripts.OOP.UI
 {
     public class ObjectiveElement
     {
+        public struct ObjectiveTracking
+        {
+            public static implicit operator ObjectiveTracking(Transform t)
+            {
+                return new ObjectiveTracking()
+                {
+                    mobileTarget = t
+                };
+            }
+
+            public static implicit operator ObjectiveTracking(Vector3 t)
+            {
+                return new ObjectiveTracking()
+                {
+                    staticTarget = t
+                };
+            }
+
+            public static implicit operator ObjectiveTracking(Vector2 t)
+            {
+                return new ObjectiveTracking()
+                {
+                    staticTarget = t
+                };
+            }
+
+            public static implicit operator Vector3(ObjectiveTracking ot)
+                => ot.mobileTarget ? ot.mobileTarget.position : ot.staticTarget;
+
+            Transform mobileTarget;
+            Vector3 staticTarget;
+        }
+
         public readonly GameObject element;
         public readonly RectTransform rect;
+
+        public EventsHandler<ObjectiveHandler.ObjectiveEvents> Events
+            = new EventsHandler<ObjectiveHandler.ObjectiveEvents>();
+
+        public ObjectiveTracking? Track
+        {
+            get => _track;
+            set
+            {
+                _track = value;
+                Events.Invoke(ObjectiveHandler.ObjectiveEvents.TrackModified, 
+                    this, _track);
+            }
+        }
+
+        private ObjectiveTracking? _track;
+
         private readonly Dictionary<string, GameObject> elements = new Dictionary<string, GameObject>();
 
         private readonly Transform container;

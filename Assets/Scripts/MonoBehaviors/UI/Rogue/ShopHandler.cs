@@ -133,7 +133,7 @@ public class ShopHandler : MonoBehaviour
         info.color = Color.clear;
         info.text = text;
         var tween = info.Tween<Graphic, Color, GraphicColorTween>
-            (Color.red, 1f, 1.5f, easing: (t) => 4*Math.Pow(t - 0.5, 2));
+            (Color.red, 0.5f, 1.5f, easing: (t) => 4*Math.Pow(t - 0.5, 2));
         tween.scaledTime = false;
         tween.loop = TweenerBase.LoopType.ResetLoop;
     }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace IgnitedBox.EventSystem
+﻿namespace IgnitedBox.EventSystem
 {
     public class EventContainer<TSource, TArgument>
     {

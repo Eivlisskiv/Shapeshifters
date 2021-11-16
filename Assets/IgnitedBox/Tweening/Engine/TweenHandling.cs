@@ -41,6 +41,18 @@ namespace IgnitedBox.Tweening
             return tween;
         }
 
+        public static TTweener UnscaledTween<TElement, TValue, TTweener>(this TElement subject, TValue target,
+            float time, float delay = 0, Func<double, double> easing = null,
+            Action callback = null) where TTweener : TweenData<TElement, TValue>
+        {
+            TTweener tween = Tween<TElement, TValue, TTweener>
+                (subject, target, time, delay, easing, callback);
+
+            tween.scaledTime = false;
+
+            return tween;
+        }
+
         public static A Tween<T, V, A>(this T subject, V target, Tweener.BlendType blend,
             float time, float delay = 0, Func<double, double> easing = null,
             Action callback = null) where A : TweenData<T, V> where T : Component

@@ -1,4 +1,5 @@
-﻿using Scripts.OOP.UI;
+﻿using IgnitedBox.EventSystem;
+using Scripts.OOP.UI;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +10,15 @@ public class ObjectiveHandler : MonoBehaviour
 
     public ObjectiveElement Current => 
         elements.Count == 0 ? null : elements[elements.Count - 1];
+
+    public enum ObjectiveEvents
+    {
+        Created, TrackModified
+    }
+
+    [System.NonSerialized]
+    public EventsHandler<ObjectiveEvents> Events
+    = new EventsHandler<ObjectiveEvents>();
 
     private readonly List<ObjectiveElement> elements 
         = new List<ObjectiveElement>();
@@ -46,6 +56,9 @@ public class ObjectiveHandler : MonoBehaviour
         func?.Invoke(oe);
 
         Add(oe);
+
+        Events.Invoke(ObjectiveEvents.Created, this, oe);
+
         return oe;
     }
 
