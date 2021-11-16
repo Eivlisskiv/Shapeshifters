@@ -1,11 +1,11 @@
 ﻿using IgnitedBox.Tweening;
 using IgnitedBox.Tweening.EasingFunctions;
+using IgnitedBox.Tweening.Tweeners.ColorTweeners;
 using IgnitedBox.Tweening.Tweeners.VectorTweeners;
 using Scripts.MonoBehaviors.UI.Menu;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class GeneralButton : MonoBehaviour
@@ -22,6 +22,16 @@ public class GeneralButton : MonoBehaviour
 
     [SerializeField]
     public string group;
+
+    public bool Enabled 
+    {
+        get => enabled;
+        set 
+        {
+            enabled = value;
+            TweenColor(value ? Color.white : Color.red, 1);
+        }
+    }
 
     protected Button Button { get; private set;}
     protected bool Selected { get; private set; }
@@ -49,7 +59,7 @@ public class GeneralButton : MonoBehaviour
 
     public void ChangeSelect(bool selected)
     {
-        if (!enabled) return;
+        if (!Enabled) return;
         if (selected == Selected) return;
 
         Selected = selected;
@@ -90,7 +100,7 @@ public class GeneralButton : MonoBehaviour
 
     public void ButtonPress()
     {
-        if (!enabled) return;
+        if (!Enabled) return;
 
         if (!Selected)
         {
@@ -107,12 +117,28 @@ public class GeneralButton : MonoBehaviour
     protected virtual void OnSelect()
     {
         transform.parent.Tween<Transform, Vector3, ScaleTween>(
-            new Vector3(1.15f, 1.15f, 1), .8f, easing: ElasticEasing.Out);
+            new Vector3(1.15f, 1.15f, 1), .8f, easing: ElasticEasing.Out)
+            .scaledTime = false;
+
+        TweenColor(Color.cyan, 0.5f);
     }
 
     protected virtual void OnDeselect()
     {
         transform.parent.Tween<Transform, Vector3, ScaleTween>(
-            new Vector3(1, 1, 1), .3f, easing: BackEasing.Out);
+            new Vector3(1, 1, 1), .3f, easing: BackEasing.Out)
+            .scaledTime = false;
+
+        TweenColor(Color.white, .2f);
+    }
+
+    protected virtual void TweenColor(Color target, float time)
+    {
+        var image = transform.parent.GetComponent<Image>();
+        if (image)
+        {
+            image.Tween<Graphic, Color, GraphicColorTween>
+                (target, time).scaledTime = false;
+        }
     }
 }

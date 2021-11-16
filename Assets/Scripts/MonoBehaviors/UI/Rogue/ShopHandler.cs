@@ -13,7 +13,7 @@ public class ShopHandler : MonoBehaviour
     public Text pointsDisplay;
 
     public Text perkTitle;
-    public Button purchase;
+    public GeneralButton purchase;
     public Text info;
 
     private (Perk perk, Text title, Text desc)? selected;
@@ -46,7 +46,7 @@ public class ShopHandler : MonoBehaviour
 
         perkTitle.text = $"{perk.Name} Level {perk.Level}";
 
-        purchase.enabled = false;
+        purchase.Enabled = false;
 
         if (player.Level < perk.Level)
         {
@@ -63,7 +63,7 @@ public class ShopHandler : MonoBehaviour
             return;
         }
 
-        purchase.enabled = true;
+        purchase.Enabled = true;
 
         Text btnTitle = purchase.transform.GetChild(0).GetComponent<Text>();
 

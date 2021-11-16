@@ -156,8 +156,8 @@ public class MainMenuHandler : MonoBehaviour
 
     public void SetStartButton(bool active)
     {
-        if (arcade) arcade.enabled = active;
-        if (story) story.enabled = active;
+        if (arcade) arcade.Enabled = active;
+        if (story) story.Enabled = active;
     }
 
     public void OnClick_Quit() => Application.Quit();
