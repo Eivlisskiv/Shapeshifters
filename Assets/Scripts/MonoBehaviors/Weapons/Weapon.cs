@@ -83,12 +83,12 @@ public class Weapon : MonoBehaviour
 
     protected virtual void OnStart()
     {
-        projectilPrefab = LoadRessource<GameObject>("Projectile");
+        projectilPrefab = LoadResource<GameObject>("Projectile");
     }
 
     protected virtual void OnUpdate() { }
 
-    protected T LoadRessource<T>(string name) where T : Object
+    protected T LoadResource<T>(string name) where T : Object
     {
         T item = Resources.Load<T>($"Weapons/{Name}/{name}");
         if(item == null) item = Resources.Load<T>($"Weapons/Default/{name}");
@@ -176,7 +176,7 @@ public class Weapon : MonoBehaviour
         {
             new AudioEntity()
             {
-                clip = LoadRessource<AudioClip>("Retro Laser Gun (1)"),
+                clip = LoadResource<AudioClip>("Retro Laser Gun (1)"),
                 replaySetting = AudioEntity.ReplaySetting.Restart,
                 volume = 0.1f,
                 spacialBlend = 1,
@@ -184,7 +184,7 @@ public class Weapon : MonoBehaviour
 
             new AudioEntity()
             {
-                clip = LoadRessource<AudioClip>("Retro Laser Gun (2)"),
+                clip = LoadResource<AudioClip>("Retro Laser Gun (2)"),
                 replaySetting = AudioEntity.ReplaySetting.Restart,
                 volume = 0.1f,
                 spacialBlend = 1,
@@ -192,7 +192,7 @@ public class Weapon : MonoBehaviour
 
             new AudioEntity()
             {
-                clip = LoadRessource<AudioClip>("Retro Laser Gun (3)"),
+                clip = LoadResource<AudioClip>("Retro Laser Gun (3)"),
                 replaySetting = AudioEntity.ReplaySetting.Restart,
                 volume = 0.1f,
                 spacialBlend = 1,
@@ -200,7 +200,7 @@ public class Weapon : MonoBehaviour
 
             new AudioEntity()
             {
-                clip = LoadRessource<AudioClip>("Retro Laser Gun (5)"),
+                clip = LoadResource<AudioClip>("Retro Laser Gun (5)"),
                 replaySetting = AudioEntity.ReplaySetting.Restart,
                 volume = 0.1f,
                 spacialBlend = 1,

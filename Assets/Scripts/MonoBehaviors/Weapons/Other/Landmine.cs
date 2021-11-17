@@ -11,8 +11,6 @@ public class Landmine : OtherProjectile
     public SpriteRenderer teamColor;
     public SpriteRenderer activeLight;
 
-    protected override bool IsTrigger => true;
-
     private void Start()
     {
         explosion.Angle = 360;
@@ -50,9 +48,14 @@ public class Landmine : OtherProjectile
         Destroy(gameObject, 300f);
     }
 
-    protected override void OnCollide(Collider2D collision)
+    public override void OnCollide(Collider2D collision)
     {
         if (!active) return;
+
+        var projectile = collision.gameObject.GetComponent<ProjectileBody>();
+        var controller = collision.gameObject.GetComponent<BaseController>();
+
+        if (!projectile && (!controller || controller.Team == owner.Team)) return;
 
         OnHit(null);
 

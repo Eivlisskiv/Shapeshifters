@@ -28,7 +28,7 @@ namespace Assets.Scripts.MonoBehaviors.Weapons.Other
             if (IsTrigger) OnCollide(collision);
         }
 
-        protected virtual void OnCollide(Collider2D collision)
+        public virtual void OnCollide(Collider2D collision)
         {
             if (!active) return;
 
@@ -51,7 +51,8 @@ namespace Assets.Scripts.MonoBehaviors.Weapons.Other
 
             bodyCollider.enabled = false;
             var rdb = GetComponent<Rigidbody2D>();
-            if(rdb) rdb.bodyType = RigidbodyType2D.Static;
+            if (rdb) Destroy(rdb);
+            Destroy(BodyCollider);
             var sr = GetComponent<SpriteRenderer>();
             if(sr) sr.enabled = false;
         }

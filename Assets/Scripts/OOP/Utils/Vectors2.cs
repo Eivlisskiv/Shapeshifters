@@ -17,5 +17,11 @@ namespace Scripts.OOP.Utils
 
         public static float TrueAngle(Vector2 from, Vector2 to)
             => Vector2.Angle(from, to) * (from.y > to.y ? -1 : 1);
+
+        public static float WorldAngle(this Vector2 from, Vector2 to)
+        {
+            int y = from.y > to.y ? -1 : 1;
+            return Vector2.Angle(Vector2.right, to - from) * y;
+        }
     }
 }

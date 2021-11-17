@@ -2,6 +2,7 @@
 using Scripts.OOP.Game_Modes;
 using Scripts.OOP.Perks.Weapons;
 using Scripts.OOP.UI;
+using Scripts.OOP.Utils;
 using UnityEngine;
 
 public class PlayerController : BaseController
@@ -56,7 +57,7 @@ public class PlayerController : BaseController
         if (Input.GetKeyDown(KeyCode.M))
         {
             var perk = new Mine_Drop();
-            perk.LevelUp();
+            perk.LevelUp(25);
             perks.Add(perk, UI);
         }
 
@@ -76,12 +77,15 @@ public class PlayerController : BaseController
         }
 
         //Get the world mouse position
-        Vector3 mousePos = cam.MouseToWorld();
+        Vector2 mousePos = cam.MouseToWorld();
 
         //Get the angle relative to the position
         Vector2 pos = transform.position;
-        int y = pos.y > mousePos.y ? -1 : 1;
-        angle = Vector2.Angle(Vector2.left, pos - (Vector2)mousePos) * y;
+
+        angle = pos.WorldAngle(mousePos);
+
+        //int y = pos.y > mousePos.y ? -1 : 1;
+        //angle = Vector2.Angle(Vector2.left, pos - (Vector2)mousePos) * y;
 
         return true;
     }

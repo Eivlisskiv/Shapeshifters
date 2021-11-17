@@ -1,4 +1,5 @@
 ﻿using Assets.IgnitedBox.UnityUtilities;
+using Assets.Scripts.MonoBehaviors.Weapons.Other;
 using IgnitedBox.Entities;
 using System;
 using UnityEngine;
@@ -222,34 +223,30 @@ namespace Scripts.Explosion
         private void OnTriggerEnter2D(Collider2D collision)
             => OnForceHit(collision);
 
-        protected virtual void OnForceHit(Collider2D collision)
+        protected virtual void OnForceHit(Collider2D collider)
         {
-            Debug.Log($"Explosion hit {collision.name}");
+            if (collider.isTrigger)
+            {
+                TriggerColliderHit(collider);
+                return;
+            }
 
-            Rigidbody2D body = collision.attachedRigidbody;
+            if (collider.TryGetComponent(out OtherProjectile other_projectile))
+            {
+                other_projectile.OnCollide(Collider);
+                return;
+            }
+
+            Rigidbody2D body = collider.attachedRigidbody;
 
             if (!body) return;
 
-            Vector2 pos = transform.position;
-            Vector2 target = body.transform.position;
-            Vector2 dist = target - pos;
-
-            //If false, nothing was hit... should not happen: where is target?
-            if (!Raycast.TryRaycast2D(pos, dist, out RaycastHit2D ray)) return;
-
-            //If what was hit is static: target is "in cover" from the explosion
-            if (!ray.rigidbody || ray.rigidbody.bodyType == RigidbodyType2D.Static) return;
-
-            float mult = 1;
 
             //If another entity is in the way: reduce the explosion's effect
-            while (mult > 0 && ray && ray.rigidbody != body)
-            {
-                Vector2 obstacle = ray.rigidbody.transform.position;
-                Vector2 diff = target - obstacle;
-                mult -= diff.magnitude / dist.magnitude;
-                Raycast.TryRaycast2D(obstacle, dist, out ray);
-            }
+            float mult = Interference(body);
+
+            //Force damped to 0
+            if (mult <= 0) return;
 
             if (body)
             {
@@ -257,21 +254,57 @@ namespace Scripts.Explosion
                 body.AddForce(force * (1 - Progress) * Intensity * mult, ForceMode2D.Impulse);
             }
 
-            BaseController controller = collision.GetComponent<BaseController>();
-
-            if(controller)
-            Debug.Log($"Explosion hit {(controller.Team == ignoreTeam ? "Teammate" : "Enemy")} " +
-                $"{controller.name} with a mult of {mult}");
+            BaseController controller = collider.GetComponent<BaseController>();
 
             if (controller && controller.Team == ignoreTeam) return;
-            HealthEntity he = controller ? controller : collision.GetComponent<HealthEntity>();
+
+            HealthEntity he = controller ? controller : collider.GetComponent<HealthEntity>();
 
             if (he)
             {
                 float totalDamage = damage * (1 - Progress) * mult;
-                Debug.Log($"Explosion hit dealt {totalDamage / damage * 100}% damage");
                 he.ModifyHealth(totalDamage);
             }
         }
+
+        private void TriggerColliderHit(Collider2D collider)
+        {
+            if (collider.TryGetComponent(out OtherProjectile other_projectile))
+            {
+                other_projectile.OnCollide(Collider);
+            }
+            if (collider.TryGetComponent(out ProjectileBody projectile_body))
+            {
+                projectile_body.handler.OnCollide(Collider);
+            }
+        }
+
+        private float Interference(Rigidbody2D body)
+        {
+            Vector2 pos = transform.position;
+            Vector2 target = body.transform.position;
+            Vector2 dist = target - pos;
+
+            //If false, nothing was hit... should not happen: where is target?
+            if (!Raycast.TryRaycast2D(pos, dist, out RaycastHit2D ray)) return 0;
+
+            float mult = 1;
+            while (mult > 0 && ValidateRayInterference(ray) && ray.rigidbody != body)
+            {
+                //If what was hit is static: target is "in cover" from the explosion
+                if (ray.rigidbody.bodyType == RigidbodyType2D.Static) return 0;
+
+                //Otherwise reduce the intensity of the explosion 
+                //based on the distance remaining
+                Vector2 obstacle = ray.rigidbody.transform.position;
+                Vector2 diff = target - obstacle;
+                mult -= diff.magnitude / dist.magnitude;
+                Raycast.TryRaycast2D(obstacle, dist, out ray);
+            }
+            return mult;
+        }
+
+        private bool ValidateRayInterference(RaycastHit2D ray)
+            => ray && !ray.collider.isTrigger && ray.rigidbody;
     }
 }

@@ -2,6 +2,7 @@
 using IgnitedBox.Tweening.Tweeners.ColorTweeners;
 using IgnitedBox.Tweening.Tweeners.VectorTweeners;
 using Scripts.OOP.UI;
+using Scripts.OOP.Utils;
 using System;
 using UnityEngine;
 
@@ -25,7 +26,7 @@ public class ObjectivePointer : MonoBehaviour
     {
         if (!isActiveAndEnabled || !target.HasValue) return;
 
-        float a2 = Vector2.SignedAngle(transform.position, (Vector2)target);
+        float a2 = ((Vector2)transform.position).WorldAngle((Vector2)target);
         transform.rotation = Quaternion.Euler(0, 0, a2);
     }
 

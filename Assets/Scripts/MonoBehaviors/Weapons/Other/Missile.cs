@@ -60,7 +60,7 @@ namespace Scripts.MonoBehaviors.Weapons.Other
             BodyCollider.enabled = true;
         }
 
-        protected override void OnCollide(Collider2D collision)
+        public override void OnCollide(Collider2D collision)
         {
             if (!active || collision.gameObject == owner.gameObject) return;
 

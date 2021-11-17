@@ -80,9 +80,8 @@ public class ObjectiveHandler : MonoBehaviour
 
     public void Remove(ObjectiveElement element)
     {
-        Events.Invoke(ObjectiveEvents.Removed, this, element);
-
         elements.Remove(element);
+        Events.Invoke(ObjectiveEvents.Removed, this, element);
         element.Fade();
 
         Current?.Expand();

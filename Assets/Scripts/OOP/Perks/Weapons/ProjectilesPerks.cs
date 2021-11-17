@@ -27,7 +27,7 @@ namespace Scripts.OOP.Perks.Weapons
                 landmine.transform.Tween<Transform, Vector3, ScaleTween>
                     (scale, 0.5f, 0.2f, callback: () => 
                     {
-                        landmine.Activate(Intensity * 2, Intensity, weapon.GetComponent<BaseController>());
+                        landmine.Activate(Intensity * 2, Intensity/10, weapon.GetComponent<BaseController>());
                         landmine.BodyCollider.isTrigger = false;
                     });
                 return true;
