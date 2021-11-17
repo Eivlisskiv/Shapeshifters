@@ -233,7 +233,8 @@ public abstract class BaseController : HealthEntity,
 
     public bool Trigger(ExplosionHandler.Effect effect)
     {
-        Body.Body.AddForce(effect.GetForce(transform.position), ForceMode2D.Impulse);
+        (Vector2 hit, float magnitude, float push) = effect.GetHit(transform.position);
+        ApplyCollisionForce(hit, magnitude, push);
 
         if (effect.Teammate(Team)) return true;
 

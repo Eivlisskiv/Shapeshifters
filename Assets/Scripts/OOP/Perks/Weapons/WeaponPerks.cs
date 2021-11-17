@@ -20,7 +20,7 @@ namespace Scripts.OOP.Perks.Weapons
     public class Barrel_Buff : Perk, IWeaponFire
     {
         protected override string GetDescription()
-            => $"Increases damage by ({Intensity}).";
+            => $"Increases projectile damage by ({Intensity}).";
 
         public bool OnFire(float _, Weapon weapon, WeaponStats buff)
         {

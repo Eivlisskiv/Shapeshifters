@@ -14,12 +14,23 @@ namespace Scripts.Explosion
             readonly ExplosionHandler handler;
             readonly float multiplier;
 
+            private Vector3 Position => handler.transform.position; 
+
             public float GetDamage()
                 => handler.damage* (1 - handler.Progress) * multiplier;
 
+            public (Vector3, float, float) GetHit(Vector3 target_position)
+            {
+                Vector2 vect = Position - target_position;
+                Vector2 hit = vect.normalized + (Vector2)target_position;
+                float modifier = handler.Intensity * multiplier * (1 - handler.Progress);
+                float magnitude = (vect / handler.Range).magnitude * modifier;
+                return (hit, magnitude, magnitude);
+            }
+
             public Vector3 GetForce(Vector3 target_position)
             {
-                Vector2 force = (target_position - handler.transform.position) / handler.Range;
+                Vector2 force = (target_position - Position) / handler.Range;
                 return force * (1 - handler.Progress) * handler.Intensity * multiplier;
             }
 
@@ -51,8 +62,8 @@ namespace Scripts.Explosion
             get => _intensity;
             set
             {
-                _intensity = value;
-                SetIntensity(value);
+                _intensity = value/10;
+                SetIntensity();
             }
         }
 
@@ -67,6 +78,7 @@ namespace Scripts.Explosion
             {
                 _speed = value;
                 SetSpeed(value);
+                SetIntensity();
             }
         }
 
@@ -124,7 +136,7 @@ namespace Scripts.Explosion
 
             time += Time.deltaTime;
 
-            Collider.radius = Range * 5 * Progress;
+            Collider.radius = Range * 4 * Progress;
 
             if (time > Duration)
             {
@@ -178,10 +190,10 @@ namespace Scripts.Explosion
             }
         }
 
-        protected virtual void SetIntensity(float value)
+        protected virtual void SetIntensity()
         {
             var burst = MainEffect.emission.GetBurst(0);
-            burst.count = Math.Min(10, (int)(value/10));
+            burst.count = Math.Min(10, (int)Intensity);
             MainEffect.emission.SetBurst(0, burst);
         }
 
@@ -204,8 +216,8 @@ namespace Scripts.Explosion
             FullStop();
 
             var mmain = MainEffect.main;
-            mmain.duration = Duration * 1.2f;
-            mmain.startLifetime = Duration * 1.2f;
+            mmain.duration = Duration * 1.3f;
+            mmain.startLifetime = Duration * 1.3f;
 
             var sub = GetSub(MainEffect);
             var main = sub.main;

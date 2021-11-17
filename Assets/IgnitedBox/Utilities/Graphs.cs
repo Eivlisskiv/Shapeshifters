@@ -13,5 +13,10 @@ namespace IgnitedBox.Utilities
             float a = height / (Mathf.Pow(curve, width) - 1);
             return a * Mathf.Pow(curve, x) - a;
         }
+
+        public static float LimitedGrowthExponent(float x, float limit, float smoothness, float start = 0)
+        {
+            return -limit * Mathf.Pow(smoothness, x) + limit + start;
+        }
     }
 }

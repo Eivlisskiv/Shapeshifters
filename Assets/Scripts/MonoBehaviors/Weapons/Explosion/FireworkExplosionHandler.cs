@@ -16,10 +16,10 @@ namespace Scripts.Explosion
             }
         }
 
-        protected override void SetIntensity(float value)
+        protected override void SetIntensity()
         {
             var burst = Secondary.emission.GetBurst(0);
-            burst.count = Mathf.Max((int)value, 5);
+            burst.count = Mathf.Max(Intensity, 5);
             Secondary.emission.SetBurst(0, burst);
         }
 

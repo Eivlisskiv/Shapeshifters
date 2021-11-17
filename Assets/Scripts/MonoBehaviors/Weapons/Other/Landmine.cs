@@ -14,7 +14,7 @@ public class Landmine : OtherProjectile
     private void Start()
     {
         explosion.Angle = 360;
-        explosion.Speed = 15;
+        explosion.Speed = 20;
         explosion.Intensity = 1;
         explosion.Range = 10;
     }
@@ -52,10 +52,9 @@ public class Landmine : OtherProjectile
     {
         if (!active) return;
 
-        var projectile = collision.gameObject.GetComponent<ProjectileBody>();
         var controller = collision.gameObject.GetComponent<BaseController>();
 
-        if (!projectile && (!controller || controller.Team == owner.Team)) return;
+        if (!controller || controller.Team == owner.Team) return;
 
         OnHit(null);
 

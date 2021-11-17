@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿using IgnitedBox.Entities;
+using Scripts.Explosion;
+using UnityEngine;
 
 namespace Assets.Scripts.MonoBehaviors.Weapons.Other
 {
-    public abstract class OtherProjectile : MonoBehaviour
+    public abstract class OtherProjectile : MonoBehaviour,
+        ITargetEntity<ProjectileHandler>, ITargetEntity<ExplosionHandler.Effect>
     {
         public Collider2D BodyCollider => 
             bodyCollider ? bodyCollider : (bodyCollider = GetComponent<Collider2D>());
@@ -41,6 +44,7 @@ namespace Assets.Scripts.MonoBehaviors.Weapons.Other
 
         protected virtual void OnHit(BaseController victim)
         {
+            if (!victim) return;
             victim.TakeDamage(damage, owner, transform.position);
             victim.ApplyCollisionForce(transform.position, force, force);
         }
@@ -55,6 +59,19 @@ namespace Assets.Scripts.MonoBehaviors.Weapons.Other
             Destroy(BodyCollider);
             var sr = GetComponent<SpriteRenderer>();
             if(sr) sr.enabled = false;
+        }
+
+        public bool Trigger(ProjectileHandler projectile)
+            => TriggerExplosive();
+        public bool Trigger(ExplosionHandler.Effect projectile)
+            => TriggerExplosive();
+
+        private bool TriggerExplosive()
+        {
+            if (!active) return false;
+            OnHit(null);
+            Destroy();
+            return true;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using IgnitedBox.Tweening;
 using IgnitedBox.Tweening.Tweeners.VectorTweeners;
+using IgnitedBox.Utilities;
 using Scripts.OOP.Stats;
 using Scripts.OOP.Utils;
 using UnityEngine;
@@ -11,12 +12,19 @@ namespace Scripts.OOP.Perks.Weapons
         protected override int ToBuffCharge => 1;
         protected override string RessourcePath => "Projectiles/Landmine";
 
+        private float SpawnChance =>
+            Graphs.LimitedGrowthExponent(Intensity, 50, 0.99f, 10);
+
+        private float Force =>
+            Graphs.LimitedGrowthExponent(Intensity, 25, 0.99f);
+
         protected override string GetDescription()
-            => $"Has a ({Intensity}%) chance to drop a mine when shooting.";
+            => $"Has a ({Mathf.Floor(SpawnChance)}%) chance to drop a mine when firing. " +
+            $"Mine's explosion deals up to ({Intensity * 2}) damage.";
 
         public bool OnFire(float angle, Weapon weapon, WeaponStats _)
         {
-            if (Randomf.Chance(Intensity * weapon.cooldown))
+            if (Randomf.Chance(SpawnChance * weapon.cooldown))
             {
                 GameObject mine = SpawnPrefab(weapon.transform.position, 
                     new Vector3(0, 0, angle), weapon.transform.parent);
@@ -27,7 +35,8 @@ namespace Scripts.OOP.Perks.Weapons
                 landmine.transform.Tween<Transform, Vector3, ScaleTween>
                     (scale, 0.5f, 0.2f, callback: () => 
                     {
-                        landmine.Activate(Intensity * 2, Intensity, weapon.GetComponent<BaseController>());
+                        landmine.Activate(Intensity * 2, Force, 
+                            weapon.GetComponent<BaseController>());
                         landmine.BodyCollider.isTrigger = false;
                     });
                 return true;

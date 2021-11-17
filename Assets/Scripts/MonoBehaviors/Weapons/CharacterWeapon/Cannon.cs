@@ -42,7 +42,7 @@ public class Cannon : Weapon
         ITargetEntity<ProjectileHandler> entity = collision.gameObject
             .GetComponent<ITargetEntity<ProjectileHandler>>();
 
-        if (entity != null) return;
+        if (entity == null) return;
 
         if (entity is BaseController victim)
         {
