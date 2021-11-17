@@ -29,8 +29,8 @@ public class LaserShot : Weapon
     {
         base.OnStart();
 
-        pointProjectile = LoadResource<Sprite>("Point");
-        dashProjectile = LoadResource<Sprite>("Dash");
+        pointProjectile = LoadRessource<Sprite>("Point");
+        dashProjectile = LoadRessource<Sprite>("Dash");
     }
 
     protected override ProjectileHandler FireProjectiles(BaseController sender,

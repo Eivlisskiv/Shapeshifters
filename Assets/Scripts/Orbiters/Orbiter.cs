@@ -1,11 +1,13 @@
 ﻿using IgnitedBox.Entities;
+using Scripts.Explosion;
 using Scripts.OOP.EnemyBehaviors.Ability.OrbiterSpawners;
 using System;
 using UnityEngine;
 
 namespace Scripts.Orbiters
 {
-    public abstract class Orbiter : HealthEntity<ProjectileHandler>
+    public abstract class Orbiter : HealthEntity, 
+        ITargetEntity<ProjectileHandler>, ITargetEntity<ExplosionHandler.Effect>
     {
         public BaseController Owner
         {
@@ -111,24 +113,31 @@ namespace Scripts.Orbiters
         public override bool ModifyHealth(float mod)
             => (health += mod) <= 0;
 
-        public override void ProjectileHit(ProjectileHandler projectile)
+        public bool Trigger(ProjectileHandler projectile)
         {
-            if (projectile.IsSameSender(Owner.gameObject)) return;
+            if (projectile.IsSameSender(Owner.gameObject)) return false;
 
-            if (projectile.Sender.IsTeammate(Owner)) return;
+            if (projectile.Sender.IsTeammate(Owner)) return false;
 
             if (ModifyHealth(-projectile.damage) && CanBeStolen)
             {
                 OnOrbiterDestroy();
-
-                Debug.Log($"{projectile.Sender.Name} stole {Owner.Name}'s {Archetype?.GetType().Name} {GetType().Name}");
-
                 Owner = projectile.Sender;
-
-                return;
             }
 
-            Debug.Log($"{Owner.Name}'s {Archetype?.GetType().Name} {GetType().Name} has {Health}/{MaxHealth} HP");
+            return true;
+        }
+
+        public bool Trigger(ExplosionHandler.Effect effect)
+        {
+            if (effect.Teammate(Owner.Team)) return false;
+
+            if (ModifyHealth(-effect.GetDamage()/2) && !CanBeStolen)
+            {
+                OnOrbiterDestroy();
+            }
+
+            return true;
         }
 
         protected virtual void OnColorChange()

@@ -39,10 +39,10 @@ public class Cannon : Weapon
     {
         if (projectile.IsSameSender(collision.gameObject)) return;
 
-        HealthEntity<ProjectileHandler> entity = collision.gameObject
-            .GetComponent<HealthEntity<ProjectileHandler>>();
+        ITargetEntity<ProjectileHandler> entity = collision.gameObject
+            .GetComponent<ITargetEntity<ProjectileHandler>>();
 
-        if (!entity) return;
+        if (entity != null) return;
 
         if (entity is BaseController victim)
         {
@@ -50,7 +50,7 @@ public class Cannon : Weapon
             return;
         }
 
-        entity.ProjectileHit(projectile);
+        entity.Trigger(projectile);
     }
 
     private void TargetController(ProjectileHandler projectile, BaseController victim)
@@ -92,7 +92,7 @@ public class Cannon : Weapon
         {
             new AudioEntity()
             {
-                clip = LoadResource<AudioClip>("Cannon Shot"),
+                clip = LoadRessource<AudioClip>("Cannon Shot"),
                 replaySetting = AudioEntity.ReplaySetting.Restart,
                 volume = 1f,
                 spacialBlend = 1,

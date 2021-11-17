@@ -1,5 +1,6 @@
 ﻿using IgnitedBox.Entities;
 using IgnitedBox.EventSystem;
+using Scripts.Explosion;
 using Scripts.OOP.Character.Stats;
 using Scripts.OOP.Game_Modes;
 using Scripts.OOP.Perks;
@@ -10,7 +11,8 @@ using Scripts.OOP.Utils;
 using System;
 using UnityEngine;
 
-public abstract class BaseController : HealthEntity<ProjectileHandler>
+public abstract class BaseController : HealthEntity, 
+    ITargetEntity<ProjectileHandler>, ITargetEntity<ExplosionHandler.Effect>
 {
     public enum ControllerEvents 
     { 
@@ -207,12 +209,12 @@ public abstract class BaseController : HealthEntity<ProjectileHandler>
         }
     }
 
-    public override void ProjectileHit(ProjectileHandler projectile)
+    public bool Trigger(ProjectileHandler projectile)
     {
         perks.Activate<IProjectileTaken>(1,
             perk => perk.OnHit(this, projectile));
 
-        if (!projectile || !projectile.active) return;
+        if (!projectile || !projectile.active) return false;
 
         float push = projectile.force;
         if (!IsTeammate(projectile.Sender))
@@ -225,6 +227,19 @@ public abstract class BaseController : HealthEntity<ProjectileHandler>
         }
 
         ApplyCollisionForce(projectile.transform.position, 0, push);
+
+        return true;
+    }
+
+    public bool Trigger(ExplosionHandler.Effect effect)
+    {
+        Body.Body.AddForce(effect.GetForce(transform.position), ForceMode2D.Impulse);
+
+        if (effect.Teammate(Team)) return true;
+
+        ModifyHealth(effect.GetDamage());
+
+        return true;
     }
 
     public bool IsTeammate(BaseController other)

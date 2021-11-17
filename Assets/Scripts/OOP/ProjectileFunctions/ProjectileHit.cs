@@ -9,8 +9,7 @@ namespace Scripts.OOP.ProjectileFunctions
         {
             if (projectile.IsSameSender(collider.gameObject)) return;
 
-            HealthEntity<ProjectileHandler>.HasHeathEntity
-                (collider.gameObject, projectile);
+            collider.gameObject.TriggerEntity(projectile, out _);
 
             projectile.ToDestroy();
         }

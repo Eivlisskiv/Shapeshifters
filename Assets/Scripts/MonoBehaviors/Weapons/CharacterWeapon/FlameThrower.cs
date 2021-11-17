@@ -26,8 +26,7 @@ class FlameThrower : BurstWeapon
     {
         if (projectile.IsSameSender(collision.gameObject)) return;
 
-        HealthEntity<ProjectileHandler>.HasHeathEntity
-            (collision.gameObject, projectile);
+        collision.gameObject.TriggerEntity(projectile, out _);
     }
 
     protected override AudioEntity[] GetFireClips()
@@ -36,7 +35,7 @@ class FlameThrower : BurstWeapon
         {
             new AudioEntity()
             {
-                clip = LoadResource<AudioClip>("Fire 1"),
+                clip = LoadRessource<AudioClip>("Fire 1"),
                 replaySetting = AudioEntity.ReplaySetting.Restart,
                 volume = 0.9f,
                 spacialBlend = 1,
@@ -44,7 +43,7 @@ class FlameThrower : BurstWeapon
 
             new AudioEntity()
             {
-                clip = LoadResource<AudioClip>("Fire 2"),
+                clip = LoadRessource<AudioClip>("Fire 2"),
                 replaySetting = AudioEntity.ReplaySetting.Restart,
                 volume = 0.9f,
                 spacialBlend = 1,
@@ -52,7 +51,7 @@ class FlameThrower : BurstWeapon
 
             new AudioEntity()
             {
-                clip = LoadResource<AudioClip>("Fire 3"),
+                clip = LoadRessource<AudioClip>("Fire 3"),
                 replaySetting = AudioEntity.ReplaySetting.Restart,
                 volume = 0.9f,
                 spacialBlend = 1,
@@ -60,7 +59,7 @@ class FlameThrower : BurstWeapon
 
             new AudioEntity()
             {
-                clip = LoadResource<AudioClip>("Fire 4"),
+                clip = LoadRessource<AudioClip>("Fire 4"),
                 replaySetting = AudioEntity.ReplaySetting.Restart,
                 volume = 0.9f,
                 spacialBlend = 1,

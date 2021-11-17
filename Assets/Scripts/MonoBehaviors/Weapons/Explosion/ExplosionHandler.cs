@@ -9,6 +9,29 @@ namespace Scripts.Explosion
     [Serializable]
     public class ExplosionHandler : MonoBehaviour
     {
+        public struct Effect
+        {
+            readonly ExplosionHandler handler;
+            readonly float multiplier;
+
+            public float GetDamage()
+                => handler.damage* (1 - handler.Progress) * multiplier;
+
+            public Vector3 GetForce(Vector3 target_position)
+            {
+                Vector2 force = (target_position - handler.transform.position) / handler.Range;
+                return force * (1 - handler.Progress) * handler.Intensity * multiplier;
+            }
+
+            public bool Teammate(int team) => team == handler.ignoreTeam;
+
+            internal Effect(ExplosionHandler handler, float m)
+            {
+                this.handler = handler;
+                multiplier = m;
+            }
+        }
+
         public ParticleSystem mainExplosion;
 
         protected CircleCollider2D Collider
@@ -225,49 +248,27 @@ namespace Scripts.Explosion
 
         protected virtual void OnForceHit(Collider2D collider)
         {
-            if (collider.isTrigger)
-            {
-                TriggerColliderHit(collider);
-                return;
-            }
-
-            if (collider.TryGetComponent(out OtherProjectile other_projectile))
-            {
-                other_projectile.OnCollide(Collider);
-                return;
-            }
-
-            Rigidbody2D body = collider.attachedRigidbody;
-
-            if (!body) return;
-
-
-            //If another entity is in the way: reduce the explosion's effect
-            float mult = Interference(body);
+             //If another entity is in the way: reduce the explosion's effect
+            float mult = Interference(collider);
 
             //Force damped to 0
             if (mult <= 0) return;
 
+            collider.gameObject.TriggerEntity(new Effect(this, mult),
+                out ITargetEntity<Effect> entity);
+
+            //If effect was handled by entity, done
+            if (entity != null) return;
+
+            Rigidbody2D body = collider.attachedRigidbody;
             if (body)
             {
-                Vector2 force = (body.transform.position - transform.position) * 0.5f;
+                Vector2 force = (body.transform.position - transform.position) / Range;
                 body.AddForce(force * (1 - Progress) * Intensity * mult, ForceMode2D.Impulse);
-            }
-
-            BaseController controller = collider.GetComponent<BaseController>();
-
-            if (controller && controller.Team == ignoreTeam) return;
-
-            HealthEntity he = controller ? controller : collider.GetComponent<HealthEntity>();
-
-            if (he)
-            {
-                float totalDamage = damage * (1 - Progress) * mult;
-                he.ModifyHealth(totalDamage);
             }
         }
 
-        private void TriggerColliderHit(Collider2D collider)
+        protected void TriggerColliderHit(Collider2D collider)
         {
             if (collider.TryGetComponent(out OtherProjectile other_projectile))
             {
@@ -279,17 +280,17 @@ namespace Scripts.Explosion
             }
         }
 
-        private float Interference(Rigidbody2D body)
+        protected float Interference(Collider2D collider)
         {
             Vector2 pos = transform.position;
-            Vector2 target = body.transform.position;
+            Vector2 target = collider.transform.position;
             Vector2 dist = target - pos;
 
             //If false, nothing was hit... should not happen: where is target?
             if (!Raycast.TryRaycast2D(pos, dist, out RaycastHit2D ray)) return 0;
 
             float mult = 1;
-            while (mult > 0 && ValidateRayInterference(ray) && ray.rigidbody != body)
+            while (mult > 0 && ValidateRayInterference(ray) && ray.rigidbody != collider.attachedRigidbody)
             {
                 //If what was hit is static: target is "in cover" from the explosion
                 if (ray.rigidbody.bodyType == RigidbodyType2D.Static) return 0;
@@ -304,7 +305,7 @@ namespace Scripts.Explosion
             return mult;
         }
 
-        private bool ValidateRayInterference(RaycastHit2D ray)
+        protected bool ValidateRayInterference(RaycastHit2D ray)
             => ray && !ray.collider.isTrigger && ray.rigidbody;
     }
 }

@@ -83,12 +83,12 @@ public class Weapon : MonoBehaviour
 
     protected virtual void OnStart()
     {
-        projectilPrefab = LoadResource<GameObject>("Projectile");
+        projectilPrefab = LoadRessource<GameObject>("Projectile");
     }
 
     protected virtual void OnUpdate() { }
 
-    protected T LoadResource<T>(string name) where T : Object
+    protected T LoadRessource<T>(string name) where T : Object
     {
         T item = Resources.Load<T>($"Weapons/{Name}/{name}");
         if(item == null) item = Resources.Load<T>($"Weapons/Default/{name}");
@@ -130,8 +130,7 @@ public class Weapon : MonoBehaviour
     {
         if (projectile.IsSameSender(collision.gameObject)) return;
 
-        HealthEntity<ProjectileHandler>.HasHeathEntity
-            (collision.gameObject, projectile);
+        collision.gameObject.TriggerEntity(projectile, out _);
 
         projectile.ToDestroy();
     }
@@ -176,7 +175,7 @@ public class Weapon : MonoBehaviour
         {
             new AudioEntity()
             {
-                clip = LoadResource<AudioClip>("Retro Laser Gun (1)"),
+                clip = LoadRessource<AudioClip>("Retro Laser Gun (1)"),
                 replaySetting = AudioEntity.ReplaySetting.Restart,
                 volume = 0.1f,
                 spacialBlend = 1,
@@ -184,7 +183,7 @@ public class Weapon : MonoBehaviour
 
             new AudioEntity()
             {
-                clip = LoadResource<AudioClip>("Retro Laser Gun (2)"),
+                clip = LoadRessource<AudioClip>("Retro Laser Gun (2)"),
                 replaySetting = AudioEntity.ReplaySetting.Restart,
                 volume = 0.1f,
                 spacialBlend = 1,
@@ -192,7 +191,7 @@ public class Weapon : MonoBehaviour
 
             new AudioEntity()
             {
-                clip = LoadResource<AudioClip>("Retro Laser Gun (3)"),
+                clip = LoadRessource<AudioClip>("Retro Laser Gun (3)"),
                 replaySetting = AudioEntity.ReplaySetting.Restart,
                 volume = 0.1f,
                 spacialBlend = 1,
@@ -200,7 +199,7 @@ public class Weapon : MonoBehaviour
 
             new AudioEntity()
             {
-                clip = LoadResource<AudioClip>("Retro Laser Gun (5)"),
+                clip = LoadRessource<AudioClip>("Retro Laser Gun (5)"),
                 replaySetting = AudioEntity.ReplaySetting.Restart,
                 volume = 0.1f,
                 spacialBlend = 1,
