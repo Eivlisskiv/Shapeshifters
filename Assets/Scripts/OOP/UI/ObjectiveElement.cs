@@ -40,6 +40,9 @@ namespace Scripts.OOP.UI
             public static implicit operator Vector3(ObjectiveTracking ot)
                 => ot.mobileTarget ? ot.mobileTarget.position : ot.staticTarget;
 
+            public static implicit operator Vector2(ObjectiveTracking ot)
+                => ot.mobileTarget ? ot.mobileTarget.position : ot.staticTarget;
+
             Transform mobileTarget;
             Vector3 staticTarget;
         }
@@ -47,16 +50,14 @@ namespace Scripts.OOP.UI
         public readonly GameObject element;
         public readonly RectTransform rect;
 
-        public EventsHandler<ObjectiveHandler.ObjectiveEvents> Events
-            = new EventsHandler<ObjectiveHandler.ObjectiveEvents>();
-
         public ObjectiveTracking? Track
         {
             get => _track;
             set
             {
                 _track = value;
-                Events.Invoke(ObjectiveHandler.ObjectiveEvents.TrackModified, 
+                ObjectiveHandler.Instance.Events.Invoke
+                    (ObjectiveHandler.ObjectiveEvents.TrackModified, 
                     this, _track);
             }
         }

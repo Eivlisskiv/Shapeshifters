@@ -22,6 +22,10 @@ public class PlayerController : BaseController
         uit.anchoredPosition = Vector3.zero;
         uit.localScale = new Vector3(1, 1, 1);
 
+        GameObject pointer = Resources.Load<GameObject>("UI/ObjectivePointer");
+        pointer = Instantiate(pointer, player.transform);
+        pointer.transform.localPosition = Vector3.zero;
+
         return player;
     }
 
@@ -54,6 +58,11 @@ public class PlayerController : BaseController
             var perk = new Mine_Drop();
             perk.LevelUp();
             perks.Add(perk, UI);
+        }
+
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            ModifyHealth(50);
         }
 #endif
     }

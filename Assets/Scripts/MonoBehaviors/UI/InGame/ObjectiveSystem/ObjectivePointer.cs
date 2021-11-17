@@ -16,31 +16,36 @@ public class ObjectivePointer : MonoBehaviour
 
     private void Start()
     {
-        StartTracking();
+        main.color = Color.clear;
+        sub.color = Color.clear;
+        Subscribe(ObjectiveHandler.Instance);
     }
 
     private void Update()
     {
         if (!isActiveAndEnabled || !target.HasValue) return;
 
-        transform.LookAt((Vector3)target);
+        float a2 = Vector2.SignedAngle(transform.position, (Vector2)target);
+        transform.rotation = Quaternion.Euler(0, 0, a2);
     }
 
     public void Subscribe(ObjectiveHandler handler)
     {
         handler.Events.Subscribe<ObjectiveHandler, ObjectiveElement>
-            (ObjectiveHandler.ObjectiveEvents.Created, Subscribe);
+            (ObjectiveHandler.ObjectiveEvents.Created, (a, b) => CheckTrack(handler.Current));
+
+        handler.Events.Subscribe<ObjectiveElement, ObjectiveElement.ObjectiveTracking?>
+            (ObjectiveHandler.ObjectiveEvents.TrackModified, (a, b) => CheckTrack(handler.Current));
+
+        handler.Events.Subscribe<ObjectiveHandler, ObjectiveElement>
+            (ObjectiveHandler.ObjectiveEvents.Removed, (a, b) => CheckTrack(handler.Current));
+
     }
 
-    private void Subscribe(ObjectiveHandler handler, ObjectiveElement element)
+    private void CheckTrack(ObjectiveElement element)
     {
-        Track(null);
-        element.Events.Subscribe<ObjectiveElement, ObjectiveElement.ObjectiveTracking?>
-            (ObjectiveHandler.ObjectiveEvents.TrackModified, (e, t) =>
-            {
-                if (e == null || handler.Current != e || !t.HasValue) return;
-                Track(t);
-            });
+        Track(element == null || !element.Track.HasValue ? 
+            null : element.Track);
     }
 
     private void Track(ObjectiveElement.ObjectiveTracking? track)
@@ -64,21 +69,23 @@ public class ObjectivePointer : MonoBehaviour
             (gold, 0.2f);
 
         StartSub(sub);
-        //StartSub(sub2, 0.5f);
     }
 
     private void StartSub(SpriteRenderer sub)
     {
-        sub.color = gold;
-        sub.transform.localScale = new Vector3(0.5f, 0.5f, 1);
+        sub.color = Color.clear;
+        sub.transform.localScale = new Vector3(0.8f, 0.8f, 1);
+
+        const float anim_time = 1.5f;
+        const float anim_delay = 1;
 
         sub.transform.UnscaledTween<Transform, Vector3, ScaleTween>
-            (new Vector3(1.5f, 1.5f, 1), 0.5f, 0.5f, callback: () => 
-            {
-                sub.UnscaledTween<SpriteRenderer, Color, SpriteRendererColorTween>
-                    (Color.clear, 1f);
+            (new Vector3(1.3f, 1.3f, 1), anim_time, anim_delay, easing: SizeEasing)
+            .loop = IgnitedBox.Tweening.Tweeners.TweenerBase.LoopType.ResetLoop;
 
-            }).loop = IgnitedBox.Tweening.Tweeners.TweenerBase.LoopType.ResetLoop;
+        sub.UnscaledTween<SpriteRenderer, Color, SpriteRendererColorTween>
+            (gold, anim_time, anim_delay, easing: ColorEasing, callback: () => sub.color = Color.clear)
+            .loop = IgnitedBox.Tweening.Tweeners.TweenerBase.LoopType.ResetLoop;
     }
 
     private void EndTracking()
@@ -98,5 +105,19 @@ public class ObjectivePointer : MonoBehaviour
 
         sub.transform.UnscaledTween<Transform, Vector3, ScaleTween>
             (Vector3.zero, 0.25f);
+    }
+
+    private double SizeEasing(double t)
+    {
+        if (t >= 0.75) return 1;
+
+        return 0.5 + (Math.Sin( (4 * Math.PI * t) + (1.5 * Math.PI) ) / 2);
+    }
+
+    private double ColorEasing(double t)
+    {
+        if (t < 0.25) return (16 * Math.Pow(t, 2));
+        else if (t < 0.75) return (16 * Math.Pow(t - 0.5, 2));
+        return 16 * Math.Pow(t - 1, 2);
     }
 }

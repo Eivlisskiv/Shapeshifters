@@ -100,7 +100,7 @@ namespace Scripts.Explosion
 
             time += Time.deltaTime;
 
-            Collider.radius = Range * Progress;
+            Collider.radius = Range * 5 * Progress;
 
             if (time > Duration)
             {
@@ -132,6 +132,7 @@ namespace Scripts.Explosion
         {
             if (!MainEffect || MainEffect.isPlaying) return;
             playing = State.Starting;
+            Collider.enabled = true;
             MainEffect.Play();
         }
 
@@ -223,6 +224,8 @@ namespace Scripts.Explosion
 
         protected virtual void OnForceHit(Collider2D collision)
         {
+            Debug.Log($"Explosion hit {collision.name}");
+
             Rigidbody2D body = collision.attachedRigidbody;
 
             if (!body) return;
@@ -255,12 +258,19 @@ namespace Scripts.Explosion
             }
 
             BaseController controller = collision.GetComponent<BaseController>();
-            if (controller && controller.Team == ignoreTeam) return;
 
+            if(controller)
+            Debug.Log($"Explosion hit {(controller.Team == ignoreTeam ? "Teammate" : "Enemy")} " +
+                $"{controller.name} with a mult of {mult}");
+
+            if (controller && controller.Team == ignoreTeam) return;
             HealthEntity he = controller ? controller : collision.GetComponent<HealthEntity>();
+
             if (he)
             {
-                he.ModifyHealth(damage * (1 - Progress) * mult);
+                float totalDamage = damage * (1 - Progress) * mult;
+                Debug.Log($"Explosion hit dealt {totalDamage / damage * 100}% damage");
+                he.ModifyHealth(totalDamage);
             }
         }
     }

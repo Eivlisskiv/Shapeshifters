@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class ObjectiveHandler : MonoBehaviour
 {
+    public static ObjectiveHandler Instance { get; private set; }
+
     public GameObject elementPrefab;
 
     public ObjectiveElement Current => 
@@ -13,7 +15,7 @@ public class ObjectiveHandler : MonoBehaviour
 
     public enum ObjectiveEvents
     {
-        Created, TrackModified
+        Created, Removed, TrackModified
     }
 
     [System.NonSerialized]
@@ -24,6 +26,11 @@ public class ObjectiveHandler : MonoBehaviour
         = new List<ObjectiveElement>();
 
     private float mid;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void Start()
     {
@@ -73,6 +80,8 @@ public class ObjectiveHandler : MonoBehaviour
 
     public void Remove(ObjectiveElement element)
     {
+        Events.Invoke(ObjectiveEvents.Removed, this, element);
+
         elements.Remove(element);
         element.Fade();
 
