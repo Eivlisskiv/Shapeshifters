@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace Scripts.OOP.TileMaps
+namespace Scripts.OOP.TileMaps.Procedural
 {
-    public class CaveRoom : MapRoom
+    public class CaveRoom : ProceduralMapRoom
     {
         int[] ceilling;
         int[] floor;
@@ -12,11 +11,14 @@ namespace Scripts.OOP.TileMaps
         Vector2 perlinOffset;
 
         float density;
-        readonly List<Vector2Int> gates = new List<Vector2Int>();
         (Vector2, int)[] clusters;
 
-        public CaveRoom(Vector2Int start, Vector2Int size, bool entrance)
-            : base (start, size, entrance) { }
+        public override int TileBaseIndex => 0;
+
+        public CaveRoom(Vector2Int size, RoomHandler previous,
+            Transform propsContainer)
+            : base(size, previous, propsContainer)
+        { }
 
         public override void Initialize()
         {
@@ -83,53 +85,12 @@ namespace Scripts.OOP.TileMaps
             tile = GetTile(current, border, center);
             if (tile != MapTileType.Empty && IsGate(current))
                 tile = MapTileType.Gate;
+
+            mapContent[current.x, current.y] = tile;
+
             HandleTileDraw(map, tilebase, tile);
 
             return Next(border);
-        }
-
-        public override bool DrawNext(Tilemap map, TileBase tilebase, bool center)
-        {
-            bool empty, next;
-            do
-            {
-                next = DrawOne(map, tilebase, center, out MapTileType tile);
-                empty = tile == MapTileType.Empty;
-
-            } while (next && empty);
-
-            return next;
-        }
-
-        public override bool DrawAmount(int amount, Tilemap map, TileBase tilebase, bool center)
-        {
-            bool next;
-            do
-            {
-                next = DrawOne(map, tilebase, center, out _);
-                amount--;
-
-            } while (next && amount > 0);
-
-            return next;
-        }
-
-        private bool HandleTileDraw(Tilemap map, TileBase tilebase, MapTileType tile)
-        {
-            mapContent[current.x, current.y] = tile;
-            if (tile != MapTileType.Empty)
-            {
-                if (tile == MapTileType.Gate)
-                    gates.Add(current);
-
-                map.SetTile(new Vector3Int(current.x, current.y, 0),
-                    tile == MapTileType.Wall || tile == MapTileType.Gate
-                    ? tilebase : null);
-
-                return false;
-            }
-
-            return true;
         }
 
         private Vector2Int CurrentBorder()
@@ -229,15 +190,6 @@ namespace Scripts.OOP.TileMaps
             }
 
             return false;
-        }
-
-        public override void OpenGate(bool open, Tilemap map, TileBase tilebase)
-        {
-            for (int i = 0; i < gates.Count; i++)
-            {
-                Vector2Int c = gates[i];
-                map.SetTile(new Vector3Int(c.x, c.y, 0), open ? null : tilebase);
-            }
         }
     }
 }

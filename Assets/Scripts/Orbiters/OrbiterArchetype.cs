@@ -95,7 +95,8 @@ namespace Scripts.Orbiters
             Vector2 target = currentTarget.transform.position;
 
             //Hits a wall = target lost
-            return Raycast.TryRaycast2D(position, target - position, 8, out _);
+            bool lost = Raycast.TryRaycast2D(position, target - position, 8, out RaycastHit2D ray);
+            return lost;
         }
 
         public void Update(Orbiter orbiter)

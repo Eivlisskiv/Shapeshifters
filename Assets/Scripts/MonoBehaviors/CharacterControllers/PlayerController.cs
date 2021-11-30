@@ -1,8 +1,8 @@
-﻿using Scripts.OOP.Character.Stats;
+﻿using IgnitedBox.UnityUtilities.Vectors;
+using Scripts.OOP.Character.Stats;
 using Scripts.OOP.Game_Modes;
 using Scripts.OOP.Perks.Weapons;
 using Scripts.OOP.UI;
-using Scripts.OOP.Utils;
 using UnityEngine;
 
 public class PlayerController : BaseController

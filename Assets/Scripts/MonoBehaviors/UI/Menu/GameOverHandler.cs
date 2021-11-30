@@ -1,4 +1,7 @@
-﻿using Scripts.OOP.Game_Modes;
+﻿using IgnitedBox.Tweening;
+using IgnitedBox.Tweening.EasingFunctions;
+using Scripts.OOP.Game_Modes;
+using Tween.Source.Tweeners.FloatTweeners;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -47,8 +50,11 @@ public class GameOverHandler : MonoBehaviour
 
         internal void SetScore(int score)
         {
-            number.text = score.ToString();
-            background.text = score.ToString();
+            number.text = "0";
+            background.text = "0";
+
+            number.Tween<Text, float, TextIntegerTweener>(score, 0.3f, easing: ExponentEasing.Out);
+            background.Tween<Text, float, TextIntegerTweener>(score, 0.3f, easing: ExponentEasing.Out);
         }
     }
 }

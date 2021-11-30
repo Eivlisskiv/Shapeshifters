@@ -1,4 +1,5 @@
 ﻿using Scripts.OOP.TileMaps;
+using Scripts.OOP.TileMaps.Procedural;
 using Scripts.OOP.UI;
 using Scripts.OOP.Utils;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Scripts.OOP.Game_Modes.Rogue
 {
-    public class Rogue : AGameMode, IRogueMenu, IControllerLevelUp
+    public class Rogue : ArcadeMode, IRogueMenu, IControllerLevelUp
     {
         public int points;
         private enum Stage { Waves, Pausing, Menu, Resuming, PassGate }
@@ -191,7 +192,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
                 5 + (level * 2);
 
             if ((score + 4) % bossEvery == 0) BossRoom();
-            else map.NextRoom(MapRoom.RandomSize());
+            else map.NextRoom(ProceduralMapRoom.RandomSize());
 
             ClearDebris();
         }
@@ -205,10 +206,15 @@ namespace Scripts.OOP.Game_Modes.Rogue
         public override void OnLoaded()
         {
             base.OnLoaded();
-            map.QueuRoom(80);
+            map.QueuRoom<CaveRoom>(80);
             map.loading.hasCenter = false;
 
             SpawnPlayer();
+        }
+
+        protected override void OnMapStarted()
+        {
+            map.QueuRoom<CaveRoom>(80);
         }
 
         protected override void OnReady()
@@ -234,7 +240,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
                 Camera.main, map.mainCanvas.transform);
 
             player.transform.position = map.current.CharacterPosition(new Vector2Int
-                (MapRoom.spacing + (MapRoom.borderWidth * 2) - 1, map.width / 4));
+                (ProceduralMapRoom.spacing + (ProceduralMapRoom.borderWidth * 2) - 1, map.current.Width / 4));
             shop.player = player;
             AddMember(0, player);
         }
@@ -247,7 +253,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
             if (isBoss) { 
                 if (!SpawnBoss(1, coords, level)) return;
             }
-            else SpawnRandom(1, coords, level);
+            else SpawnEnemy(GetRandomEnemy(), 1, coords, level);
 
             SpawnsLeft--;
             cooldown = 5;

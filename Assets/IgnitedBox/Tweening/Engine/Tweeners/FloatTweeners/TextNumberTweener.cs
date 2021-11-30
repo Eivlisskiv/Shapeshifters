@@ -36,6 +36,13 @@ namespace Tween.Source.Tweeners.FloatTweeners
 
     public class TextIntegerTweener : TextFloatTweener
     {
+        public TextIntegerTweener() { }
+
+        public TextIntegerTweener(Text e, float target, float time,
+            float delay, Func<double, double> easing, Action callback)
+            : base(e, target, time, delay, easing, callback) { }
+
+
         protected override void OnFinish()
             => Element.text = ToText(Target, 0);
 

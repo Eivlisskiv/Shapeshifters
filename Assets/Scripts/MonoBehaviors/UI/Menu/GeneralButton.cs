@@ -41,6 +41,8 @@ public class GeneralButton : MonoBehaviour
     [SerializeField]
     private UnityEvent onPress = new UnityEvent();
 
+
+
     private void Start()
     {
         Button = GetComponent<Button>();

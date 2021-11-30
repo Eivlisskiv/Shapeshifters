@@ -1,4 +1,4 @@
-﻿using Scripts.OOP.Utils;
+﻿using IgnitedBox.UnityUtilities.Vectors;
 using System;
 using UnityEngine;
 

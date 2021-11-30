@@ -40,20 +40,15 @@ namespace Scripts.OOP.Game_Modes
         protected readonly private ResourceCache<GameObject> enemies
             = new ResourceCache<GameObject>("Enemies/");
 
-        protected readonly Dictionary<string, (float rate, string[] names)> enemyTable;
-
         protected ObjectiveHandler Objectives { get; private set; }
 
         public int SavedScore()
             => PlayerPrefs.GetInt(scoreNamePath);
 
-        public AGameMode(MainMenuHandler menu, MapHandler map,
-            Dictionary<string, (float, string[])> enemyTable, params Color[] teamColors)
+        public AGameMode(MainMenuHandler menu, MapHandler map, params Color[] teamColors)
         {
             this.menu = menu;
             this.map = map;
-
-            this.enemyTable = enemyTable;
 
             this.teamColors = teamColors;
             teams = new List<BaseController>[teamColors.Length];
@@ -101,31 +96,13 @@ namespace Scripts.OOP.Game_Modes
             Object.Destroy(gameTransform.gameObject);
         }
 
-        protected EnemyController SpawnRandom(int team, Vector2Int coords, int level)
+        protected EnemyController SpawnEnemy(GameObject instantiated_mob, int team, Vector2Int coords, int level)
         {
-            GameObject mob = GetEnemySpawn();
-            mob.transform.position = map.current.CharacterPosition(coords);
-            var enemy = mob.GetComponent<EnemyController>();
+            instantiated_mob.transform.position = map.current.CharacterPosition(coords);
+            var enemy = instantiated_mob.GetComponent<EnemyController>();
             enemy.Set(level);
             AddMember(team, enemy);
             return enemy;
-        }
-
-        private GameObject GetEnemySpawn()
-        {
-            if (enemyTable != null && enemyTable.Count > 0)
-            {
-                float total = 0;
-                float r = Random.Range(0, 101);
-                foreach (var v in enemyTable)
-                {
-                    total += v.Value.rate;
-                    if (r <= total)
-                        return enemies.Instantiate($"{v.Key}/{Randomf.Element(v.Value.names)}");
-                }
-            }
-
-            return enemies.Instantiate("Regular/Tier1/Regular");
         }
 
         public void AddMember(int team, BaseController controller, bool isExtra = false)
@@ -173,8 +150,7 @@ namespace Scripts.OOP.Game_Modes
                 var team = GetTeam(i);
                 for (int i1 = 0; i1 < team.Count; i1++)
                 {
-                    BaseController m = team[i1];
-                    m.DisableController(value);
+                    team[i1].DisableController(value);
                 }
             }
         }
@@ -185,9 +161,11 @@ namespace Scripts.OOP.Game_Modes
             team.Remove(member);
         }
 
-        public virtual void StartMap()
+        protected abstract void OnMapStarted();
+
+        public void StartMap()
         {
-            map.enabled = true;
+            OnMapStarted();
             map.StartMap();
         }
 

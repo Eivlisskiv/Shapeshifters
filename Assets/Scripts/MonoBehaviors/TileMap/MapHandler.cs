@@ -1,4 +1,8 @@
 ﻿using Scripts.OOP.Game_Modes;
+using Scripts.OOP.Game_Modes.Story;
+using Scripts.OOP.TileMaps;
+using Scripts.OOP.TileMaps.Procedural;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -13,10 +17,10 @@ public class MapHandler : MonoBehaviour
 
     public TileBase[] tilesets;
 
-    public int width;
+    //public int width;
     public bool spawnMobs;
 
-    List<RoomHandler> rooms;
+    readonly List<RoomHandler> rooms = new List<RoomHandler>();
 
     internal RoomHandler previous;
     internal RoomHandler current;
@@ -24,10 +28,13 @@ public class MapHandler : MonoBehaviour
 
     public void StartMap()
     {
-        rooms = new List<RoomHandler>();
-        int height = width / 2;
-        GenerateRoom(width, height, null);
-        AlignCamera(0.68f * width);
+        if (enabled)
+        {
+            Debug.LogWarning("MapHandler already started");
+            return;
+        }
+        enabled = true;
+        AlignCamera(0.68f * loading.Width);
     }
 
     private void AlignCamera(float size)
@@ -41,7 +48,8 @@ public class MapHandler : MonoBehaviour
         background.localScale = new Vector3(s, s, 1);
     }
 
-    public void QueuRoom(int size)
+    public void QueuRoom<T>(int size)
+        where T : ProceduralMapRoom
     {
         if(loading != null)
         {
@@ -49,8 +57,35 @@ public class MapHandler : MonoBehaviour
             return;
         }
 
-        GenerateRoom(size, size / 2, current);
+        CreateRoom((room) => 
+        {
+            var r = ConstructRoom<T>(new Vector2Int(size, size / 2),
+                current, room.PropsContainer);
+
+            room.SetSettings(r, tilesets[Math.Min
+            (r.TileBaseIndex, tilesets.Length - 1)]);
+        });
     }
+
+    public void QueuRoom(MapPreset preset)
+    {
+        if (loading != null)
+        {
+            Debug.LogWarning($"There is already a queud room");
+            return;
+        }
+
+        CreateRoom((room) =>
+        {
+            var r = new FixedMapRoom(preset, current, room.PropsContainer);
+            room.SetSettings(r, tilesets[Math.Min
+                (r.tileBaseIndex, tilesets.Length - 1)]);
+        });
+    }
+
+    private T ConstructRoom<T>(params object[] args)
+        where T : MapRoom
+        => (T) System.Activator.CreateInstance(typeof(T), args);
 
     public void NextRoom(int size)
     {
@@ -68,16 +103,18 @@ public class MapHandler : MonoBehaviour
         current = loading;
         loading = null;
 
-        QueuRoom(size);
+        QueuRoom<CaveRoom>(size);
     }
 
-    private void GenerateRoom(int width, int height, RoomHandler previous)
+    private void CreateRoom(Action<RoomHandler> settings)
     {
         GameObject robj = Instantiate(roomPrefab);
         robj.transform.parent = transform;
         robj.name = $"Room{rooms.Count}";
         RoomHandler room = robj.GetComponent<RoomHandler>();
-        room.SetSettings(width, height, tilesets[0], previous);
+
+        settings(room);
+
         rooms.Add(room);
         loading = room;
     }

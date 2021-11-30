@@ -1,5 +1,6 @@
 ﻿using IgnitedBox.Entities;
 using IgnitedBox.EventSystem;
+using IgnitedBox.UnityUtilities.Vectors;
 using Scripts.Explosion;
 using Scripts.OOP.Character.Stats;
 using Scripts.OOP.Game_Modes;
@@ -7,7 +8,6 @@ using Scripts.OOP.Perks;
 using Scripts.OOP.Perks.Character.Triggers;
 using Scripts.OOP.Perks.Weapons;
 using Scripts.OOP.UI.StatsBar;
-using Scripts.OOP.Utils;
 using System;
 using UnityEngine;
 

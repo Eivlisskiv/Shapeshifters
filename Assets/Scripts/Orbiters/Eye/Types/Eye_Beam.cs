@@ -1,6 +1,7 @@
 ﻿using Assets.IgnitedBox.UnityUtilities;
 using IgnitedBox.Tweening.TweenPresets;
 using IgnitedBox.UnityUtilities;
+using IgnitedBox.UnityUtilities.Vectors;
 using Scripts.OOP.EnemyBehaviors.Targetting;
 using Scripts.OOP.Utils;
 using UnityEngine;

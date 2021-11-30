@@ -1,8 +1,8 @@
 ﻿using IgnitedBox.Tweening;
 using IgnitedBox.Tweening.Tweeners.ColorTweeners;
 using IgnitedBox.Tweening.Tweeners.VectorTweeners;
+using IgnitedBox.UnityUtilities.Vectors;
 using Scripts.OOP.UI;
-using Scripts.OOP.Utils;
 using System;
 using UnityEngine;
 

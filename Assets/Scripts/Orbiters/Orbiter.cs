@@ -111,7 +111,10 @@ namespace Scripts.Orbiters
         }
 
         public override bool ModifyHealth(float mod)
-            => (health += mod) <= 0;
+        {
+            if (mod < 0) Target = null;
+            return (health += mod) <= 0;
+        }
 
         public bool Trigger(ProjectileHandler projectile)
         {

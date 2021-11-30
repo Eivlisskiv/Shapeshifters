@@ -1,4 +1,5 @@
 ﻿using IgnitedBox.UnityUtilities;
+using IgnitedBox.UnityUtilities.Vectors;
 using Scripts.OOP.Utils;
 using UnityEngine;
 

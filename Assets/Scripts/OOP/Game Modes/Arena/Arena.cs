@@ -1,5 +1,6 @@
 ﻿using Scripts.OOP.Perks;
 using Scripts.OOP.TileMaps;
+using Scripts.OOP.TileMaps.Procedural;
 using Scripts.OOP.UI;
 using Scripts.OOP.Utils;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using UnityEngine.UI;
 
 namespace Scripts.OOP.Game_Modes.Arena
 {
-    public class Arena : AGameMode, IControllerLevelUp, IElimination
+    public class Arena : ArcadeMode, IControllerLevelUp, IElimination
     {
         private bool spawns = false;
         private float spawnCooldown;
@@ -78,6 +79,11 @@ namespace Scripts.OOP.Game_Modes.Arena
                 killer.perks.Add(victim.perks.RandomDrop(), killer is PlayerController player ? player.UI : null);
         }
 
+        protected override void OnMapStarted()
+        {
+            map.QueuRoom<CaveRoom>(80);
+        }
+
         public override void OnLoaded()
         {
             base.OnLoaded();
@@ -107,7 +113,7 @@ namespace Scripts.OOP.Game_Modes.Arena
                 Camera.main, map.mainCanvas.transform);
 
             player.transform.position = map.current.CharacterPosition(new Vector2Int
-                (MapRoom.spacing + (MapRoom.borderWidth * 2) - 1, map.width / 4));
+                (ProceduralMapRoom.spacing + (ProceduralMapRoom.borderWidth * 2) - 1, map.current.Width / 4));
 
             AddMember(0, player);
         }
@@ -115,7 +121,7 @@ namespace Scripts.OOP.Game_Modes.Arena
         private void SpawnEnemy()
         {
             if (CheckEnemySpawns(out Vector2Int coords))
-                SpawnRandom(1, coords, level);
+                SpawnEnemy(GetRandomEnemy(), 1, coords, level);
         }
 
         private bool CheckEnemySpawns(out Vector2Int pos)

@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using IgnitedBox.Tweening.Tweeners.VectorTweeners;
 using IgnitedBox.Tweening;
+using Scripts.MonoBehaviors.UI.Menu;
 
 public class MainMenuHandler : MonoBehaviour
 {
@@ -24,10 +25,8 @@ public class MainMenuHandler : MonoBehaviour
     public GameObject container;
     public MapHandler map;
 
-    public RectTransform perkList;
     public GameObject perkDescPrefab;
 
-    public RectTransform gameModeContainer;
     public GameObject gameModePrefab;
 
     public GameObject instructions;
@@ -54,14 +53,6 @@ public class MainMenuHandler : MonoBehaviour
         containerRect = container.GetComponent<RectTransform>();
 
         instance = this;
-
-        perks = new UIPerksList(perkList, perkDescPrefab);
-        perks.LoadPerks((perk, title, desc) =>
-        {
-            perk.LevelUp();
-            title.text = $"{perk.Name} lvl {perk.Level}";
-            desc.text = perk.Description;
-        });
     }
 
     // Update is called once per frame
@@ -123,21 +114,22 @@ public class MainMenuHandler : MonoBehaviour
     public void OnClick_TabButton(RectTransform tab)
         => SwitchTab(tab);
 
-    public void OnClick_Arcade(GeneralButton button)
+    public void OnClick_Arcade(TabButton button)
     {
         if (!arcade) arcade = button;
-        if(modes == null)
+        if (!button.tab) return;
+        if (modes == null)
         {
             modes = new GameModeUI[GameModes.modes.Count];
             int i = 0;
             foreach(var mode in GameModes.modes)
             {
                 modes[i] = new GameModeUI(mode.Key, mode.Value,
-                    Instantiate(gameModePrefab, gameModeContainer), this);
+                    Instantiate(gameModePrefab, button.tab), this);
                 i++;
             }
         }
-        SwitchTab(gameModeContainer);
+        SwitchTab(button.tab);
     }
     
     public void StartGame(Type mode, string description)
@@ -152,6 +144,29 @@ public class MainMenuHandler : MonoBehaviour
         SwitchTab(null);
 
         SetStartButton(false);
+    }
+
+    public void OnClick_Story(TabButton button)
+    {
+        if (!story) story = button;
+        if (button.tab) SwitchTab(button.tab);
+    }
+
+    public void OnClick_Perks(RectTransform tab)
+    {
+        RectTransform c = tab.GetChild(0)
+            .GetChild(0).GetChild(0)
+            .GetComponent<RectTransform>();
+
+        perks = new UIPerksList(c, perkDescPrefab);
+        perks.LoadPerks((perk, title, desc) =>
+        {
+            perk.LevelUp();
+            title.text = $"{perk.Name} lvl {perk.Level}";
+            desc.text = perk.Description;
+        });
+
+        SwitchTab(tab);
     }
 
     public void SetStartButton(bool active)

@@ -1,5 +1,5 @@
-﻿using Scripts.OOP.ShapeController;
-using Scripts.OOP.Utils;
+﻿using IgnitedBox.UnityUtilities.Vectors;
+using Scripts.OOP.ShapeController;
 using System;
 using System.Collections.Generic;
 using UnityEngine;

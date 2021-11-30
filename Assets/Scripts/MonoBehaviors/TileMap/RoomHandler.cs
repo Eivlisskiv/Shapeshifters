@@ -5,17 +5,18 @@ using UnityEngine.Tilemaps;
 public class RoomHandler : MonoBehaviour
 {
     public Vector2Int StartV => current.Start;
+
     public bool hasCenter = true;
     int tilesPerFrame = 5;
 
     TileBase tile;
 
-    public int Width { get; private set; }
-    public int Height { get; private set; }
+    public int Width => current.Size.x;
+    public int Height => current.Size.y;
+
+    public Transform PropsContainer { get; private set; }
 
     Tilemap map;
-
-    Vector2Int lastEnd = Vector2Int.zero;
 
     MapRoom current;
 
@@ -23,36 +24,23 @@ public class RoomHandler : MonoBehaviour
     { get => loaded; }
     bool loaded = false;
 
-    private bool entrance;
-
-    private Transform gate;
-
-    public void SetSettings(int w, int h, TileBase tile, RoomHandler prev)
+    public void SetSettings(MapRoom room, TileBase tile)
     {
-        Width = w;
-        Height = h;
         this.tile = tile;
-        entrance = prev;
-        if (prev)
-        {
-            var lastSize = prev.current.Size;
-            var lastPosition = prev.transform.localPosition;
-            lastEnd = new Vector2Int(
-                Mathf.RoundToInt(lastPosition.x + lastSize.x),
-                Mathf.RoundToInt(lastPosition.y + ((prev.Height - Height) / 2)));
-        }
-
+        current = room;
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        PropsContainer = new GameObject().transform;
+        PropsContainer.SetParent(transform);
+        PropsContainer.name = "PropsContainer";
+
         map = GetComponent<Tilemap>();
         transform.localScale = new Vector3(1, 1, 0);
         map.ClearAllTiles();
-
-        current = new CaveRoom(lastEnd, new Vector2Int(Width, Height), entrance);
-        map.transform.localPosition = new Vector3(current.Start.x, current.Start.y, 0);
+        map.transform.localPosition = new Vector3(StartV.x, StartV.y, 0);
     }
 
     void Update()

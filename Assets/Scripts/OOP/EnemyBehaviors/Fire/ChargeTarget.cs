@@ -1,4 +1,5 @@
-﻿using Scripts.OOP.Utils;
+﻿using IgnitedBox.UnityUtilities.Vectors;
+using Scripts.OOP.Utils;
 using UnityEngine;
 
 namespace Scripts.OOP.EnemyBehaviors.Fire
