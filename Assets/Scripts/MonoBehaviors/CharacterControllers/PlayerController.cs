@@ -57,7 +57,7 @@ public class PlayerController : BaseController
         if (Input.GetKeyDown(KeyCode.M))
         {
             var perk = new Mine_Drop();
-            perk.LevelUp(25);
+            perk.LevelUp(1);
             perks.Add(perk, UI);
         }
 

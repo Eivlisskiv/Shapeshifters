@@ -238,7 +238,7 @@ public abstract class BaseController : HealthEntity,
 
         if (effect.Teammate(Team)) return true;
 
-        ModifyHealth(effect.GetDamage());
+        ModifyHealth(-effect.GetDamage());
 
         return true;
     }
@@ -254,7 +254,7 @@ public abstract class BaseController : HealthEntity,
         Vector2 pos = transform.position;
         int y = pos.y > hit.y ? -1 : 1;
         float angle = Vector2.Angle(Vector2.left, pos - hit) * y;
-        if (push > 2) Body.AddForce(angle, magnitude, push);
+        /*if (push > 2)*/ Body.AddForce(angle, magnitude, push);
     }
 
     public void TakeDamage(float damage, BaseController attacker, Vector2? direction)

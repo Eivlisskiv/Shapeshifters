@@ -17,7 +17,7 @@ namespace Scripts.Explosion
             private Vector3 Position => handler.transform.position; 
 
             public float GetDamage()
-                => handler.damage* (1 - handler.Progress) * multiplier;
+                => handler.damage * (1 - handler.Progress) * multiplier;
 
             public (Vector3, float, float) GetHit(Vector3 target_position)
             {
@@ -62,7 +62,7 @@ namespace Scripts.Explosion
             get => _intensity;
             set
             {
-                _intensity = value/10;
+                _intensity = value;
                 SetIntensity();
             }
         }

@@ -71,7 +71,7 @@ namespace Scripts.OOP.EnemyBehaviors
                 return;
             }
 
-            int level = self.Level / perks.Length;
+            int level = Math.Max(self.Level / perks.Length, 1);
             int charge = self.Level;
 
             for (int i = 0; i < perks.Length; i++)

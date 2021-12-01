@@ -16,7 +16,7 @@ namespace Scripts.OOP.Perks.Weapons
             Graphs.LimitedGrowthExponent(Intensity, 50, 0.99f, 10);
 
         private float Force =>
-            Graphs.LimitedGrowthExponent(Intensity, 25, 0.99f);
+            Graphs.LimitedGrowthExponent(Intensity, 25, 0.99f, 5);
 
         protected override string GetDescription()
             => $"Has a ({Mathf.Floor(SpawnChance)}%) chance to drop a mine when firing. " +
