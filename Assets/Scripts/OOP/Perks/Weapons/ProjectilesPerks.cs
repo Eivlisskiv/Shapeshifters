@@ -9,6 +9,8 @@ namespace Scripts.OOP.Perks.Weapons
 {
     class Mine_Drop : EmitterPerk, IWeaponFire
     {
+        const int base_force = 20;
+
         protected override int ToBuffCharge => 1;
         protected override string RessourcePath => "Projectiles/Landmine";
 
@@ -16,7 +18,7 @@ namespace Scripts.OOP.Perks.Weapons
             Graphs.LimitedGrowthExponent(Intensity, 50, 0.99f, 10);
 
         private float Force =>
-            Graphs.LimitedGrowthExponent(Intensity, 25, 0.99f, 5);
+            Graphs.LimitedGrowthExponent(Intensity, 25 + base_force, 0.99f, base_force);
 
         protected override string GetDescription()
             => $"Has a ({Mathf.Floor(SpawnChance)}%) chance to drop a mine when firing. " +
@@ -32,11 +34,11 @@ namespace Scripts.OOP.Perks.Weapons
                 landmine.BodyCollider.isTrigger = true;
                 var scale = landmine.transform.localScale;
                 landmine.transform.localScale = Vector3.zero;
+                BaseController controller = weapon.GetComponent<BaseController>();
                 landmine.transform.Tween<Transform, Vector3, ScaleTween>
                     (scale, 0.5f, 0.2f, callback: () => 
                     {
-                        landmine.Activate(Intensity * 2, Force, 
-                            weapon.GetComponent<BaseController>());
+                        landmine.Activate(Intensity * 2, Force, controller);
                         landmine.BodyCollider.isTrigger = false;
                     });
                 return true;

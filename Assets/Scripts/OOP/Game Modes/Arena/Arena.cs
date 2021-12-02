@@ -3,14 +3,15 @@ using Scripts.OOP.TileMaps;
 using Scripts.OOP.TileMaps.Procedural;
 using Scripts.OOP.UI;
 using Scripts.OOP.Utils;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using IgnitedBox.Random.DropTables;
+using IgnitedBox.Random.DropTables.CategorizedTable;
 
 namespace Scripts.OOP.Game_Modes.Arena
 {
-    public class Arena : ArcadeMode, IControllerLevelUp, IElimination
+    public class Arena : ArcadeMode<ExpTable<PathTable>>, IControllerLevelUp, IElimination
     {
         private bool spawns = false;
         private float spawnCooldown;
@@ -23,10 +24,9 @@ namespace Scripts.OOP.Game_Modes.Arena
         private int switchWeapon;
 
         public Arena(MainMenuHandler menu, MapHandler map) 
-            : base(menu, map, new Dictionary<string, (float, string[])>() {
-                { "Regular/Tier1", (60, new[]{ "Regular", "Bomber", "Tank", "Sniper", }) },
-                { "Regular/Tier2", (40, new[]{"Gunner", "Pirate", "Flamer" }) }
-            }, Color.green, Color.red)
+            : base(menu, map, new ExpTable<PathTable>(1.01, 
+                new PathTable("Regular/Tier1/", "Regular")
+                ), Color.green, Color.red)
         {
             spawnCooldown = 5;
             level = 1;
@@ -146,7 +146,7 @@ namespace Scripts.OOP.Game_Modes.Arena
                 controller.stats.MaxHealthPoints(controller.Level);
 
                 level = player.Level;
-                score = player.Level;
+                Score = player.Level;
 
                 if (player.Level == 1 || player.Level % 5 == 0)
                 {
@@ -154,6 +154,13 @@ namespace Scripts.OOP.Game_Modes.Arena
                     player.perks.Add(perk, player.UI);
                 }
             }
+        }
+
+        protected override void AddSpawns(string category, params string[] names)
+        {
+            int sub = spawnTable.FindIndex(t => t.Name == category);
+            if (sub < 0) spawnTable.Add(new PathTable(category, names));
+            else spawnTable[sub].AddRange(names);
         }
     }
 }

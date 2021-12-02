@@ -58,7 +58,8 @@ public class MainMenuHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (action == MenuAction.None) return;
+        if (action == MenuAction.None  || action == MenuAction.Loading 
+            || cooldown == 0) return;
 
         cooldown = Math.Max(0, cooldown - Time.deltaTime);
         if (cooldown == 0) 
@@ -117,6 +118,13 @@ public class MainMenuHandler : MonoBehaviour
     public void OnClick_Arcade(TabButton button)
     {
         if (!arcade) arcade = button;
+
+        if (action == MenuAction.Loading)
+        {
+            SetStartButton(false);
+            return;
+        }
+
         if (!button.tab) return;
         if (modes == null)
         {
@@ -149,6 +157,13 @@ public class MainMenuHandler : MonoBehaviour
     public void OnClick_Story(TabButton button)
     {
         if (!story) story = button;
+
+        if (action == MenuAction.Loading)
+        {
+            SetStartButton(false);
+            return;
+        }
+
         if (button.tab) SwitchTab(button.tab);
     }
 

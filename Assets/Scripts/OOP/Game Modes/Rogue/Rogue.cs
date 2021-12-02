@@ -1,14 +1,15 @@
-﻿using Scripts.OOP.TileMaps;
+﻿using IgnitedBox.Random.DropTables;
+using IgnitedBox.Random.DropTables.CategorizedTable;
+using Scripts.OOP.TileMaps;
 using Scripts.OOP.TileMaps.Procedural;
 using Scripts.OOP.UI;
 using Scripts.OOP.Utils;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Scripts.OOP.Game_Modes.Rogue
 {
-    public class Rogue : ArcadeMode, IRogueMenu, IControllerLevelUp
+    public class Rogue : ArcadeMode<ExpTable<PathTable>>, IRogueMenu, IControllerLevelUp
     {
         public int points;
         private enum Stage { Waves, Pausing, Menu, Resuming, PassGate }
@@ -44,14 +45,12 @@ namespace Scripts.OOP.Game_Modes.Rogue
         private readonly GameObject cratePrefab;
         private readonly ShopHandler shop;
         private readonly ResourceCache<GameObject> Bosses;
-        private readonly string[] bossesPaths;
+        private readonly DropTable<string> bossesPaths;
 
         public Rogue(MainMenuHandler menu, MapHandler map)
-            : base(menu, map, new Dictionary<string, (float, string[])>() {
-                { "Regular/Tier1", (50, new[]{ "Regular", "Bomber", "Tank", "Sniper", }) },
-                { "Regular/Tier2", (30, new[]{"Gunner", "Pirate", "Flamer" }) },
-                { "Special", (20, new[]{ "Eye Holder", }) }
-            }, Color.green, Color.red)
+            : base(menu, map, new ExpTable<PathTable>(1.01,
+                new PathTable("Regular/Tier1/", "Regular")
+                ), Color.green, Color.red)
         {
             cooldown = 5;
             level = 1;
@@ -64,9 +63,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
             Bosses = new ResourceCache<GameObject>("Enemies/Boss/");
             bossesPaths = new string[]
-            {
-                "Pyramid", "Number Four"
-            };
+            { "Pyramid", "Number Four" };
         }
 
         public override void OnUpdate()
@@ -121,7 +118,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
         private void FinishWave()
         {
-            score++;
+            Score++;
             if (!map.loading.Loaded) map.loading.SetTilesPerFrame(50);
             stage = Stage.Pausing;
             PauseHandler.SetControl(false);
@@ -187,11 +184,11 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
             const int bossEvery = 5;
 
-            isBoss = (score + 3) % bossEvery == 0;
+            isBoss = (Score + 3) % bossEvery == 0;
             SpawnsLeft = isBoss ? 1 :
                 5 + (level * 2);
 
-            if ((score + 4) % bossEvery == 0) BossRoom();
+            if ((Score + 4) % bossEvery == 0) BossRoom();
             else map.NextRoom(ProceduralMapRoom.RandomSize());
 
             ClearDebris();
@@ -284,7 +281,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
         private EnemyController SpawnBoss(int team, Vector2Int pos, int level)
         {
-            string bossName = bossesPaths.RandomElement();
+            string bossName = bossesPaths.DropOne(out _);
 
             if(!Bosses.TryGetPrefab(bossName, out GameObject bossObject)) return null;
 
@@ -360,8 +357,17 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
         public void ControllerLevelUp(BaseController controller)
         {
-            if(controller is PlayerController)
+            if (controller is PlayerController)
+            {
                 controller.stats.MaxHealthPoints(controller.Level);
+            }
+        }
+
+        protected override void AddSpawns(string category, params string[] names)
+        {
+            int sub = spawnTable.FindIndex(t => t.Name == category);
+            if (sub < 0) spawnTable.Add(new PathTable(category, names));
+            else spawnTable[sub].AddRange(names);
         }
     }
 }

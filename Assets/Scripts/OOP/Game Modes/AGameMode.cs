@@ -24,8 +24,16 @@ namespace Scripts.OOP.Game_Modes
         protected bool Loaded { get => loaded; }
         private bool loaded;
         
-        public int Score { get => score; }
-        protected int score;
+        public int Score 
+        {
+            get => score; 
+            protected set
+            {
+                score = value;
+                ScoreChanged();
+            }
+        }
+        private int score;
 
         protected MapHandler map;
         private readonly MainMenuHandler menu;
@@ -123,6 +131,8 @@ namespace Scripts.OOP.Game_Modes
         }
 
         protected virtual void ExtraMemberAdded(int team, BaseController controller) { }
+
+        protected virtual void ScoreChanged() { }
 
         public List<BaseController> GetTeam(int team) 
             => teams[team];
