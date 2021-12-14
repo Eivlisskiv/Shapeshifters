@@ -1,9 +1,12 @@
-﻿using Scripts.OOP.TileMaps;
+﻿using Scripts.OOP.Game_Modes;
+using Scripts.OOP.TileMaps;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class RoomHandler : MonoBehaviour
 {
+    public BoxCollider2D bounds;
+
     public Vector2Int StartV => current.Start;
 
     public bool hasCenter = true;
@@ -28,6 +31,11 @@ public class RoomHandler : MonoBehaviour
     {
         this.tile = tile;
         current = room;
+        if (bounds)
+        {
+            bounds.offset = new Vector2(Width/2 + 0.5f, Height/2 + 0.5f);
+            bounds.size = new Vector2(Width - 2, Height - 2);
+        }
     }
 
     // Start is called before the first frame update
@@ -57,6 +65,8 @@ public class RoomHandler : MonoBehaviour
             if (collider) collider.enabled = true;
 
             loaded = true;
+
+            current.LoadFinished();
         }
     }
 

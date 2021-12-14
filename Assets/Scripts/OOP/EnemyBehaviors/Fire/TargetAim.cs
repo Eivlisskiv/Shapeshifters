@@ -7,7 +7,11 @@ namespace Scripts.OOP.EnemyBehaviors.Fire
 {
     public class TargetAim : IFireBehavior
     {
+#if UNITY_EDITOR
+        const bool SHOW_LINE = false;
+
         private LineRenderer aim;
+#endif
 
         public bool Fire(EnemyController self, out float angle)
         {
@@ -35,13 +39,18 @@ namespace Scripts.OOP.EnemyBehaviors.Fire
             Vector2 origin = pos + (direction.normalized
                 * (self.Body.Radius + 0.1f));
 
-            if (false && Debug.isDebugBuild)
+            RaycastHit2D hit = Physics2D.Raycast(origin, direction);
+
+#if UNITY_EDITOR
+#pragma warning disable CS0162 // Unreachable code detected
+            if (SHOW_LINE)
             {
                 if (!aim) CreateLine(self);
-                SetLine(origin, origin + direction);
+                SetLine(origin, hit.point);
             }
+#pragma warning restore CS0162 // Unreachable code detected
+#endif
 
-            RaycastHit2D hit = Physics2D.Raycast(origin, direction);
             if (hit && hit.transform == self.target.transform)
             {
                 angle = Vectors2.TrueAngle(Vector2.right, pos - vt);
@@ -52,9 +61,11 @@ namespace Scripts.OOP.EnemyBehaviors.Fire
             return false;
         }
 
+#if UNITY_EDITOR
         private void CreateLine(EnemyController self)
         {
             aim = Components.CreateGameObject<LineRenderer>("Aim", self.transform);
+            aim.widthMultiplier = 0.5f;
         }
 
         private void SetLine(Vector2 origin, Vector2 to)
@@ -63,5 +74,6 @@ namespace Scripts.OOP.EnemyBehaviors.Fire
 
             aim.SetPositions(new Vector3[] { origin, to });
         }
+#endif
     }
 }

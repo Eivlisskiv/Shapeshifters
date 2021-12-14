@@ -1,13 +1,13 @@
 ﻿using Scripts.OOP.Perks;
 using Scripts.OOP.TileMaps;
 using Scripts.OOP.TileMaps.Procedural;
-using Scripts.OOP.UI;
 using Scripts.OOP.Utils;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using IgnitedBox.Random.DropTables;
 using IgnitedBox.Random.DropTables.CategorizedTable;
+using Scripts.UI.InGame.Objectives;
 
 namespace Scripts.OOP.Game_Modes.Arena
 {

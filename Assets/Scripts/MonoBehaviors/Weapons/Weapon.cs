@@ -126,11 +126,14 @@ public class Weapon : MonoBehaviour
     }
 
     protected virtual void OnProjectileHit(
-        ProjectileHandler projectile, Collider2D collision)
+        ProjectileHandler projectile, Collider2D collider)
     {
-        if (projectile.IsSameSender(collision.gameObject)) return;
+        if (collider)
+        {
+            if (projectile.IsSameSender(collider.gameObject)) return;
 
-        collision.gameObject.TriggerEntity(projectile, out _);
+            collider.gameObject.TriggerEntity(projectile, out _);
+        }
 
         projectile.ToDestroy();
     }

@@ -5,6 +5,8 @@ namespace IgnitedBox.Random.DropTables
 {
     public class ExpTable<T> : DropTable<T>
     {
+        //https://www.desmos.com/calculator/co810wj86t
+
         const int width = 100;
 
         public double RateDistribution
@@ -12,8 +14,7 @@ namespace IgnitedBox.Random.DropTables
             get => _curve;
             set
             {
-                _curve = 
-                    Math.Max(1.000001, value);
+                _curve =  value;
             }
         }
 
@@ -37,6 +38,7 @@ namespace IgnitedBox.Random.DropTables
         private protected override int DropIndex()
         {
             if (Count == 0) return -1;
+            if (_curve <= 1) return RandomInt(Count);
 
             double x = RandomDouble(width);
 
@@ -59,6 +61,8 @@ namespace IgnitedBox.Random.DropTables
 
         private double GetRate(int y)
         {
+            if (_curve <= 1) return 1.00 / Count;
+
             double a = y * (Math.Pow(_curve, width) - 1);
             a = Math.Log((a + Count) / Count);
             return (a / Math.Log(_curve));

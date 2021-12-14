@@ -238,7 +238,12 @@ public abstract class BaseController : HealthEntity,
 
         if (effect.Teammate(Team)) return true;
 
-        ModifyHealth(-effect.GetDamage());
+        float damage = effect.GetDamage();
+
+        perks.Activate<IReceiveDamage>(1,
+                perk => perk.OnHit(this, hit, ref damage));
+
+        ModifyHealth(-damage);
 
         return true;
     }

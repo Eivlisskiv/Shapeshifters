@@ -5,17 +5,17 @@ using System;
 namespace Scripts.OOP.Game_Modes.Story
 {
     [Serializable]
-    public struct StoryLevel
+    public class StoryLevel
     {
-        public int chapter;
-        public int act;
-        public SerializableVector2Int playerSpawn;
-        public int tileBase;
+        public string name;
+        public SerializableInt2 playerSpawn;
         public MapPreset[] maps;
+        public ObjectiveData[] main;
+        //public ObjectiveData[] secondary; Seconday will have conditions?
     }
 
     [Serializable]
-    public struct MapPreset
+    public class MapPreset
     {
         public int tileBaseIndex;
         public MapTileType[,] tiles;
@@ -27,6 +27,15 @@ namespace Scripts.OOP.Game_Modes.Story
     {
         public string id;
         public string prefabPath;
-        public SerializableVector2 position;
+        public SerializableFloat2 position;
+    }
+
+    [Serializable]
+    public struct ObjectiveData
+    {
+        public string id;
+        public SerializableFloat4 color;
+        public SerializableFloat2? track;
+        public object[] parameters;
     }
 }

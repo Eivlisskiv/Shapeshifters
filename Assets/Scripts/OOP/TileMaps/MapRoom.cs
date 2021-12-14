@@ -48,6 +48,8 @@ namespace Scripts.OOP.TileMaps
 
         public abstract void Initialize();
 
+        public abstract void LoadFinished();
+
         public abstract bool DrawOne(Tilemap map, TileBase tilebase, bool center, out MapTileType tile);
 
         protected bool HandleTileDraw(Tilemap map, TileBase tilebase, MapTileType tile)

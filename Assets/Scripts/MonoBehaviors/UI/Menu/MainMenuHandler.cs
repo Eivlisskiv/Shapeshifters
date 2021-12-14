@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using IgnitedBox.Tweening.Tweeners.VectorTweeners;
 using IgnitedBox.Tweening;
 using Scripts.MonoBehaviors.UI.Menu;
+using Scripts.UI.InGame.Objectives;
 
 public class MainMenuHandler : MonoBehaviour
 {

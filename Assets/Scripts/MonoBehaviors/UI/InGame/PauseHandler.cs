@@ -1,5 +1,6 @@
 ﻿using IgnitedBox.Tweening;
 using IgnitedBox.Tweening.Tweeners.VectorTweeners;
+using Scripts.OOP.Game_Modes;
 using Scripts.OOP.Utils;
 using UnityEngine;
 using UnityEngine.UI;
@@ -75,6 +76,8 @@ public class PauseHandler : MonoBehaviour
             TimeHandler.Instance.Resume();
             ToPause();
         }
+
+        GameModes.GameMode?.PauseControllers(paused);
 
         grey.enabled = paused;
         text.enabled = paused;

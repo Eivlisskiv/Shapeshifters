@@ -1,6 +1,7 @@
 ﻿using IgnitedBox.Tweening;
 using IgnitedBox.Tweening.Tweeners.VectorTweeners;
 using Scripts.OOP.Utils;
+using Scripts.UI.InGame.Objectives;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -134,6 +135,9 @@ namespace Scripts.OOP.Game_Modes
 
         protected virtual void ScoreChanged() { }
 
+        public virtual void MapEntered(RoomHandler room, Collider2D subject) { }
+        public virtual void MapExited(RoomHandler room, Collider2D subject) { }
+
         public List<BaseController> GetTeam(int team) 
             => teams[team];
 
@@ -152,7 +156,7 @@ namespace Scripts.OOP.Game_Modes
             return enemies;
         }
 
-        protected void PauseControllers(bool value)
+        public void PauseControllers(bool value)
         {
             int teamCount = TeamCount;
             for (int i = 0; i < teamCount; i++)

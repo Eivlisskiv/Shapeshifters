@@ -35,11 +35,12 @@ public class Cannon : Weapon
     }
 
     protected override void OnProjectileHit
-        (ProjectileHandler projectile, Collider2D collision)
+        (ProjectileHandler projectile, Collider2D collider)
     {
-        if (projectile.IsSameSender(collision.gameObject)) return;
+        if (!collider) return;
+        if (projectile.IsSameSender(collider.gameObject)) return;
 
-        ITargetEntity<ProjectileHandler> entity = collision.gameObject
+        ITargetEntity<ProjectileHandler> entity = collider.gameObject
             .GetComponent<ITargetEntity<ProjectileHandler>>();
 
         if (entity == null) return;

@@ -1,6 +1,5 @@
 ﻿using IgnitedBox.Entities;
 using Scripts.OOP.Audio;
-using Scripts.OOP.Stats;
 using UnityEngine;
 
 class FlameThrower : BurstWeapon
@@ -22,11 +21,13 @@ class FlameThrower : BurstWeapon
         totalShots = 3;
     }
 
-    protected override void OnProjectileHit(ProjectileHandler projectile, Collider2D collision)
+    protected override void OnProjectileHit(ProjectileHandler projectile, Collider2D collider)
     {
-        if (projectile.IsSameSender(collision.gameObject)) return;
+        if (!collider) return;
 
-        collision.gameObject.TriggerEntity(projectile, out _);
+        if (projectile.IsSameSender(collider.gameObject)) return;
+
+        collider.gameObject.TriggerEntity(projectile, out _);
     }
 
     protected override AudioEntity[] GetFireClips()

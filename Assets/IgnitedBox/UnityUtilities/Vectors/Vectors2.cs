@@ -26,17 +26,17 @@ namespace IgnitedBox.UnityUtilities.Vectors
     }
 
     [System.Serializable]
-    public struct SerializableVector2
+    public struct SerializableFloat2
     {
-        public static implicit operator Vector2(SerializableVector2 v)
+        public static implicit operator Vector2(SerializableFloat2 v)
             => new Vector2(v.x, v.y);
-        public static implicit operator SerializableVector2(Vector2 v)
-            => new SerializableVector2(v.x, v.y);
+        public static implicit operator SerializableFloat2(Vector2 v)
+            => new SerializableFloat2(v.x, v.y);
 
         public float x;
         public float y;
 
-        public SerializableVector2(float x, float y)
+        public SerializableFloat2(float x, float y)
         {
             this.x = x;
             this.y = y;
@@ -44,17 +44,17 @@ namespace IgnitedBox.UnityUtilities.Vectors
     }
 
     [System.Serializable]
-    public struct SerializableVector2Int
+    public struct SerializableInt2
     {
-        public static implicit operator Vector2Int(SerializableVector2Int v)
+        public static implicit operator Vector2Int(SerializableInt2 v)
             => new Vector2Int(v.x, v.y);
-        public static implicit operator SerializableVector2Int(Vector2Int v)
-            => new SerializableVector2Int(v.x, v.y);
+        public static implicit operator SerializableInt2(Vector2Int v)
+            => new SerializableInt2(v.x, v.y);
 
         public int x;
         public int y;
 
-        public SerializableVector2Int(int x, int y)
+        public SerializableInt2(int x, int y)
         {
             this.x = x;
             this.y = y;

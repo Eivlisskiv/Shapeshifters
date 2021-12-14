@@ -28,5 +28,7 @@ namespace Scripts.OOP.TileMaps.Procedural
             /*else*/
             previousBorder = new Vector2Int(0, size.y);
         }
+
+        public override void LoadFinished() { } 
     }
 }

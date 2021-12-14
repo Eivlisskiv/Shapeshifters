@@ -1,51 +1,18 @@
-﻿using IgnitedBox.EventSystem;
-using IgnitedBox.Tweening;
+﻿using IgnitedBox.Tweening;
 using IgnitedBox.Tweening.EasingFunctions;
 using IgnitedBox.Tweening.Tweeners.VectorTweeners;
+using Scripts.OOP.Game_Modes.Story;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Scripts.OOP.UI
+namespace Scripts.UI.InGame.Objectives
 {
     public class ObjectiveElement
     {
-        public struct ObjectiveTracking
-        {
-            public static implicit operator ObjectiveTracking(Transform t)
-            {
-                return new ObjectiveTracking()
-                {
-                    mobileTarget = t
-                };
-            }
-
-            public static implicit operator ObjectiveTracking(Vector3 t)
-            {
-                return new ObjectiveTracking()
-                {
-                    staticTarget = t
-                };
-            }
-
-            public static implicit operator ObjectiveTracking(Vector2 t)
-            {
-                return new ObjectiveTracking()
-                {
-                    staticTarget = t
-                };
-            }
-
-            public static implicit operator Vector3(ObjectiveTracking ot)
-                => ot.mobileTarget ? ot.mobileTarget.position : ot.staticTarget;
-
-            public static implicit operator Vector2(ObjectiveTracking ot)
-                => ot.mobileTarget ? ot.mobileTarget.position : ot.staticTarget;
-
-            Transform mobileTarget;
-            Vector3 staticTarget;
-        }
+        private static readonly Font font
+             = Resources.Load<Font>("Fonts/ThaleahFat_TTF");
 
         public readonly GameObject element;
         public readonly RectTransform rect;
@@ -57,7 +24,7 @@ namespace Scripts.OOP.UI
             {
                 _track = value;
                 ObjectiveHandler.Instance.Events.Invoke
-                    (ObjectiveHandler.ObjectiveEvents.TrackModified, 
+                    (ObjectiveHandler.EventTypes.TrackModified, 
                     this, _track);
             }
         }
@@ -68,15 +35,17 @@ namespace Scripts.OOP.UI
 
         private readonly Transform container;
 
-        private readonly Font font;
-
-        public ObjectiveElement(GameObject element)
+        public ObjectiveElement(GameObject element, ObjectiveData? data = null)
         {
             this.element = element;
             container = element.transform.GetChild(0);
             rect = element.GetComponent<RectTransform>();
+            if(data.HasValue) Initialize(data.Value);
+        }
 
-            font = Resources.Load<Font>("Fonts/ThaleahFat_TTF");
+        public virtual void Initialize(ObjectiveData data) 
+        {
+            Track = (Vector2)data.track;
         }
 
         public T Get<T>(string name, Action<T> action = null) where T : Graphic

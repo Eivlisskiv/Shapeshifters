@@ -1,30 +1,39 @@
 ﻿using UnityEngine;
 using System;
+using IgnitedBox.Entities;
+using Scripts.Explosion;
 
-public class ProjectileBody : MonoBehaviour
+public class ProjectileBody : MonoBehaviour,
+    ITargetEntity<ProjectileHandler>, ITargetEntity<ExplosionHandler.Effect>
 {
     [NonSerialized]
     public ProjectileHandler handler;
 
     public bool isOnStay = false;
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collider)
     {
         if(isOnStay) return;
 
-        handler.OnCollide(collision);
+        if (collider.isTrigger) return;
+
+        handler.OnCollide(collider);
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collider)
     {
         if (!isOnStay) return;
 
-        handler.OnCollide(collision);
+        if (collider.isTrigger) return;
+
+        handler.OnCollide(collider);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (isOnStay) return;
+
+        if (collision.collider.isTrigger) return;
 
         handler.OnCollide(collision.collider);
     }
@@ -32,6 +41,8 @@ public class ProjectileBody : MonoBehaviour
     private void OnCollisionStay2D(Collision2D collision)
     {
         if (!isOnStay) return;
+
+        if (collision.collider.isTrigger) return;
 
         handler.OnCollide(collision.collider);
     }
@@ -47,5 +58,17 @@ public class ProjectileBody : MonoBehaviour
     {
         T component = GetComponent<T>();
         if (component) Destroy(component);
+    }
+
+    public bool Trigger(ProjectileHandler projectile)
+    {
+        handler.OnCollide(null);
+        return false;
+    }
+
+    public bool Trigger(ExplosionHandler.Effect projectile)
+    {
+        handler.OnCollide(null);
+        return false;
     }
 }

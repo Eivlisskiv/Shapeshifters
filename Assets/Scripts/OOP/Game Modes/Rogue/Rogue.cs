@@ -2,8 +2,9 @@
 using IgnitedBox.Random.DropTables.CategorizedTable;
 using Scripts.OOP.TileMaps;
 using Scripts.OOP.TileMaps.Procedural;
-using Scripts.OOP.UI;
 using Scripts.OOP.Utils;
+using Scripts.UI.InGame.Objectives;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -33,6 +34,8 @@ namespace Scripts.OOP.Game_Modes.Rogue
             }
         }
 
+        private int maxSpawns = 3;
+
         private void UpdateProgress()
         {
             if (progress) progress.text = (GetTeam(1).Count + spawnsLeft).ToString();
@@ -46,6 +49,9 @@ namespace Scripts.OOP.Game_Modes.Rogue
         private readonly ShopHandler shop;
         private readonly ResourceCache<GameObject> Bosses;
         private readonly DropTable<string> bossesPaths;
+
+        private readonly List<PlayerController> playersReady
+            = new List<PlayerController>();
 
         public Rogue(MainMenuHandler menu, MapHandler map)
             : base(menu, map, new ExpTable<PathTable>(1.01,
@@ -85,10 +91,6 @@ namespace Scripts.OOP.Game_Modes.Rogue
                 case Stage.Resuming:
                     if (!TimeHandler.Instance.LerpScale(1, 0.02f)) return;
                     ReachNext(); return;
-
-                case Stage.PassGate:
-                    if (PlayerReady()) NextWave();
-                    return;
             }
 
             if (spawns && SpawnsLeft > 0)
@@ -158,6 +160,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
             });
         }
 
+        /*
         private bool PlayerReady()
         {
             var players = GetTeam(0);
@@ -170,6 +173,34 @@ namespace Scripts.OOP.Game_Modes.Rogue
                     return false;
             }
             return true;
+        }
+        */
+
+        public override void MapEntered(RoomHandler room, Collider2D subject)
+        {
+            //The next map is the one we want to enter
+            if (stage != Stage.PassGate || room != map.loading) return;
+            PlayerController player = subject.gameObject.GetComponent<PlayerController>();
+            if (!player || playersReady.Contains(player)) return;
+
+            if(playersReady.Count + 1 == GetTeam(0).Count)
+            {
+                playersReady.Clear();
+                NextWave();
+                return;
+            }
+
+            playersReady.Add(player);
+        }
+
+        public override void MapExited(RoomHandler room, Collider2D subject)
+        {
+            //The next map is the one we want to enter
+            if (stage != Stage.PassGate || room != map.loading) return;
+            PlayerController player = subject.gameObject.GetComponent<PlayerController>();
+            if (!player) return;
+
+            playersReady.Remove(player);
         }
 
         private void NextWave()
@@ -186,7 +217,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
             isBoss = (Score + 3) % bossEvery == 0;
             SpawnsLeft = isBoss ? 1 :
-                5 + (level * 2);
+                5 + maxSpawns;
 
             if ((Score + 4) % bossEvery == 0) BossRoom();
             else map.NextRoom(ProceduralMapRoom.RandomSize());
@@ -322,10 +353,6 @@ namespace Scripts.OOP.Game_Modes.Rogue
             bar = Object.Instantiate(bar);
             bar.name = $"{boss.Name} Health";
             bar.GetComponent<AspectRatioFitter>().enabled = false;
-            var foreground = bar.transform.Find("Foreground");
-            foreground.GetComponent<Image>().sprite =
-                Resources.Load<Sprite>($"Sprites/Bosses/{boss.Name}/Foreground");
-            foreground.localScale = new Vector3(0.97f, 0.8f, 1);
 
             objective.Add(bar);
 
@@ -335,6 +362,8 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
         private void BossDrop(EnemyController boss)
         {
+            maxSpawns++;
+            points += level;
             Objectives.Remove(objective);
             GameObject crate = Object.Instantiate(cratePrefab);
             crate.transform.position = boss.transform.position;
@@ -345,7 +374,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
         {
             pos = Vector2Int.zero;
             if (map.current == null) return false;
-            if (GetTeam(1).Count < 3)
+            if (GetTeam(1).Count < maxSpawns)
             {
                 MapTileType type = map.current.RandomTile(out pos);
 

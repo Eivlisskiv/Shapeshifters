@@ -51,5 +51,16 @@ namespace Scripts.OOP.TileMaps
             HandleTileDraw(map, tilebase, tile);
             return Next();
         }
+
+        public override void LoadFinished()
+        {
+            ForEachProp(prop => prop.SetActive(true));
+        }
+
+        protected void ForEachProp(System.Action<GameObject> action)
+        {
+            foreach (KeyValuePair<string, GameObject> prop in props)
+                if(prop.Value) action(prop.Value);
+        }
     }
 }
