@@ -8,6 +8,7 @@ namespace Scripts.OOP.Game_Modes.Story
     public class StoryLevel
     {
         public string name;
+        public string description;
         public SerializableInt2 playerSpawn;
         public MapPreset[] maps;
         public ObjectiveData[] main;

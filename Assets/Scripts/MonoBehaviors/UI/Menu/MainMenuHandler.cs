@@ -9,6 +9,7 @@ using IgnitedBox.Tweening.Tweeners.VectorTweeners;
 using IgnitedBox.Tweening;
 using Scripts.MonoBehaviors.UI.Menu;
 using Scripts.UI.InGame.Objectives;
+using Scripts.OOP.Game_Modes.Story.ChapterOne;
 
 public class MainMenuHandler : MonoBehaviour
 {
@@ -165,7 +166,10 @@ public class MainMenuHandler : MonoBehaviour
             return;
         }
 
-        if (button.tab) SwitchTab(button.tab);
+        Episode1 game = new Episode1(this, map);
+        game.StartMap();
+
+        //if (button.tab) SwitchTab(button.tab);
     }
 
     public void OnClick_Perks(RectTransform tab)

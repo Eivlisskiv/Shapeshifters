@@ -12,7 +12,7 @@ namespace Scripts.OOP.TileMaps
             get => start;
         }
 
-        protected Vector2Int size;
+        protected readonly Vector2Int size;
         public Vector2Int Size
         {
             get => size;
@@ -20,7 +20,14 @@ namespace Scripts.OOP.TileMaps
 
         protected Vector2Int current;
 
-        public MapTileType[,] mapContent;
+        protected readonly MapTileType[,] mapContent;
+
+        public MapTileType GetTile(Vector2Int pos)
+            => mapContent[pos.y, pos.x];
+
+        public void SetTile(Vector2Int pos, MapTileType tile)
+            => mapContent[pos.y, pos.x] = tile;
+
         protected List<Vector2Int> gates = new List<Vector2Int>();
 
         protected bool entrance;
@@ -29,7 +36,15 @@ namespace Scripts.OOP.TileMaps
 
         public MapRoom(RoomHandler previous, Vector2Int size, Transform propsContainer)
         {
+            this.size = size;
+            mapContent = new MapTileType[size.y, size.x];
             this.propsContainer = propsContainer;
+
+            Construct(previous);
+        }
+
+        private void Construct(RoomHandler previous)
+        {
             entrance = !!previous;
             current = Vector2Int.zero;
 
@@ -42,8 +57,18 @@ namespace Scripts.OOP.TileMaps
                     Mathf.RoundToInt(lastPosition.y + ((previous.Height - size.y) / 2)));
             }
 
-            this.size = size;
             Initialize();
+        }
+
+        public MapRoom(RoomHandler previous, MapTileType[,] tiles, Transform propsContainer)
+        {
+            mapContent = tiles;
+            size = new Vector2Int(tiles.GetLength(1),
+                                 tiles.GetLength(0));
+
+            this.propsContainer = propsContainer;
+
+            Construct(previous);
         }
 
         public abstract void Initialize();
@@ -71,13 +96,13 @@ namespace Scripts.OOP.TileMaps
 
         public virtual bool Next()
         {
-            if (current.y < size.y)
+            if (current.y < size.y - 1)
             {
                 current.y++;
                 return true;
             }
 
-            if (current.x < size.x)
+            if (current.x < size.x - 1)
             {
                 current.y = 0;
                 current.x++;
@@ -113,13 +138,16 @@ namespace Scripts.OOP.TileMaps
             return next;
         }
 
-        public void OpenGate(bool open, Tilemap map, TileBase tilebase)
+        public Vector2Int OpenGate(bool open, Tilemap map, TileBase tilebase)
         {
+            Vector2Int c = Vector2Int.zero;
             for (int i = 0; i < gates.Count; i++)
             {
-                Vector2Int c = gates[i];
+                c = gates[i];
                 map.SetTile(new Vector3Int(c.x, c.y, 0), open ? null : tilebase);
             }
+
+            return c;
         }
     }
 }

@@ -12,11 +12,9 @@ namespace Scripts.OOP.TileMaps
         protected Dictionary<string, GameObject> props;
 
         public FixedMapRoom(MapPreset preset, RoomHandler previous, Transform propsContainer)
-            : base(previous, new Vector2Int(preset.tiles.GetLength(0),
-                                 preset.tiles.GetLength(1)), propsContainer)
+            : base(previous, preset.tiles, propsContainer)
         {
             tileBaseIndex = preset.tileBaseIndex;
-            mapContent = preset.tiles;
 
             SpawnProps(preset.props);
         }
@@ -24,6 +22,8 @@ namespace Scripts.OOP.TileMaps
         private void SpawnProps(MapProp[] props)
         {
             this.props = new Dictionary<string, GameObject>();
+
+            if (props == null || props.Length == 0) return;
 
             for(int i = 0; i < props.Length; i++)
             {
@@ -47,7 +47,7 @@ namespace Scripts.OOP.TileMaps
 
         public override bool DrawOne(Tilemap map, TileBase tilebase, bool center, out MapTileType tile)
         {
-            tile = mapContent[current.x, current.y];
+            tile = GetTile(current);
             HandleTileDraw(map, tilebase, tile);
             return Next();
         }

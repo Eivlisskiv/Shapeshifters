@@ -33,8 +33,8 @@ public class RoomHandler : MonoBehaviour
         current = room;
         if (bounds)
         {
-            bounds.offset = new Vector2(Width/2 + 0.5f, Height/2 + 0.5f);
-            bounds.size = new Vector2(Width - 2, Height - 2);
+            bounds.transform.position = new Vector2(Width/2f, Height/2f);
+            bounds.size = new Vector2((Width - 2) * 0.9f, (Height - 2) * 0.9f);
         }
     }
 
@@ -73,21 +73,20 @@ public class RoomHandler : MonoBehaviour
     public void SetTilesPerFrame(int tpf)
         => tilesPerFrame = tpf;
 
-    public MapTileType GetTile(Vector2Int pos)
-        => current.mapContent[pos.x, pos.y];
+    public MapTileType GetTile(Vector2Int pos) => current.GetTile(pos);
 
     public MapTileType RandomTile(out Vector2Int pos)
     {
-        var content = current.mapContent;
         pos = new Vector2Int(
-                Random.Range(0, content.GetLength(0)),
-                Random.Range(0, content.GetLength(1)));
-        return content[pos.x, pos.y];
+                    Random.Range(0, current.Size.x),
+                    Random.Range(0, current.Size.y)
+                    );
+        return current.GetTile(pos);
     }
 
-    public Vector2 CharacterPosition(Vector2Int coords)
+    public Vector2 MapPosition(Vector2Int coords)
         => new Vector3((coords.x + StartV.x) * transform.parent.transform.localScale.x,
         (coords.y + StartV.y) * transform.parent.transform.localScale.y);
 
-    public void OpenGate(bool v) => current.OpenGate(v, map, tile);
+    public Vector2Int OpenGate(bool v) => current.OpenGate(v, map, tile);
 }

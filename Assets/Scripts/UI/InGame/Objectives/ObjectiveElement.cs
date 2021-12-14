@@ -1,7 +1,6 @@
 ﻿using IgnitedBox.Tweening;
 using IgnitedBox.Tweening.EasingFunctions;
 using IgnitedBox.Tweening.Tweeners.VectorTweeners;
-using Scripts.OOP.Game_Modes.Story;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,17 +34,16 @@ namespace Scripts.UI.InGame.Objectives
 
         private readonly Transform container;
 
-        public ObjectiveElement(GameObject element, ObjectiveData? data = null)
+        public ObjectiveElement(GameObject element)
         {
             this.element = element;
             container = element.transform.GetChild(0);
             rect = element.GetComponent<RectTransform>();
-            if(data.HasValue) Initialize(data.Value);
         }
 
-        public virtual void Initialize(ObjectiveData data) 
+        public virtual void OnRemoved(ObjectiveHandler handler) 
         {
-            Track = (Vector2)data.track;
+            handler.Events.CleanInstace(this);
         }
 
         public T Get<T>(string name, Action<T> action = null) where T : Graphic

@@ -5,14 +5,12 @@ namespace Scripts.OOP.Game_Modes.Story.ChapterOne
 {
     public class Episode1 : Chapter1
     {
-        public Episode1(StoryLevel set, MainMenuHandler menu, MapHandler map)
-            : base(set, menu, map) 
-        
-        {
-            levelSettings = new StoryLevel()
+        public Episode1(MainMenuHandler menu, MapHandler map)
+            : base(new StoryLevel()
             {
                 name = "Chapter 1, Act 1",
-                playerSpawn = new SerializableInt2(0, 0),
+                description = "ERROR \\\\\\\\ INCOMING INSTRUCTIONS \\\\\\\\",
+                playerSpawn = new SerializableInt2(1, 2),
                 maps = new MapPreset[]
                 {
                     new MapPreset()
@@ -20,12 +18,12 @@ namespace Scripts.OOP.Game_Modes.Story.ChapterOne
                         tileBaseIndex = 0,
                         tiles = new MapTileType[,]
                         {
-                            { MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, },
-                            { MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, },
-                            { MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, },
-                            { MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, },
-                            { MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, },
-                            { MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, }
+                            { MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, },
+                            { MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, },
+                            { MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, },
+                            { MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, },
+                            { MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, },
+                            { MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, }
                         }
                     },
                     new MapPreset()
@@ -33,12 +31,12 @@ namespace Scripts.OOP.Game_Modes.Story.ChapterOne
                         tileBaseIndex = 0,
                         tiles = new MapTileType[,]
                         {
-                            { MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, },
-                            { MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, },
-                            { MapTileType.Gate, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, },
-                            { MapTileType.Gate, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, },
-                            { MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, },
-                            { MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, }
+                            { MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, },
+                            { MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, },
+                            { MapTileType.Gate, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, },
+                            { MapTileType.Gate, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, },
+                            { MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, },
+                            { MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, }
                         }
                     }
                 },
@@ -46,12 +44,12 @@ namespace Scripts.OOP.Game_Modes.Story.ChapterOne
                 {
                     new ObjectiveData()
                     {
-                        id = "",
+                        id = "Reach Map",
                         color = new SerializableFloat4(0, 0, 1, 1),
                     }
                 }
-            };
+            }, menu, map) 
         
-        }
+        { }
     }
 }

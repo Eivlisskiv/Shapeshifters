@@ -20,8 +20,8 @@ namespace Scripts.UI.InGame.Objectives
             Created, Removed, TrackModified
         }
 
-        [System.NonSerialized]
-        public EventsHandler<EventTypes> Events
+        //[System.NonSerialized]
+        public EventsHandler<EventTypes> Events { get; private set; }
         = new EventsHandler<EventTypes>();
 
         private readonly List<ObjectiveElement> elements
@@ -62,12 +62,11 @@ namespace Scripts.UI.InGame.Objectives
             var image = element.GetComponent<Image>();
             if (image) image.color = color;
 
-            System.Type defaultType = typeof(ObjectiveElement);
-            if (objType == null || !objType.IsSubclassOf(defaultType))
-                objType = defaultType;
-
-            ObjectiveElement oe = (ObjectiveElement)System.Activator
-                .CreateInstance(objType, element, data);
+            ObjectiveElement oe = 
+                (objType != null && objType.IsSubclassOf(typeof(ObjectiveElement))) ?
+                (ObjectiveElement)System.Activator.CreateInstance(objType, element, data)
+                : new ObjectiveElement(element);
+                    
 
             func?.Invoke(oe);
 
@@ -91,6 +90,7 @@ namespace Scripts.UI.InGame.Objectives
         {
             elements.Remove(element);
             Events.Invoke(EventTypes.Removed, this, element);
+            element.OnRemoved(this);
             element.Fade();
 
             Current?.Expand();

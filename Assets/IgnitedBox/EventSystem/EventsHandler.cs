@@ -5,8 +5,8 @@ namespace IgnitedBox.EventSystem
 {
     public class EventsHandler<TKey>
     {
-        readonly Dictionary<TKey, object> eventsContainers
-            = new Dictionary<TKey, object>();
+        readonly Dictionary<TKey, EventContainer> eventsContainers
+            = new Dictionary<TKey, EventContainer>();
 
         public void Invoke<TSource, TArgument>(TKey key, TSource source, TArgument arg)
         {
@@ -26,9 +26,17 @@ namespace IgnitedBox.EventSystem
             container?.Remove(func);
         }
 
+        public void CleanInstace(object target)
+        {
+            foreach (KeyValuePair<TKey, EventContainer> keypair in eventsContainers)
+            {
+                keypair.Value.CleanInstance(target);
+            }
+        }
+
         private EventContainer<TSource, TArgument> Get<TSource, TArgument>(TKey key)
         {
-            if (!eventsContainers.TryGetValue(key, out object container))
+            if (!eventsContainers.TryGetValue(key, out EventContainer container))
             {
                 container = new EventContainer<TSource, TArgument>();
                 eventsContainers.Add(key, container);

@@ -53,8 +53,8 @@ public class GameOverHandler : MonoBehaviour
             number.text = "0";
             background.text = "0";
 
-            number.Tween<Text, float, TextIntegerTweener>(score, 0.3f, easing: ExponentEasing.Out);
-            background.Tween<Text, float, TextIntegerTweener>(score, 0.3f, easing: ExponentEasing.Out);
+            number.Tween<Text, float, TextIntegerTweener>(score, 2, 1, easing: ExponentEasing.Out);
+            background.Tween<Text, float, TextIntegerTweener>(score, 2, 1, easing: ExponentEasing.Out);
         }
     }
 }

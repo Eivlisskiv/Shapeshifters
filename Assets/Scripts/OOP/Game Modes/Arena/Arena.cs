@@ -112,7 +112,7 @@ namespace Scripts.OOP.Game_Modes.Arena
                 (map.characterPrefab, map.uiPrefab,
                 Camera.main, map.mainCanvas.transform);
 
-            player.transform.position = map.current.CharacterPosition(new Vector2Int
+            player.transform.position = map.current.MapPosition(new Vector2Int
                 (ProceduralMapRoom.spacing + (ProceduralMapRoom.borderWidth * 2) - 1, map.current.Width / 4));
 
             AddMember(0, player);

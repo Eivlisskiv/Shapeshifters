@@ -86,7 +86,7 @@ namespace Scripts.OOP.TileMaps.Procedural
             if (tile != MapTileType.Empty && IsGate(current))
                 tile = MapTileType.Gate;
 
-            mapContent[current.x, current.y] = tile;
+            SetTile(current, tile);
 
             HandleTileDraw(map, tilebase, tile);
 
@@ -174,13 +174,13 @@ namespace Scripts.OOP.TileMaps.Procedural
 
         public bool Next(Vector2Int border)
         {
-            if (current.y < size.y)
+            if (current.y < size.y - 1)
             {
                 current.y++;
                 return true;
             }
 
-            if (current.x < size.x)
+            if (current.x < size.x - 1)
             {
                 current.y = 0;
                 current.x++;

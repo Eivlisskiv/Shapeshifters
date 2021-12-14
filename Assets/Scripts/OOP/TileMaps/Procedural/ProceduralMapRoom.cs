@@ -22,8 +22,6 @@ namespace Scripts.OOP.TileMaps.Procedural
             Transform propsContainer)
             : base(previous, size, propsContainer)
         {
-            mapContent = new MapTileType[size.x + 1, size.y + 1];
-
             //if (previous) previousBorder = previous.current;
             /*else*/
             previousBorder = new Vector2Int(0, size.y);

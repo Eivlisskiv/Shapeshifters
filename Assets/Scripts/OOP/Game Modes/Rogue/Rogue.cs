@@ -146,35 +146,15 @@ namespace Scripts.OOP.Game_Modes.Rogue
         private void ReachNext()
         {
             stage = Stage.PassGate;
-            map.current.OpenGate(true);
-
-            int height = map.loading.Height / 2;
-            Vector2 gatePosition = map.loading.CharacterPosition(new Vector2Int(3, height));
 
             objective = Objectives.CreateObjective("Gate", Color.cyan);
-            objective.Track = gatePosition;
+            objective.Track = NextGate(true);
             objective.Get<Text>("Title", t =>
             {
                 t.text = "Reach the next room ---->";
                 t.alignment = TextAnchor.MiddleCenter;
             });
         }
-
-        /*
-        private bool PlayerReady()
-        {
-            var players = GetTeam(0);
-            int height = map.loading.Height / 2;
-            Vector2 gatePosition = map.loading.CharacterPosition(new Vector2Int(3, height));
-            for (int i = 0; i < players.Count; i++)
-            {
-                BaseController player = players[i];
-                if (player.transform.position.x < gatePosition.x)
-                    return false;
-            }
-            return true;
-        }
-        */
 
         public override void MapEntered(RoomHandler room, Collider2D subject)
         {
@@ -267,7 +247,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
                 (map.characterPrefab, map.uiPrefab,
                 Camera.main, map.mainCanvas.transform);
 
-            player.transform.position = map.current.CharacterPosition(new Vector2Int
+            player.transform.position = map.current.MapPosition(new Vector2Int
                 (ProceduralMapRoom.spacing + (ProceduralMapRoom.borderWidth * 2) - 1, map.current.Width / 4));
             shop.player = player;
             AddMember(0, player);
@@ -326,7 +306,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
             boss = bossObject.GetComponent<EnemyController>();
             boss.Set(level);
-            boss.transform.position = map.current.CharacterPosition(pos);
+            boss.transform.position = map.current.MapPosition(pos);
 
             AddMember(team, boss);
 

@@ -1,4 +1,5 @@
-﻿using IgnitedBox.Tweening;
+﻿using IgnitedBox.EventSystem;
+using IgnitedBox.Tweening;
 using IgnitedBox.Tweening.Tweeners.VectorTweeners;
 using Scripts.OOP.Utils;
 using Scripts.UI.InGame.Objectives;
@@ -107,7 +108,7 @@ namespace Scripts.OOP.Game_Modes
 
         protected EnemyController SpawnEnemy(GameObject instantiated_mob, int team, Vector2Int coords, int level)
         {
-            instantiated_mob.transform.position = map.current.CharacterPosition(coords);
+            instantiated_mob.transform.position = map.current.MapPosition(coords);
             var enemy = instantiated_mob.GetComponent<EnemyController>();
             enemy.Set(level);
             AddMember(team, enemy);
@@ -134,6 +135,9 @@ namespace Scripts.OOP.Game_Modes
         protected virtual void ExtraMemberAdded(int team, BaseController controller) { }
 
         protected virtual void ScoreChanged() { }
+
+        public ObjectiveTracking? NextGate(bool openGame)
+            => map.loading.MapPosition(map.loading.OpenGate(openGame));
 
         public virtual void MapEntered(RoomHandler room, Collider2D subject) { }
         public virtual void MapExited(RoomHandler room, Collider2D subject) { }
@@ -199,7 +203,7 @@ namespace Scripts.OOP.Game_Modes
         public virtual void PlayerElimenated(PlayerController player)
             => GameOver();
 
-        protected void GameOver()
+        protected virtual void GameOver()
         {
             Objectives.transform.Tween<Transform, Vector3, PositionTween>
                 (Objectives.transform.localPosition + new Vector3(0, 200, 0),
