@@ -2,9 +2,10 @@
 
 namespace IgnitedBox.UnityUtilities.Vectors
 {
-    public class Vectors3
+    public static class Vectors3
     {
-
+        public static Vector3 Div(this Vector3 a, Vector3 b)
+            => new Vector3(a.x / b.x, a.y / b.y, a.z / b.z);
     }
 
     [System.Serializable]

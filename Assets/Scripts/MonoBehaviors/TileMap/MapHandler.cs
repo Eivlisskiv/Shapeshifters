@@ -60,7 +60,7 @@ public class MapHandler : MonoBehaviour
         CreateRoom((room) => 
         {
             var r = ConstructRoom<T>(new Vector2Int(size, size / 2),
-                current, room.PropsContainer);
+                current, room.propsContainer);
 
             room.SetSettings(r, tilesets[Math.Min
             (r.TileBaseIndex, tilesets.Length - 1)]);
@@ -77,7 +77,7 @@ public class MapHandler : MonoBehaviour
 
         CreateRoom((room) =>
         {
-            var r = new FixedMapRoom(preset, current, room.PropsContainer);
+            var r = new FixedMapRoom(preset, current, room.propsContainer);
             room.SetSettings(r, tilesets[Math.Min
                 (r.tileBaseIndex, tilesets.Length - 1)]);
         });

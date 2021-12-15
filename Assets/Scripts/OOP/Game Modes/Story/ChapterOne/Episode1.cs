@@ -18,12 +18,26 @@ namespace Scripts.OOP.Game_Modes.Story.ChapterOne
                         tileBaseIndex = 0,
                         tiles = new MapTileType[,]
                         {
-                            { MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, },
-                            { MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, },
-                            { MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, },
-                            { MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, },
-                            { MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, },
-                            { MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, }
+                            { MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall,   MapTileType.Wall,},
+                            { MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty,MapTileType.Wall, MapTileType.Empty, MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty,  MapTileType.Wall,},
+                            { MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, MapTileType.Empty,MapTileType.Wall, MapTileType.Empty, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Empty,  MapTileType.Wall,},
+                            { MapTileType.Wall, MapTileType.Empty, MapTileType.Wall, MapTileType.Wall, MapTileType.Empty,MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Empty, MapTileType.Wall,},
+                            { MapTileType.Wall, MapTileType.Empty, MapTileType.Wall, MapTileType.Wall, MapTileType.Empty,MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, MapTileType.Wall, MapTileType.Empty, MapTileType.Empty,},
+                            { MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, MapTileType.Empty,MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, MapTileType.Empty, MapTileType.Wall, MapTileType.Wall, MapTileType.Empty, MapTileType.Wall, MapTileType.Wall, MapTileType.Empty, MapTileType.Empty,},
+                            { MapTileType.Wall, MapTileType.Wall, MapTileType.Empty, MapTileType.Wall, MapTileType.Empty,MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, MapTileType.Empty, MapTileType.Wall, MapTileType.Empty, MapTileType.Wall, MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, MapTileType.Empty,  MapTileType.Wall,},
+                            { MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, MapTileType.Empty,MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, MapTileType.Empty, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Empty, MapTileType.Wall, MapTileType.Empty, MapTileType.Wall,},
+                            { MapTileType.Wall, MapTileType.Empty, MapTileType.Wall, MapTileType.Wall, MapTileType.Empty,MapTileType.Wall, MapTileType.Empty, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Empty, MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, MapTileType.Empty, MapTileType.Wall, MapTileType.Empty,  MapTileType.Wall,},
+                            { MapTileType.Wall, MapTileType.Empty, MapTileType.Wall, MapTileType.Wall, MapTileType.Empty,MapTileType.Wall, MapTileType.Empty, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Empty, MapTileType.Empty, MapTileType.Empty,   MapTileType.Wall,},
+                            { MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall,MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall, MapTileType.Wall,   MapTileType.Wall,}
+                        },
+                        props = new MapProp[]
+                        {
+                            new MapProp()
+                            {
+                                id = "Landmine",
+                                prefabPath = "Projectiles/Landmine",
+                                position = new SerializableFloat2(-2, 4),
+                            }
                         }
                     },
                     new MapPreset()

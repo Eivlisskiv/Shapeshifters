@@ -1,4 +1,5 @@
-﻿using Scripts.OOP.Game_Modes.Story;
+﻿using IgnitedBox.UnityUtilities.Vectors;
+using Scripts.OOP.Game_Modes.Story;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -32,18 +33,19 @@ namespace Scripts.OOP.TileMaps
                 //instantiate the prop 
                 GameObject prefab = Resources.Load<GameObject>(mp.prefabPath);
                 if (!prefab) continue;
-                GameObject prop = GameObject.Instantiate(prefab, propsContainer);
+                GameObject prop = Object.Instantiate(prefab, propsContainer);
                 prop.name = mp.id;
+
+                prop.transform.SetParent(propsContainer);
+                prop.transform.localScale /= 3;
+
                 prop.transform.localPosition = (Vector2)mp.position;
                 prop.SetActive(false);
                 this.props.Add(mp.id, prop);
             }
         }
 
-        public override void Initialize()
-        {
-            //Nothing to initialize
-        }
+        public override void Initialize() { }
 
         public override bool DrawOne(Tilemap map, TileBase tilebase, bool center, out MapTileType tile)
         {

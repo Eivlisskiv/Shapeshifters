@@ -41,6 +41,9 @@ namespace IgnitedBox.UnityUtilities.Vectors
             this.x = x;
             this.y = y;
         }
+
+        public static SerializableFloat2 operator *(SerializableFloat2 a, float b)
+            => new SerializableFloat2(a.x * b, a.y * b);
     }
 
     [System.Serializable]

@@ -84,9 +84,6 @@ public class PlayerController : BaseController
 
         angle = pos.WorldAngle(mousePos);
 
-        //int y = pos.y > mousePos.y ? -1 : 1;
-        //angle = Vector2.Angle(Vector2.left, pos - (Vector2)mousePos) * y;
-
         return true;
     }
 
@@ -108,7 +105,12 @@ public class PlayerController : BaseController
     public override void OnDeathEnded()
     {
         base.OnDeathEnded();
-        if (ui) Destroy(ui.gameObject);
+        //if (ui) Destroy(ui.gameObject);
         GameModes.GameMode.PlayerElimenated(this);
+    }
+
+    private void OnDestroy()
+    {
+        if(ui) Destroy(ui.gameObject);
     }
 }

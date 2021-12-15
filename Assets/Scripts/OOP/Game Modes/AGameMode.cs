@@ -207,7 +207,7 @@ namespace Scripts.OOP.Game_Modes
         {
             Objectives.transform.Tween<Transform, Vector3, PositionTween>
                 (Objectives.transform.localPosition + new Vector3(0, 200, 0),
-                0.5f, callback: () => Object.Destroy(Objectives));
+                0.5f, callback: () => Object.Destroy(Objectives.gameObject));
             MainMenuHandler.GameOver();
         }
 

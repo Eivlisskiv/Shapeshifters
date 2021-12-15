@@ -20,13 +20,13 @@ namespace Scripts.OOP.TileMaps
 
         protected Vector2Int current;
 
-        protected readonly MapTileType[,] mapContent;
+        private readonly MapTileType[,] mapContent;
 
         public MapTileType GetTile(Vector2Int pos)
-            => mapContent[pos.y, pos.x];
+            => mapContent[(size.y - 1) - pos.y, pos.x];
 
         public void SetTile(Vector2Int pos, MapTileType tile)
-            => mapContent[pos.y, pos.x] = tile;
+            => mapContent[(size.y - 1) - pos.y, pos.x] = tile;
 
         protected List<Vector2Int> gates = new List<Vector2Int>();
 
@@ -38,6 +38,17 @@ namespace Scripts.OOP.TileMaps
         {
             this.size = size;
             mapContent = new MapTileType[size.y, size.x];
+            this.propsContainer = propsContainer;
+
+            Construct(previous);
+        }
+
+        public MapRoom(RoomHandler previous, MapTileType[,] tiles, Transform propsContainer)
+        {
+            mapContent = tiles;
+            size = new Vector2Int(tiles.GetLength(1),
+                                 tiles.GetLength(0));
+
             this.propsContainer = propsContainer;
 
             Construct(previous);
@@ -58,17 +69,6 @@ namespace Scripts.OOP.TileMaps
             }
 
             Initialize();
-        }
-
-        public MapRoom(RoomHandler previous, MapTileType[,] tiles, Transform propsContainer)
-        {
-            mapContent = tiles;
-            size = new Vector2Int(tiles.GetLength(1),
-                                 tiles.GetLength(0));
-
-            this.propsContainer = propsContainer;
-
-            Construct(previous);
         }
 
         public abstract void Initialize();

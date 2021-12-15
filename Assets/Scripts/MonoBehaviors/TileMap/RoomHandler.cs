@@ -1,5 +1,4 @@
-﻿using Scripts.OOP.Game_Modes;
-using Scripts.OOP.TileMaps;
+﻿using Scripts.OOP.TileMaps;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -17,7 +16,7 @@ public class RoomHandler : MonoBehaviour
     public int Width => current.Size.x;
     public int Height => current.Size.y;
 
-    public Transform PropsContainer { get; private set; }
+    public Transform propsContainer;
 
     Tilemap map;
 
@@ -41,10 +40,6 @@ public class RoomHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        PropsContainer = new GameObject().transform;
-        PropsContainer.SetParent(transform);
-        PropsContainer.name = "PropsContainer";
-
         map = GetComponent<Tilemap>();
         transform.localScale = new Vector3(1, 1, 0);
         map.ClearAllTiles();
