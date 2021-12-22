@@ -7,10 +7,7 @@ namespace Scripts.UI.Menu.Story
 {
     public class StoryUIElement : GameModeUI
     {
-        
-
-        public StoryUIElement(int chapter, int episode, GameObject ui, MainMenuHandler menu) 
-            : base(ui, menu) { }
+        public StoryUIElement(int chapter, int episode) { }
 
         protected override string GetDescription()
         {

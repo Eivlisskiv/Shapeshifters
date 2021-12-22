@@ -36,8 +36,7 @@ namespace Scripts.OOP.TileMaps
                 GameObject prop = Object.Instantiate(prefab, propsContainer);
                 prop.name = mp.id;
 
-                prop.transform.SetParent(propsContainer);
-                prop.transform.localScale /= 3;
+                prop.transform.SetParent(propsContainer, true);
 
                 prop.transform.localPosition = (Vector2)mp.position;
                 prop.SetActive(false);

@@ -11,7 +11,7 @@ public class GameModeButton : GeneralButton
 
     protected override void OnStart()
     {
-        var panel = transform.parent.GetChild(1);
+        var panel = transform.parent.GetChild(3);
         desc = panel.GetComponent<RectTransform>();
 
         var t = panel.GetChild(0);

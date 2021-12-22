@@ -8,12 +8,6 @@ namespace Scripts.OOP.UI
     {
         private Text score;
 
-        public GameModeUI(GameObject ui, MainMenuHandler menu) 
-        {
-            InitializeUI(ui, menu);
-        }
-
-
         public void SetScore(int score)
             => this.score.text = score.ToString();
 
@@ -35,14 +29,12 @@ namespace Scripts.OOP.UI
 
         protected virtual void BeforeInit() { }
 
-        private void InitializeUI(GameObject ui, MainMenuHandler menu)
+        public void InitializeUI(GameObject ui, MainMenuHandler menu)
         {
-            BeforeInit();
             InitScore(ui.transform.GetChild(0));
             InitTitle(ui.transform.GetChild(1));
             InitButton(menu, ui.transform.GetChild(2));
             InitDescription(ui.transform.GetChild(3));
-            AfterInit();
         }
 
         protected virtual void AfterInit() { }

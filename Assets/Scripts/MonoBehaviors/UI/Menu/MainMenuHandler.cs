@@ -10,6 +10,8 @@ using Scripts.UI.InGame.Objectives;
 using Scripts.OOP.Game_Modes.Story.ChapterOne;
 using System.Collections.Generic;
 using Scripts.UI.Menu.Story;
+using UnityEngine.UI;
+using IgnitedBox.Tweening.Tweeners.ColorTweeners;
 
 public class MainMenuHandler : MonoBehaviour
 {
@@ -34,7 +36,10 @@ public class MainMenuHandler : MonoBehaviour
     public GameObject instructions;
     public GameObject objectivePrefab;
 
+    private Image background;
+
     private MenuAction action;
+
     private float cooldown;
 
     private SoundHandler sounds;
@@ -54,6 +59,10 @@ public class MainMenuHandler : MonoBehaviour
     {
         sounds = GetComponent<SoundHandler>();
         containerRect = container.GetComponent<RectTransform>();
+
+        background = container.transform.GetChild(0).GetComponent<Image>();
+        background.transform.SetParent(transform, true);
+        background.transform.SetSiblingIndex(0);
 
         instance = this;
     }
@@ -135,8 +144,9 @@ public class MainMenuHandler : MonoBehaviour
             Modes = new Dictionary<Type, ArcadeModeUI>();
             foreach (var mode in GameModes.modes)
             {
-                Modes.Add(mode.Key, new ArcadeModeUI(mode.Key, mode.Value,
-                    Instantiate(gameModePrefab, button.tab), this));
+                ArcadeModeUI ui = new ArcadeModeUI(mode.Key, mode.Value);
+                ui.InitializeUI(Instantiate(gameModePrefab, button.tab), this);
+                Modes.Add(mode.Key, ui);
             }
         }
 
@@ -146,7 +156,7 @@ public class MainMenuHandler : MonoBehaviour
     public void StartGame(Type mode, string description)
     {
         if (action == MenuAction.Loading) return;
-        action = MenuAction.Loading;
+            LoadingStarting();
 
         AGameMode gamemode = (AGameMode)Activator.CreateInstance(mode, this, map);
         gamemode.description = description;
@@ -167,7 +177,7 @@ public class MainMenuHandler : MonoBehaviour
             return;
         }
 
-        action = MenuAction.Loading;
+        LoadingStarting();
         SwitchTab(null);
         Episode1 game = new Episode1(this, map);
         game.StartMap();
@@ -200,6 +210,12 @@ public class MainMenuHandler : MonoBehaviour
 
     public void OnClick_Quit() => Application.Quit();
 
+    private void LoadingStarting()
+    {
+        action = MenuAction.Loading;
+        background.Tween<Graphic, Color, GraphicColorTween>(Color.clear, 2);
+    }
+
     private void GameOverUI()
     {
         if(sounds) sounds.PlayRandom("Game Over");
@@ -216,6 +232,8 @@ public class MainMenuHandler : MonoBehaviour
         GameModes.GameMode.UpdateMenu(this);
         GameModes.GameMode.SaveProgress();
         GameModes.GameMode.EndGame();
+
+        background.Tween<Graphic, Color, GraphicColorTween>(Color.white, 2);
     }
 
     internal ObjectiveHandler SpawnGameUI(string gamemodeDesc, Action onReady)

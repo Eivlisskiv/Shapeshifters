@@ -12,8 +12,7 @@ namespace Scripts.OOP.UI
         private readonly string desc;
         private string name;
 
-        public ArcadeModeUI(Type mode, string description, 
-            GameObject ui, MainMenuHandler menu) : base(ui, menu)
+        public ArcadeModeUI(Type mode, string description)
         {
             this.mode = mode;
             desc = description;
