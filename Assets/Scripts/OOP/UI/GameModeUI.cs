@@ -1,61 +1,67 @@
-﻿using Scripts.OOP.Game_Modes;
-using System;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Scripts.OOP.UI
 {
-    public class GameModeUI
+    public abstract class GameModeUI
     {
-        public readonly Type mode;
-        readonly MainMenuHandler menu;
-        internal Text score;
+        private Text score;
 
-        private readonly string desc;
-
-        public GameModeUI(Type mode, string description, GameObject ui, MainMenuHandler menu)
+        public GameModeUI(GameObject ui, MainMenuHandler menu) 
         {
-            this.menu = menu;
-            this.mode = mode;
-            desc = description;
-            InitializeUI(ui);
+            InitializeUI(ui, menu);
         }
+
 
         public void SetScore(int score)
             => this.score.text = score.ToString();
 
-        private void InitializeUI(GameObject ui)
-        {
-            //main = ui;
-            InitScore(ui.transform.GetChild(0));
-            InitDescription(ui.transform.GetChild(1));
-            InitTitle(ui.transform.GetChild(2));
-            InitButton(ui.transform.GetChild(3));
-        }
-
-        private void InitTitle(Transform child)
-        {
-            Text t = child.GetComponent<Text>();
-            t.text = mode.Name.Replace('_', ' ');
-        }
-
-        private void InitButton(Transform child)
+        private void InitButton(MainMenuHandler menu, Transform child)
         {
             GeneralButton button = child.GetComponent<GeneralButton>();
-            button.OnPress.AddListener(() => menu.StartGame(mode, desc));
+            button.OnPress.AddListener(GetOnClick(menu));
         }
+
+        protected abstract UnityAction GetOnClick(MainMenuHandler menu);
+
+        private void InitDescription(Transform transform)
+        {
+            Text desc = transform.GetChild(0).GetComponent<Text>();
+            desc.text = GetDescription();
+        }
+
+        protected abstract string GetDescription();
+
+        protected virtual void BeforeInit() { }
+
+        private void InitializeUI(GameObject ui, MainMenuHandler menu)
+        {
+            BeforeInit();
+            InitScore(ui.transform.GetChild(0));
+            InitTitle(ui.transform.GetChild(1));
+            InitButton(menu, ui.transform.GetChild(2));
+            InitDescription(ui.transform.GetChild(3));
+            AfterInit();
+        }
+
+        protected virtual void AfterInit() { }
 
         private void InitScore(Transform transform)
         {
             Transform p = transform.GetChild(1);
             score = p.GetComponent<Text>();
-            score.text = GameModes.LoadScore(mode).ToString();
+            score.text = GetTopScore().ToString();
         }
 
-        private void InitDescription(Transform transform)
+        protected abstract int GetTopScore();
+
+        private void InitTitle(Transform child)
         {
-            Text desc = transform.GetChild(0).GetComponent<Text>();
-            desc.text = this.desc;
+            Text t = child.GetComponent<Text>();
+            t.text = GetName();
         }
+
+        protected abstract string GetName();
     }
 }

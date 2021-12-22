@@ -1,5 +1,4 @@
 ﻿using Scripts.OOP.Perks;
-using Scripts.OOP.TileMaps;
 using Scripts.OOP.TileMaps.Procedural;
 using Scripts.OOP.Utils;
 using System.Linq;
@@ -43,7 +42,9 @@ namespace Scripts.OOP.Game_Modes.Arena
                 spawnCooldown -= Time.deltaTime;
                 return;
             }
-            SpawnEnemy();
+
+            if (GetTeam(1).Count < 3)
+                SpawnEnemy(GetRandomEnemy(), 1, level);
         }
 
         public override void MemberDestroyed(BaseController member)
@@ -116,27 +117,6 @@ namespace Scripts.OOP.Game_Modes.Arena
                 (ProceduralMapRoom.spacing + (ProceduralMapRoom.borderWidth * 2) - 1, map.current.Width / 4));
 
             AddMember(0, player);
-        }
-
-        private void SpawnEnemy()
-        {
-            if (CheckEnemySpawns(out Vector2Int coords))
-                SpawnEnemy(GetRandomEnemy(), 1, coords, level);
-        }
-
-        private bool CheckEnemySpawns(out Vector2Int pos)
-        {
-            pos = Vector2Int.zero;
-
-            if (GetTeam(1).Count < 3)
-            {
-                MapTileType type = map.current.RandomTile(out pos);
-
-                if (type == MapTileType.Empty)
-                    return true;
-            }
-
-            return false;
         }
 
         public void ControllerLevelUp(BaseController controller)

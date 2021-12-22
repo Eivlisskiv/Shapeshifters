@@ -52,7 +52,7 @@ namespace Scripts.UI.InGame.Objectives
         }
 
         public ObjectiveElement CreateObjective(string name, 
-            Color color = default, ObjectiveData? data = null,
+            Color color = default, ObjectiveData data = null,
             System.Action<ObjectiveElement> func = null,
             System.Type objType = null)
         {
@@ -90,8 +90,7 @@ namespace Scripts.UI.InGame.Objectives
         {
             elements.Remove(element);
             Events.Invoke(EventTypes.Removed, this, element);
-            element.OnRemoved(this);
-            element.Fade();
+            element.Fade(this);
 
             Current?.Expand();
         }

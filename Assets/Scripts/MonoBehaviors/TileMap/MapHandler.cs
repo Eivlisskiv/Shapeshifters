@@ -87,11 +87,28 @@ public class MapHandler : MonoBehaviour
         where T : MapRoom
         => (T) System.Activator.CreateInstance(typeof(T), args);
 
-    public void NextRoom(int size)
+    public void NextRoom(MapPreset preset, bool isRemoveOld)
+    {
+        if (loading != null)
+        {
+            if (!loading.Loaded) loading.SetTilesPerFrame(999);
+
+            if (previous && isRemoveOld) Destroy(previous.gameObject);
+
+            previous = current;
+
+            current = loading;
+            loading = null;
+        }
+
+        QueuRoom(preset);
+    }
+
+    public void NextProceduralRoom(int size)
     {
         if(loading != null && !loading.Loaded)
         {
-            Debug.LogWarning($"Loading room is still laoding");
+            Debug.LogWarning($"Loading room is still loading");
             return;
         }
 

@@ -1,9 +1,56 @@
 ﻿using IgnitedBox.Random.DropTables;
+using Scripts.OOP.MongoRealm;
 using UnityEngine;
 
 namespace Scripts.OOP.Game_Modes
 {
-    public abstract class ArcadeMode<TTable> : AGameMode
+    public abstract class ArcadeMode : AGameMode 
+    {
+        public ArcadeMode(MainMenuHandler menu, MapHandler map, params Color[] teamColors)
+            : base(menu, map, teamColors) { }
+
+        protected override void ScoreChanged()
+        {
+            switch (Score)
+            {
+                case 1: AddSpawns("Regular/Tier1/", "Sniper"); break;
+                case 2: AddSpawns("Regular/Tier1/", "Bomber"); break;
+                case 3: AddSpawns("Regular/Tier1/", "Tank"); break;
+                case 4: AddSpawns("Regular/Tier2/", "Flamer"); break;
+                case 5: AddSpawns("Regular/Tier2/", "Gunner"); break;
+                case 6: AddSpawns("Regular/Tier2/", "Pirate"); break;
+                case 8: AddSpawns("Special/", "Cloner"); break;
+                case 10: AddSpawns("Special/", "Eye Holder"); break;
+            }
+        }
+
+        protected abstract void AddSpawns(string category, params string[] name);
+
+        public override int LoadProgress()
+        {
+            ArcadeProgress progress = ArcadeProgress.Load<ArcadeProgress>(Name);
+            return progress.TopScore;
+        }
+
+        public override void SaveProgress()
+        {
+            ArcadeProgress progress = ArcadeProgress.Load<ArcadeProgress>(Name);
+            progress.LastScore = Score;
+            if (Score > progress.TopScore)
+                progress.TopScore = Score;
+            progress.Save();
+        }
+
+        public override void UpdateMenu(MainMenuHandler menu)
+        {
+            ArcadeProgress progress = ArcadeProgress.Load<ArcadeProgress>(Name);
+
+            if(Score > progress.TopScore)
+                menu.Modes[GetType()].SetScore(Score);
+        }
+    }
+
+    public abstract class ArcadeMode<TTable> : ArcadeMode
         where TTable : Table
     {
         protected readonly TTable spawnTable;
@@ -26,22 +73,5 @@ namespace Scripts.OOP.Game_Modes
 
             return enemies.Instantiate(name);
         }
-
-        protected override void ScoreChanged()
-        {
-            switch (Score)
-            {
-                case 1: AddSpawns("Regular/Tier1/", "Sniper"); break;
-                case 2: AddSpawns("Regular/Tier1/", "Bomber"); break;
-                case 3: AddSpawns("Regular/Tier1/", "Tank"); break;
-                case 4: AddSpawns("Regular/Tier2/", "Flamer"); break;
-                case 5: AddSpawns("Regular/Tier2/", "Gunner"); break;
-                case 6: AddSpawns("Regular/Tier2/", "Pirate"); break;
-                case 8: AddSpawns("Special/", "Cloner"); break;
-                case 10: AddSpawns("Special/", "Eye Holder"); break;
-            }
-        }
-
-        protected abstract void AddSpawns(string category, params string[] name);
     }
 }

@@ -1,5 +1,8 @@
 ﻿using IgnitedBox.Entities;
 using IgnitedBox.EventSystem;
+using IgnitedBox.Tweening;
+using IgnitedBox.Tweening.Tweeners.VectorTweeners;
+using IgnitedBox.Tweening.EasingFunctions;
 using IgnitedBox.UnityUtilities.Vectors;
 using Scripts.Explosion;
 using Scripts.OOP.Character.Stats;
@@ -81,6 +84,10 @@ public abstract class BaseController : HealthEntity,
         Events = new EventsHandler<ControllerEvents>();
         Body.SetColor(0, _colors[0]);
         Body.SetColor(1, _colors[1]);
+
+        var size = transform.localScale;
+        transform.localScale = Vector3.zero;
+        transform.Tween<Transform, Vector3, ScaleTween>(size, 2, easing: ElasticEasing.Out);
 
         OnStart();
 
@@ -182,6 +189,8 @@ public abstract class BaseController : HealthEntity,
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (collision.gameObject.layer == 8) return;
+
         perks.Activate<ICollide>(1, perk => perk.OnCollide(this, collision));
 
         Events.Invoke(ControllerEvents.Collide, this, collision);

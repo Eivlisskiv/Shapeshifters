@@ -33,7 +33,7 @@ public class RoomHandler : MonoBehaviour
         if (bounds)
         {
             bounds.transform.position = new Vector2(Width/2f, Height/2f);
-            bounds.size = new Vector2((Width - 2) * 0.9f, (Height - 2) * 0.9f);
+            bounds.size = new Vector2(Width - 2, Height - 2);
         }
     }
 
@@ -84,4 +84,6 @@ public class RoomHandler : MonoBehaviour
         (coords.y + StartV.y) * transform.parent.transform.localScale.y);
 
     public Vector2Int OpenGate(bool v) => current.OpenGate(v, map, tile);
+
+    public Vector2Int RandomSpawn() => current.RandomSpawn();
 }

@@ -1,7 +1,6 @@
 ﻿using IgnitedBox.Tweening;
 using IgnitedBox.Tweening.EasingFunctions;
 using IgnitedBox.Tweening.Tweeners.VectorTweeners;
-using Unity.VectorGraphics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +8,6 @@ public class GameModeButton : GeneralButton
 {
     private RectTransform desc;
     private Text text;
-    private SVGImage image;
 
     protected override void OnStart()
     {
@@ -21,8 +19,6 @@ public class GameModeButton : GeneralButton
         text = t.GetComponent<Text>();
         desc.sizeDelta = t2.sizeDelta + new Vector2(5, 5);
         desc.localScale = new Vector3(0, 1, 1);
-        image = transform.parent.GetComponent<SVGImage>();
-
     }
 
     protected override void OnSelect()

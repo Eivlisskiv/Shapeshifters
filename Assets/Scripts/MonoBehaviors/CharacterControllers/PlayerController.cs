@@ -4,6 +4,7 @@ using Scripts.OOP.Game_Modes;
 using Scripts.OOP.Perks.Weapons;
 using Scripts.OOP.UI;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerController : BaseController
 {
@@ -75,6 +76,17 @@ public class PlayerController : BaseController
             angle = 0;
             return false;
         }
+
+        GameObject selected = EventSystem.current.currentSelectedGameObject;
+        if (selected)
+        {
+            Debug.Log($"Mouse click hit {selected}");
+
+            angle = 0;
+            return false;
+        }
+
+        //Vector2 screenPos = Input.mousePosition;
 
         //Get the world mouse position
         Vector2 mousePos = cam.MouseToWorld();

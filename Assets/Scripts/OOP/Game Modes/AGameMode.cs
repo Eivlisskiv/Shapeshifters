@@ -1,6 +1,7 @@
 ﻿using IgnitedBox.EventSystem;
 using IgnitedBox.Tweening;
 using IgnitedBox.Tweening.Tweeners.VectorTweeners;
+using IgnitedBox.UnityUtilities;
 using Scripts.OOP.Utils;
 using Scripts.UI.InGame.Objectives;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ namespace Scripts.OOP.Game_Modes
         public int Score 
         {
             get => score; 
-            protected set
+            set
             {
                 score = value;
                 ScoreChanged();
@@ -52,9 +53,6 @@ namespace Scripts.OOP.Game_Modes
 
         protected ObjectiveHandler Objectives { get; private set; }
 
-        public int SavedScore()
-            => PlayerPrefs.GetInt(scoreNamePath);
-
         public AGameMode(MainMenuHandler menu, MapHandler map, params Color[] teamColors)
         {
             this.menu = menu;
@@ -72,6 +70,12 @@ namespace Scripts.OOP.Game_Modes
 
             scoreNamePath = $"Score_{Name}";
         }
+
+        public abstract int LoadProgress();
+
+        public abstract void SaveProgress();
+
+        public abstract void UpdateMenu(MainMenuHandler menu);
 
         private void InitiateTeam(int i)
         {
@@ -106,10 +110,11 @@ namespace Scripts.OOP.Game_Modes
             Object.Destroy(gameTransform.gameObject);
         }
 
-        protected EnemyController SpawnEnemy(GameObject instantiated_mob, int team, Vector2Int coords, int level)
+        public EnemyController SpawnEnemy(GameObject mob, int team, int level, Vector2Int? coords = null)
         {
-            instantiated_mob.transform.position = map.current.MapPosition(coords);
-            var enemy = instantiated_mob.GetComponent<EnemyController>();
+            if (mob.IsPrefab()) mob = Object.Instantiate(mob);
+            mob.transform.position = map.current.MapPosition(coords ?? map.current.RandomSpawn());
+            var enemy = mob.GetComponent<EnemyController>();
             enemy.Set(level);
             AddMember(team, enemy);
             return enemy;
@@ -136,8 +141,22 @@ namespace Scripts.OOP.Game_Modes
 
         protected virtual void ScoreChanged() { }
 
-        public ObjectiveTracking? NextGate(bool openGame)
-            => map.loading.MapPosition(map.loading.OpenGate(openGame));
+        public ObjectiveTracking? NextGate(int i, bool openGame)
+        {
+            RoomHandler mapp = null;
+            switch (i)
+            {
+                case -1: mapp = map.previous; break;
+                case 0: mapp = map.current; break;
+                case 1: mapp = map.loading; break;
+            };
+
+            if (!mapp) return null;
+
+            Vector2 pos = mapp.MapPosition(mapp.OpenGate(openGame));
+            Vector2 mid = mapp.MapPosition(new Vector2Int(mapp.Width / 2, mapp.Height / 2));
+            return pos + ((pos - mid).normalized * 6);
+        }
 
         public virtual void MapEntered(RoomHandler room, Collider2D subject) { }
         public virtual void MapExited(RoomHandler room, Collider2D subject) { }

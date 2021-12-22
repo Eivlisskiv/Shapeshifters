@@ -26,7 +26,7 @@ namespace IgnitedBox.UnityUtilities.Vectors
     }
 
     [System.Serializable]
-    public struct SerializableFloat2
+    public class SerializableFloat2
     {
         public static implicit operator Vector2(SerializableFloat2 v)
             => new Vector2(v.x, v.y);
@@ -47,7 +47,7 @@ namespace IgnitedBox.UnityUtilities.Vectors
     }
 
     [System.Serializable]
-    public struct SerializableInt2
+    public class SerializableInt2
     {
         public static implicit operator Vector2Int(SerializableInt2 v)
             => new Vector2Int(v.x, v.y);
@@ -56,6 +56,8 @@ namespace IgnitedBox.UnityUtilities.Vectors
 
         public int x;
         public int y;
+
+        public SerializableInt2() { }
 
         public SerializableInt2(int x, int y)
         {

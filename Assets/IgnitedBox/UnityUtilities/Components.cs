@@ -5,6 +5,9 @@ namespace IgnitedBox.UnityUtilities
 {
     public static class Components
     {
+        public static bool IsPrefab(this GameObject obj)
+            => obj.scene.rootCount == 0 && string.IsNullOrEmpty(obj.scene.name);
+
         public static T CreateGameObject<T>(string name = null, 
             Transform parent = null, Action<T> action = null)
             where T : Component

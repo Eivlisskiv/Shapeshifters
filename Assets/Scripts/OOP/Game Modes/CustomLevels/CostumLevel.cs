@@ -1,20 +1,18 @@
-﻿using IgnitedBox.EventSystem;
-using Scripts.UI.InGame.Objectives;
+﻿using Scripts.UI.InGame.Objectives;
 using Scripts.UI.InGame.Objectives.ObjectivePresets;
-using Scripts.UI.InGame.Objectives.ObjectivePresets.Position;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Scripts.OOP.Game_Modes.Story
 {
-    public class StoryMode : AGameMode
+    public abstract partial class CustomLevel : AGameMode
     {
         private float game_timer;
 
         private bool ongoing;
         private bool LevelCompleted => ObjectivesProgress >= levelSettings.main.Length;
 
-        protected StoryLevel levelSettings;
+        protected LevelSettings levelSettings;
         protected int ObjectivesProgress { get; private set; }
         private int mapProgress;
 
@@ -23,11 +21,7 @@ namespace Scripts.OOP.Game_Modes.Story
         private readonly List<PlayerController> playersReady
             = new List<PlayerController>();
 
-        public EventsHandler<System.Type> ObjectiveEvents
-            { get; private set; }
-            = new EventsHandler<System.Type>();
-
-        public StoryMode(StoryLevel levelSettings, MainMenuHandler menu, 
+        public CustomLevel(LevelSettings levelSettings, MainMenuHandler menu, 
             MapHandler map, params Color[] teamColors)
             : base(menu, map, teamColors)
         {
@@ -46,15 +40,13 @@ namespace Scripts.OOP.Game_Modes.Story
             //Load the first map
             mapProgress = -1;
             NextMap();
-            
-            //How to identify which map the player is in to spawn enemies and objective props? (current?)
         }
 
         protected void NextMap()
         {
             if (mapProgress + 1 >= levelSettings.maps.Length) return;
             mapProgress++;
-            map.QueuRoom(levelSettings.maps[mapProgress]);
+            map.NextRoom(levelSettings.maps[mapProgress], false);
         }
 
         public override void OnLoaded()
@@ -77,7 +69,7 @@ namespace Scripts.OOP.Game_Modes.Story
                 ObjectiveCompleted);
         }
 
-        private void SpawnPlayer()
+        protected virtual PlayerController SpawnPlayer()
         {
             PlayerController player = PlayerController.Instantiate
                 (map.characterPrefab, map.uiPrefab,
@@ -85,41 +77,7 @@ namespace Scripts.OOP.Game_Modes.Story
 
             player.transform.position = map.current.MapPosition(levelSettings.playerSpawn);
             AddMember(0, player);
-        }
-
-        public override void MapEntered(RoomHandler room, Collider2D subject)
-        {
-            //The next map is the one we want to enter
-            if (room != map.loading) return;
-            PlayerController player = subject.gameObject.GetComponent<PlayerController>();
-            if (!player || playersReady.Contains(player)) return;
-
-            int count = playersReady.Count + 1;
-
-            ObjectiveEvents.Invoke(typeof(Reach_Map), this, count);
-
-            if (count == GetTeam(0).Count)
-            {
-                map.loading.OpenGate(false);
-                playersReady.Clear();
-                NextMap();
-                return;
-            }
-
-            playersReady.Add(player);
-        }
-
-        public override void MapExited(RoomHandler room, Collider2D subject)
-        {
-            //The next map is the one we want to enter
-            if (room != map.loading) return;
-            PlayerController player = subject.gameObject.GetComponent<PlayerController>();
-            if (!player) return;
-
-            playersReady.Remove(player);
-
-            ObjectiveEvents.Invoke(typeof(Reach_Map), this, playersReady.Count);
-
+            return player;
         }
 
         protected override void GameOver()
@@ -132,7 +90,7 @@ namespace Scripts.OOP.Game_Modes.Story
         private void NextObjective()
         {
             ObjectivesProgress++;
-
+            Score++;
             if(LevelCompleted)
             {
                 GameOver();

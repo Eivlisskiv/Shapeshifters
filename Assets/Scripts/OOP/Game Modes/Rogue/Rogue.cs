@@ -148,7 +148,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
             stage = Stage.PassGate;
 
             objective = Objectives.CreateObjective("Gate", Color.cyan);
-            objective.Track = NextGate(true);
+            objective.Track = NextGate(0, true);
             objective.Get<Text>("Title", t =>
             {
                 t.text = "Reach the next room ---->";
@@ -200,14 +200,14 @@ namespace Scripts.OOP.Game_Modes.Rogue
                 5 + maxSpawns;
 
             if ((Score + 4) % bossEvery == 0) BossRoom();
-            else map.NextRoom(ProceduralMapRoom.RandomSize());
+            else map.NextProceduralRoom(ProceduralMapRoom.RandomSize());
 
             ClearDebris();
         }
 
         private void BossRoom()
         {
-            map.NextRoom(80);
+            map.NextProceduralRoom(80);
             map.loading.hasCenter = false;
         }
 
@@ -255,13 +255,11 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
         private void SpawnEnemy()
         {
-            if (!CheckEnemySpawns(out Vector2Int coords))
+            if (GetTeam(1).Count >= maxSpawns)
                 return;
 
-            if (isBoss) { 
-                if (!SpawnBoss(1, coords, level)) return;
-            }
-            else SpawnEnemy(GetRandomEnemy(), 1, coords, level);
+            if (isBoss && !SpawnBoss(1, level)) return;
+            else SpawnEnemy(GetRandomEnemy(), 1, level);
 
             SpawnsLeft--;
             cooldown = 5;
@@ -290,7 +288,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
                     __checkDir(Vector2Int.right);
         }
 
-        private EnemyController SpawnBoss(int team, Vector2Int pos, int level)
+        private EnemyController SpawnBoss(int team, int level)
         {
             string bossName = bossesPaths.DropOne(out _);
 
@@ -299,6 +297,8 @@ namespace Scripts.OOP.Game_Modes.Rogue
             EnemyController boss = bossObject.GetComponent<EnemyController>();
 
             if (!boss) return null;
+
+            Vector2Int pos = map.current.RandomSpawn();
 
             if (!SpaceForBossSpawn(pos, boss.settings.size)) return null;
 
@@ -348,20 +348,6 @@ namespace Scripts.OOP.Game_Modes.Rogue
             GameObject crate = Object.Instantiate(cratePrefab);
             crate.transform.position = boss.transform.position;
             crate.transform.localScale = new Vector3(0.25f, 0.25f, 1);
-        }
-
-        private bool CheckEnemySpawns(out Vector2Int pos)
-        {
-            pos = Vector2Int.zero;
-            if (map.current == null) return false;
-            if (GetTeam(1).Count < maxSpawns)
-            {
-                MapTileType type = map.current.RandomTile(out pos);
-
-                return type == MapTileType.Empty;
-            }
-
-            return false;
         }
 
         public void ControllerLevelUp(BaseController controller)

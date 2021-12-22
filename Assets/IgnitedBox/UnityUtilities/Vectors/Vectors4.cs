@@ -8,7 +8,7 @@ namespace IgnitedBox.UnityUtilities.Vectors
     }
 
     [System.Serializable]
-    public struct SerializableFloat4
+    public class SerializableFloat4
     {
         public static implicit operator Vector4(SerializableFloat4 v)
             => new Vector4(v.x, v.y, v.z, v.w);

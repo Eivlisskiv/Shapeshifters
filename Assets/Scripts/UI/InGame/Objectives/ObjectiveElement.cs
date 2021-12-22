@@ -33,6 +33,7 @@ namespace Scripts.UI.InGame.Objectives
         private readonly Dictionary<string, GameObject> elements = new Dictionary<string, GameObject>();
 
         private readonly Transform container;
+        private bool isSpawning;
 
         public ObjectiveElement(GameObject element)
         {
@@ -41,7 +42,12 @@ namespace Scripts.UI.InGame.Objectives
             rect = element.GetComponent<RectTransform>();
         }
 
-        public virtual void OnRemoved(ObjectiveHandler handler) 
+        protected virtual void OnReady()
+        {
+            isSpawning = false;
+        }
+
+        protected virtual void OnRemoved(ObjectiveHandler handler) 
         {
             handler.Events.CleanInstace(this);
         }
@@ -93,14 +99,25 @@ namespace Scripts.UI.InGame.Objectives
 
         public void Spawn(float y)
         {
+            isSpawning = true;
+
             rect.localScale = new Vector2(0, 0);
             rect.localPosition = new Vector3(0, y, 0);
 
             rect.Tween<Transform, Vector3, ScaleTween>
-                (new Vector3(1, 1, 1), 1, easing: ExponentEasing.Out,
-                callback: () => rect.Tween<Transform, Vector3, PositionTween>
-                (new Vector3(0, -rect.sizeDelta.y / 2, 0),
-                0.2f, easing: ExponentEasing.Out));
+            (
+                new Vector3(1, 1, 1), 1, easing: ExponentEasing.Out,
+                callback: SpawnStep2
+            );
+        }
+
+        private void SpawnStep2()
+        {
+            rect.Tween<Transform, Vector3, PositionTween>
+            (
+                new Vector3(0, -rect.sizeDelta.y / 2, 0),
+                0.2f, easing: ExponentEasing.Out, callback: OnReady
+            );
         }
 
         public void Shrink()
@@ -115,6 +132,8 @@ namespace Scripts.UI.InGame.Objectives
 
         public void Expand()
         {
+            if (isSpawning) return;
+
             rect.Tween<Transform, Vector3, ScaleTween>
                 (new Vector3(1, 1, 1), 1, 1.5f, ExponentEasing.Out);
 
@@ -123,8 +142,9 @@ namespace Scripts.UI.InGame.Objectives
                 1, 1.5f, ExponentEasing.Out);
         }
 
-        public void Fade()
+        public void Fade(ObjectiveHandler handler)
         {
+            OnRemoved(handler);
             rect.Tween<Transform, Vector3, ScaleTween>
                 (new Vector3(0, 0, 0), 1, easing: BackEasing.In,
                 callback: () => UnityEngine.Object.Destroy(element));

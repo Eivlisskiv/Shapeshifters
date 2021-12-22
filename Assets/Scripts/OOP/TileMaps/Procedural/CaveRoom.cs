@@ -83,7 +83,7 @@ namespace Scripts.OOP.TileMaps.Procedural
         {
             Vector2Int border = CurrentBorder();
             tile = GetTile(current, border, center);
-            if (tile != MapTileType.Empty && IsGate(current))
+            if (tile == MapTileType.Wall && IsGate(current))
                 tile = MapTileType.Gate;
 
             SetTile(current, tile);
@@ -121,9 +121,9 @@ namespace Scripts.OOP.TileMaps.Procedural
             else if (v.y <= border.y || v.y >= border.x) return MapTileType.Wall;
             //Assure space between floor/ceilling and middle
             else if (v.y <= border.y + spacing || v.y >= border.x - spacing)
-                return MapTileType.Empty;
+                return MapTileType.Spawn;
             //Assure left/right space
-            else if (SideSpace(v.x)) return MapTileType.Empty;
+            else if (SideSpace(v.x)) return MapTileType.Spawn;
 
             return hasCenter && PerlinWall(v)
                 ? MapTileType.Wall : MapTileType.Empty;

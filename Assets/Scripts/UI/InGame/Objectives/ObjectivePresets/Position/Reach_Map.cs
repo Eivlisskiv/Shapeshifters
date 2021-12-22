@@ -12,22 +12,23 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Position
 
         public Reach_Map(GameObject element, ObjectiveData data) : base(element, data) { }
 
-        public override void Initialize(ObjectiveData data)
+        protected override void Initialize(ObjectiveData data)
         {
             base.Initialize(data);
 
-            Track = Game.NextGate(true);
+            Track = Game.NextGate(0, true);
             Get<Text>("Title", (t) => t.text = LoadParam(data, 0, "Reach the next room.") );
 
             playerCount = Game.GetTeam(0).Count;
 
-            progress = Get<Text>("Progress", (t) => t.text = $"0/{playerCount} players" );
+            if(playerCount > 1)
+                progress = Get<Text>("Progress", (t) => t.text =$"0/{playerCount} players" );
 
-            Game.ObjectiveEvents.Subscribe<StoryMode, int> 
+            Game.ObjectiveEvents.Subscribe<CustomLevel, int> 
                     (typeof(Reach_Map), MapProgress);
         }
 
-        private void MapProgress(StoryMode game, int progress)
+        private void MapProgress(CustomLevel game, int progress)
         {
             if (progress == playerCount)
             {
@@ -35,7 +36,8 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Position
                 return;
             }
 
-            this.progress.text = $"{progress}/{playerCount} players";
+            if (this.progress)
+                this.progress.text = $"{progress}/{playerCount} players";
         }
     }
 }

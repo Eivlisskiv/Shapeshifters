@@ -39,16 +39,5 @@ namespace Scripts.OOP.Game_Modes
 
         public static Transform GetDebrisTransform(int team)
             => _instance?.teamTransforms[team].debris;
-
-        public static int LoadScore(Type mode = null)
-        {
-            string name = mode?.Name.Replace('_', ' ') ?? _instance.Name;
-            return PlayerPrefs.GetInt($"Score_{name}");
-        }
-
-        public static void SaveScore(int score)
-        {
-            PlayerPrefs.SetInt($"Score_{_instance.Name}", score);
-        }
     }
 }

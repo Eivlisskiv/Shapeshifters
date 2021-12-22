@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Scripts.OOP.Utils;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -20,30 +21,33 @@ namespace Scripts.OOP.TileMaps
 
         protected Vector2Int current;
 
-        private readonly MapTileType[,] mapContent;
+        private readonly int[,] mapContent;
 
         public MapTileType GetTile(Vector2Int pos)
-            => mapContent[(size.y - 1) - pos.y, pos.x];
+            => (MapTileType)mapContent[(size.y - 1) - pos.y, pos.x];
 
         public void SetTile(Vector2Int pos, MapTileType tile)
-            => mapContent[(size.y - 1) - pos.y, pos.x] = tile;
+            => mapContent[(size.y - 1) - pos.y, pos.x] = (int)tile;
 
         protected List<Vector2Int> gates = new List<Vector2Int>();
+        protected List<Vector2Int> spawns = new List<Vector2Int>();
 
         protected bool entrance;
+
+        private bool isGateOpen;
 
         protected readonly Transform propsContainer;
 
         public MapRoom(RoomHandler previous, Vector2Int size, Transform propsContainer)
         {
             this.size = size;
-            mapContent = new MapTileType[size.y, size.x];
+            mapContent = new int[size.y, size.x];
             this.propsContainer = propsContainer;
 
             Construct(previous);
         }
 
-        public MapRoom(RoomHandler previous, MapTileType[,] tiles, Transform propsContainer)
+        public MapRoom(RoomHandler previous, int[,] tiles, Transform propsContainer)
         {
             mapContent = tiles;
             size = new Vector2Int(tiles.GetLength(1),
@@ -79,17 +83,23 @@ namespace Scripts.OOP.TileMaps
 
         protected bool HandleTileDraw(Tilemap map, TileBase tilebase, MapTileType tile)
         {
-            if (tile != MapTileType.Empty)
+            if (tile == MapTileType.Empty)
+                return false;
+
+            if (tile == MapTileType.Gate)
             {
-                if (tile == MapTileType.Gate)
-                    gates.Add(current);
+                gates.Add(current);
+                if (isGateOpen) return false;
+            }
 
-                map.SetTile(new Vector3Int(current.x, current.y, 0),
-                    tile == MapTileType.Wall || tile == MapTileType.Gate
-                    ? tilebase : null);
-
+            if (tile == MapTileType.Spawn)
+            {
+                spawns.Add(current);
                 return false;
             }
+
+            map.SetTile(new Vector3Int(current.x, current.y, 0),
+                tilebase);
 
             return true;
         }
@@ -141,6 +151,9 @@ namespace Scripts.OOP.TileMaps
         public Vector2Int OpenGate(bool open, Tilemap map, TileBase tilebase)
         {
             Vector2Int c = Vector2Int.zero;
+
+            isGateOpen = open;
+
             for (int i = 0; i < gates.Count; i++)
             {
                 c = gates[i];
@@ -149,5 +162,7 @@ namespace Scripts.OOP.TileMaps
 
             return c;
         }
+
+        public Vector2Int RandomSpawn() => spawns.RandomElement();
     }
 }

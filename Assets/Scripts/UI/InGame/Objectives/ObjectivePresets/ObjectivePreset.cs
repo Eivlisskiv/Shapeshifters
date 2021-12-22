@@ -20,21 +20,21 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets
             => ObjectiveHandler.Instance.CreateObjective(data.id, data.color, data,
                 objType: Initializers.TryGetValue(data.id, out Type t) ? t : null);
 
-        protected StoryMode Game { get; private set; }
+        protected CustomLevel Game { get; private set; }
         protected ObjectiveHandler Handler => ObjectiveHandler.Instance;
 
-        protected ObjectivePreset(GameObject element, ObjectiveData? data = null) : base(element) 
+        protected ObjectivePreset(GameObject element, ObjectiveData data = null) : base(element) 
         {
-            if (data.HasValue) Initialize(data.Value);
+            if (data != null) Initialize(data);
         }
 
-        public virtual void Initialize(ObjectiveData data)
+        protected virtual void Initialize(ObjectiveData data)
         {
-            if(data.track.HasValue) Track = (Vector2)data.track;
-            Game = (StoryMode)GameModes.GameMode;
+            if(data.track != null) Track = (Vector2)data.track;
+            Game = (CustomLevel)GameModes.GameMode;
         }
 
-        public override void OnRemoved(ObjectiveHandler handler)
+        protected override void OnRemoved(ObjectiveHandler handler)
         {
             base.OnRemoved(handler);
             Game.ObjectiveEvents.CleanInstace(this);

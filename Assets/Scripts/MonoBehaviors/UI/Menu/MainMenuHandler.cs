@@ -2,14 +2,14 @@
 using Scripts.OOP.Game_Modes;
 using Scripts.OOP.UI;
 using System;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 using IgnitedBox.Tweening.Tweeners.VectorTweeners;
 using IgnitedBox.Tweening;
 using Scripts.MonoBehaviors.UI.Menu;
 using Scripts.UI.InGame.Objectives;
 using Scripts.OOP.Game_Modes.Story.ChapterOne;
+using System.Collections.Generic;
+using Scripts.UI.Menu.Story;
 
 public class MainMenuHandler : MonoBehaviour
 {
@@ -40,7 +40,8 @@ public class MainMenuHandler : MonoBehaviour
     private SoundHandler sounds;
 
     private UIPerksList perks;
-    private GameModeUI[] modes;
+
+    public Dictionary<Type, ArcadeModeUI> Modes { get; private set; }
 
     private RectTransform openTab;
     private RectTransform containerRect;
@@ -60,14 +61,14 @@ public class MainMenuHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (action == MenuAction.None  || action == MenuAction.Loading 
+        if (action == MenuAction.None || action == MenuAction.Loading
             || cooldown == 0) return;
 
         cooldown = Math.Max(0, cooldown - Time.deltaTime);
-        if (cooldown == 0) 
+        if (cooldown == 0)
         {
             if (action == MenuAction.GameOver) EndGame();
-            action = MenuAction.None; 
+            action = MenuAction.None;
         }
     }
 
@@ -84,12 +85,12 @@ public class MainMenuHandler : MonoBehaviour
 
             openTab.Tween<RectTransform, Vector3, RectSizeTween>(
                 new Vector2(-1, openTab.sizeDelta.y), speed,
-                easing: ExponentEasing.Out, callback: () => 
+                easing: ExponentEasing.Out, callback: () =>
                 {
                     if (tab)
                     {
                         tab.Tween<RectTransform, Vector3, RectSizeTween>(
-                        new Vector2(width, tab.sizeDelta.y), speed, 
+                        new Vector2(width, tab.sizeDelta.y), speed,
                         easing: ElasticEasing.Out);
                     }
                 });
@@ -100,12 +101,12 @@ public class MainMenuHandler : MonoBehaviour
             containerRect.Tween<Transform, Vector3, PositionTween>(
             containerRect.localPosition + new Vector3(width / 2, 0), speed / 2.5f);
         }
-        else if(openTab == null) //opening from no tab
+        else if (openTab == null) //opening from no tab
         {
             containerRect.Tween<Transform, Vector3, PositionTween>(
             containerRect.localPosition - new Vector3(width / 2, 0), speed / 2.5f);
 
-            if(tab)
+            if (tab)
                 tab.Tween<RectTransform, Vector3, RectSizeTween>(
                 new Vector2(width, tab.sizeDelta.y), speed,
                 easing: ElasticEasing.Out);
@@ -128,17 +129,17 @@ public class MainMenuHandler : MonoBehaviour
         }
 
         if (!button.tab) return;
-        if (modes == null)
+
+        if (Modes == null)
         {
-            modes = new GameModeUI[GameModes.modes.Count];
-            int i = 0;
-            foreach(var mode in GameModes.modes)
+            Modes = new Dictionary<Type, ArcadeModeUI>();
+            foreach (var mode in GameModes.modes)
             {
-                modes[i] = new GameModeUI(mode.Key, mode.Value,
-                    Instantiate(gameModePrefab, button.tab), this);
-                i++;
+                Modes.Add(mode.Key, new ArcadeModeUI(mode.Key, mode.Value,
+                    Instantiate(gameModePrefab, button.tab), this));
             }
         }
+
         SwitchTab(button.tab);
     }
     
@@ -166,6 +167,8 @@ public class MainMenuHandler : MonoBehaviour
             return;
         }
 
+        action = MenuAction.Loading;
+        SwitchTab(null);
         Episode1 game = new Episode1(this, map);
         game.StartMap();
 
@@ -201,7 +204,7 @@ public class MainMenuHandler : MonoBehaviour
     {
         if(sounds) sounds.PlayRandom("Game Over");
         gameOver.gameObject.SetActive(true);
-        gameOver.SetScores(GameModes.LoadScore());
+        gameOver.SetScores(GameModes.GameMode.LoadProgress());
         cooldown = 5;
         action = MenuAction.GameOver;
     }
@@ -209,18 +212,10 @@ public class MainMenuHandler : MonoBehaviour
     private void EndGame()
     {
         gameOver.gameObject.SetActive(false);
-        int newScore = GameModes.GameMode.Score;
-        int topScore = GameModes.LoadScore();
         container.SetActive(true);
-        if (newScore > topScore)
-        {
-            Text score = modes.First(m => 
-                m.mode == GameModes.GameMode.GetType()).score;
-            score.text = newScore.ToString();
-            GameModes.SaveScore(newScore);
-        }
-
-        GameModes.GameMode?.EndGame();
+        GameModes.GameMode.UpdateMenu(this);
+        GameModes.GameMode.SaveProgress();
+        GameModes.GameMode.EndGame();
     }
 
     internal ObjectiveHandler SpawnGameUI(string gamemodeDesc, Action onReady)
