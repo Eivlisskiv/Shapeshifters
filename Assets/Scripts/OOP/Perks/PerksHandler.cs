@@ -102,5 +102,15 @@ namespace Scripts.OOP.Perks
             perk.ToBuff();
             return perk;
         }
+
+        internal SerializedPerk[] Serialize(string id)
+        {
+            SerializedPerk[] serialized = new SerializedPerk[perks.Count];
+            for (int i = 0; i < perks.Count; i++)
+            {
+                serialized[i] = new SerializedPerk(id, perks[i]);
+            }
+            return serialized;
+        }
     }
 }

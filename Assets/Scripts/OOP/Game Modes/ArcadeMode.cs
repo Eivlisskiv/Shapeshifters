@@ -28,13 +28,13 @@ namespace Scripts.OOP.Game_Modes
 
         public override int LoadProgress()
         {
-            ArcadeProgress progress = ArcadeProgress.Load<ArcadeProgress>(Name);
+            ArcadeProgress progress = ArcadeProgress.LoadOne<ArcadeProgress>(Name);
             return progress.TopScore;
         }
 
         public override void SaveProgress()
         {
-            ArcadeProgress progress = ArcadeProgress.Load<ArcadeProgress>(Name);
+            ArcadeProgress progress = ArcadeProgress.LoadOne<ArcadeProgress>(Name);
             progress.LastScore = Score;
             if (Score > progress.TopScore)
                 progress.TopScore = Score;
@@ -43,7 +43,7 @@ namespace Scripts.OOP.Game_Modes
 
         public override void UpdateMenu(MainMenuHandler menu)
         {
-            ArcadeProgress progress = ArcadeProgress.Load<ArcadeProgress>(Name);
+            ArcadeProgress progress = ArcadeProgress.LoadOne<ArcadeProgress>(Name);
 
             if(Score > progress.TopScore)
                 menu.Modes[GetType()].SetScore(Score);

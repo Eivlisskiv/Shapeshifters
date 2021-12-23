@@ -4,24 +4,39 @@ using Scripts.OOP.Database;
 
 namespace Scripts.OOP.Game_Modes.Story
 {
-    public abstract class StoryLevel : CustomLevel
+    public class StoryLevel : CustomLevel
     {
-        public StoryLevel(LevelSettings levelSettings, MainMenuHandler menu,
+        private readonly StorySettings story;
+
+        public StoryLevel(StorySettings levelSettings, MainMenuHandler menu,
             MapHandler map, int extra_teams = 0) : base(levelSettings, menu, map,
-                ChapterSettings.GetTeams(extra_teams)) { }
+                ChapterSettings.GetTeams(extra_teams)) 
+        {
+            story = levelSettings;
+        }
 
         public override int LoadProgress()
         {
-            StoryProgress progress = StoryProgress.Load(levelSettings.Chapter, levelSettings.Episode);
+            StoryProgress progress = StoryProgress.Load(story.Chapter, story.Episode);
             return progress.TopScore;
         }
 
         public override void SaveProgress()
         {
-            StoryProgress progress = StoryProgress.Load(levelSettings.Chapter, levelSettings.Episode);
+            StoryProgress progress = StoryProgress.Load(story.Chapter, story.Episode);
             progress.LastScore = Score;
             if (Score > progress.TopScore)
                 progress.TopScore = Score;
+
+            PlayerController player = (PlayerController)GetTeam(0)[0];
+
+            progress.LevelReached = player.Level;
+            progress.Experience = player.Xp;
+
+            progress.Perks = player.perks.Serialize(progress.Id);
+
+            progress.Weapon = player.Weapon.GetType().Name;
+
             progress.Save();
         }
 
@@ -33,10 +48,10 @@ namespace Scripts.OOP.Game_Modes.Story
         protected override PlayerController SpawnPlayer()
         {
             PlayerController player = base.SpawnPlayer();
-            if (levelSettings.Episode > 1)
+            if (story.Episode > 1)
             {
-                StoryProgress previous = StoryProgress.Load(levelSettings.Chapter, levelSettings.Episode - 1);
-                //Load up all of the progress from the previous story;
+                StoryProgress previous = StoryProgress.Load(story.Chapter, story.Episode - 1);
+                player.LoadProgress(previous);
             }
             return player;
         }

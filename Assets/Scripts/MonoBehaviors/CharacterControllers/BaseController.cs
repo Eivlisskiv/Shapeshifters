@@ -23,8 +23,7 @@ public abstract class BaseController : HealthEntity,
         DamageTaken
     }
 
-    public Weapon Weapon
-        => weapon ? weapon : (weapon = GetComponent<Weapon>());
+    public Weapon Weapon => weapon ? weapon : (weapon = GetComponent<Weapon>());
 
     private Weapon weapon;
 
@@ -60,12 +59,10 @@ public abstract class BaseController : HealthEntity,
     internal EventsHandler<ControllerEvents> Events;
     internal PerksHandler perks;
 
-    protected int level;
-    public int Level
-    { get => level; }
+    public int Level { get; protected set; }
 
-    protected float xp;
-    public int XPRequired => Mathf.FloorToInt((level + 1) * (float)Math.Pow(10, 2));
+    public float Xp { get; protected set; }
+    public int XPRequired => Mathf.FloorToInt((Level + 1) * (float)Math.Pow(10, 2));
 
     private readonly Color[] _colors = new Color[2];
     public void SetColor(int i, Color value)
@@ -91,7 +88,7 @@ public abstract class BaseController : HealthEntity,
 
         OnStart();
 
-        if (stats == null) stats = new Stats(30 + (level / 5));
+        if (stats == null) stats = new Stats(30 + (Level / 5));
         if (perks == null) perks = new PerksHandler();
     }
 
@@ -349,19 +346,19 @@ public abstract class BaseController : HealthEntity,
 
     public void OnKill(BaseController target)
     {
-        AddXP(target.xp + (target.XPRequired / (level + 2) ));
+        AddXP(target.Xp + (target.XPRequired / (Level + 2) ));
         GameModes.Run<IElimination>(mode => mode.Elimenation(target, this));
     }
 
     private void AddXP(float amount)
     {
-        xp += amount;
+        Xp += amount;
         bool up = false;
-        while(xp >= XPRequired)
+        while(Xp >= XPRequired)
         {
-            xp -= XPRequired;
+            Xp -= XPRequired;
             up = true;
-            level++;
+            Level++;
             ModifyHealth(stats.MaxHealth - stats.health);
         }
 

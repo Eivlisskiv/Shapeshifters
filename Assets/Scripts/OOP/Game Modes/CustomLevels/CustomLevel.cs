@@ -10,7 +10,7 @@ namespace Scripts.OOP.Game_Modes.Story
         private float game_timer;
 
         private bool ongoing;
-        private bool LevelCompleted => ObjectivesProgress >= levelSettings.main.Length;
+        private bool LevelCompleted => ObjectivesProgress >= levelSettings.Main.Length;
 
         protected LevelSettings levelSettings;
         protected int ObjectivesProgress { get; private set; }
@@ -25,7 +25,7 @@ namespace Scripts.OOP.Game_Modes.Story
             MapHandler map, params Color[] teamColors)
             : base(menu, map, teamColors)
         {
-            description = levelSettings.description;
+            description = levelSettings.Description;
             this.levelSettings = levelSettings;
             ObjectivesProgress = -1;
         }
@@ -44,9 +44,9 @@ namespace Scripts.OOP.Game_Modes.Story
 
         protected void NextMap()
         {
-            if (mapProgress + 1 >= levelSettings.maps.Length) return;
+            if (mapProgress + 1 >= levelSettings.Maps.Length) return;
             mapProgress++;
-            map.NextRoom(levelSettings.maps[mapProgress], false);
+            map.NextRoom(levelSettings.Maps[mapProgress], false);
         }
 
         public override void OnLoaded()
@@ -75,7 +75,7 @@ namespace Scripts.OOP.Game_Modes.Story
                 (map.characterPrefab, map.uiPrefab,
                 Camera.main, map.mainCanvas.transform);
 
-            player.transform.position = map.current.MapPosition(levelSettings.playerSpawn);
+            player.transform.position = map.current.MapPosition(levelSettings.PlayerSpawn);
             AddMember(0, player);
             return player;
         }
@@ -97,7 +97,7 @@ namespace Scripts.OOP.Game_Modes.Story
                 return;
             }
 
-            ObjectiveData data = levelSettings.main[ObjectivesProgress];
+            ObjectiveData data = levelSettings.Main[ObjectivesProgress];
             CurrentObjective = ObjectivePreset.Create(data);
         }
 

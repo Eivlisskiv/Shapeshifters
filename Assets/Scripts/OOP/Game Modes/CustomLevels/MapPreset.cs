@@ -1,25 +1,51 @@
-﻿using IgnitedBox.UnityUtilities.Vectors;
+﻿using IgnitedBox.SaveData.Databases.Sqlite;
+using IgnitedBox.UnityUtilities.Vectors;
 using System;
 
 namespace Scripts.OOP.Game_Modes.Story
 {
-    [Serializable]
-    public class LevelSettings
+    public class StorySettings : LevelSettings
     {
-        public string id { get; set; }
-
-        public string Creator { get; set; }
-
-        public string name { get; set; }
-
         public int Chapter { get; set; }
         public int Episode { get; set; }
 
-        public string description { get; set; }
-        public SerializableInt2 playerSpawn { get; set; }
-        public MapPreset[] maps { get; set; }
-        public ObjectiveData[] main { get; set; }
-        //public ObjectiveData[] secondary; Seconday will have conditions?
+        public StorySettings() : base() { }
+        public StorySettings(int chapter, int episode, string name) : base(name)
+        {
+            Chapter = chapter;
+            Episode = episode;
+
+            Id = $"{Creator}/{chapter}.{episode}";
+        }
+    }
+
+    [Serializable]
+    public class LevelSettings : SqliteHandler.SqlTable<string>
+    {
+        public string Creator { get; set; }
+
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+        public SerializableInt2 PlayerSpawn { get; set; }
+        public MapPreset[] Maps { get; set; }
+        public ObjectiveData[] Main { get; set; }
+        
+        public LevelSettings() { }
+
+        public LevelSettings(string creator, string name)
+        {
+            Creator = creator;
+            Name = name;
+
+            Id = $"{creator}/{name}";
+        }
+
+        protected LevelSettings(string name)
+        {
+            Creator = "IBS";
+            Name = name;
+        }
     }
 
     [Serializable]

@@ -7,11 +7,10 @@ using IgnitedBox.Tweening.Tweeners.VectorTweeners;
 using IgnitedBox.Tweening;
 using Scripts.MonoBehaviors.UI.Menu;
 using Scripts.UI.InGame.Objectives;
-using Scripts.OOP.Game_Modes.Story.ChapterOne;
 using System.Collections.Generic;
-using Scripts.UI.Menu.Story;
 using UnityEngine.UI;
 using IgnitedBox.Tweening.Tweeners.ColorTweeners;
+using Scripts.OOP.Game_Modes.Story;
 
 public class MainMenuHandler : MonoBehaviour
 {
@@ -179,7 +178,25 @@ public class MainMenuHandler : MonoBehaviour
 
         LoadingStarting();
         SwitchTab(null);
-        Episode1 game = new Episode1(this, map);
+        StoryLevel game = new StoryLevel(Chapter.Episodes[0][0], this, map);
+        game.StartMap();
+
+        //if (button.tab) SwitchTab(button.tab);
+    }
+
+    public void OnClick_Story2(TabButton button)
+    {
+        if (!story) story = button;
+
+        if (action == MenuAction.Loading)
+        {
+            SetStartButton(false);
+            return;
+        }
+
+        LoadingStarting();
+        SwitchTab(null);
+        StoryLevel game = new StoryLevel(Chapter.Episodes[0][1], this, map);
         game.StartMap();
 
         //if (button.tab) SwitchTab(button.tab);

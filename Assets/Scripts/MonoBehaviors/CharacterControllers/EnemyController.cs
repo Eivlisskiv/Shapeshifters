@@ -16,7 +16,7 @@ public class EnemyController : BaseController
 
     public void Set(int level)
     {
-        this.level = level;
+        this.Level = level;
     }
 
     public override void OnStart()

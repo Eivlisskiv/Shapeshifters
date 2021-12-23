@@ -32,7 +32,7 @@ namespace Scripts.OOP.UI
         protected override int GetTopScore()
         {
             string id = GetName();
-            ArcadeProgress prog = ArcadeProgress.Load<ArcadeProgress>(id, true);
+            ArcadeProgress prog = ArcadeProgress.LoadOne<ArcadeProgress>(id, true);
             return prog.TopScore;
         }
     }

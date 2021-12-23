@@ -1,6 +1,8 @@
 ﻿using IgnitedBox.UnityUtilities.Vectors;
 using Scripts.OOP.Character.Stats;
+using Scripts.OOP.Database;
 using Scripts.OOP.Game_Modes;
+using Scripts.OOP.Perks;
 using Scripts.OOP.Perks.Weapons;
 using Scripts.OOP.UI;
 using UnityEngine;
@@ -44,10 +46,35 @@ public class PlayerController : BaseController
         if (ui)
         {
             SetHealthBar(ui.healthContainer);
-            ui.UpdateXP(xp / XPRequired);
+            ui.LevelUp(Level);
+            ui.UpdateXP(Xp / XPRequired);
         }
 
         UpdateHealthBar();
+    }
+
+    internal void LoadProgress(StoryProgress previous)
+    {
+        Level = previous.LevelReached;
+        Xp = previous.Experience;
+
+        SerializedPerk[] perks = previous.Perks;
+        this.perks = new PerksHandler();
+        for (int i = 0; i < perks.Length; i++)
+        {
+            SerializedPerk sperk = perks[i];
+            Perk perk = PerksHandler.Load(sperk.Name);
+            perk.LevelUp(sperk.Level);
+            perk.ChargeBuff(sperk.Buff, sperk.Charge);
+            this.perks.Add(perk, ui);
+        }
+
+        for (int i = 0; i < Weapon.Types.Length; i++)
+        {
+            System.Type type = Weapon.Types[i];
+            if (type.Name == previous.Weapon)
+                SetWeapon(type);
+        }
     }
 
     public override void OnUpdate()
@@ -103,8 +130,8 @@ public class PlayerController : BaseController
     {
         if (ui)
         {
-            if (isUp) ui.LevelUp(level);
-            ui.UpdateXP(xp / XPRequired);
+            if (isUp) ui.LevelUp(Level);
+            ui.UpdateXP(Xp / XPRequired);
         }
     }
 

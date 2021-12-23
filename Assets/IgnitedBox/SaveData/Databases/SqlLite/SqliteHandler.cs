@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace IgnitedBox.SaveData.Databases.Sqlite
@@ -23,7 +24,7 @@ namespace IgnitedBox.SaveData.Databases.Sqlite
             return table;
         }
 
-        private static void SaveEntity<I>(SqlTable<I> entity)
+        private static void SaveEntity<I>(ISqlTable<I> entity)
         {
             Type type = entity.GetType();
 
@@ -54,15 +55,30 @@ namespace IgnitedBox.SaveData.Databases.Sqlite
             });
         }
 
-        private static T Load<T, I>(I id, bool createIfnone) where T : SqlTable<I>, new()
+        private static bool TableExists(string name)
+        {
+            bool exists = false;    
+            CreateQuery($"SELECT 1 FROM sqlite_master WHERE type='table' AND name='{name}'", cmd => 
+            {
+                cmd.ExecuteNonQuery();
+                using (SqliteDataReader reader = cmd.ExecuteReader())
+                {
+                    exists = reader.Read();
+                }
+            });
+            return exists;
+        }
+
+        private static T LoadOne<T, K>(K id, string keyName, bool createIfnone) where T : class, ITable, new()
         {
             Type type = typeof(T);
             bool found = false;
-            T entry = new T() { Id = id };
+
+            T entry = new T();
 
             TableInfo table = GetTableInfo(type);
 
-            CreateQuery(table.select, cmd =>
+            CreateQuery(string.Format(table.select, keyName), cmd =>
             {
                 cmd.Parameters.Add(new SqliteParameter
                 {
@@ -77,26 +93,98 @@ namespace IgnitedBox.SaveData.Databases.Sqlite
                     if (!reader.Read()) return;
 
                     found = true;
-                    Dictionary<string, object> values = GetColumnValues(reader);
-
-                    GetSetMember[] fields = table.fields;
-
-                    for (int i = 0; i < fields.Length; i++)
-                    {
-                        GetSetMember field = fields[i];
-                        if (values.TryGetValue(field.Name, out object v))
-                            field.SetValue(entry, v);
-                    }
+                    ReadEntry(entry, table, reader);
                 }
             });
 
             if (!found && createIfnone)
             {
-                SaveEntity(entry);
+                if (entry is ISqlTable<K> ken) ken.Id = id;
+                entry.Save();
                 return entry;
             }
 
             return found ? entry : null;
+        }
+
+        private static T[] LoadAll<T, K>(K id, string keyName) where T : class, ITable, new()
+        {
+            Type type = typeof(T);
+            TableInfo table = GetTableInfo(type);
+            List<T> entries = new List<T>();
+            CreateQuery(string.Format(table.select, keyName), cmd =>
+            {
+                cmd.Parameters.Add(new SqliteParameter
+                {
+                    ParameterName = "Id",
+                    Value = id
+                });
+
+#pragma warning disable IDE0063 // Use simple 'using' statement
+                using (SqliteDataReader reader = cmd.ExecuteReader())
+#pragma warning restore IDE0063 // Use simple 'using' statement
+                {
+                    while (reader.Read())
+                    {
+                        T entry = new T();
+                        ReadEntry(entry, table, reader);
+                        entries.Add(entry);
+                    }
+                }
+            });
+
+            return entries.ToArray();
+        }
+
+        private static void DeleteEntity<I>(ISqlTable<I> entry)
+        {
+            Type type = entry.GetType();
+            if (!TableExists(type.Name)) return;
+            CreateQuery($"DELETE FROM {type.Name} WHERE Id=@Id", cmd =>
+            {
+                cmd.Parameters.Add(new SqliteParameter
+                {
+                    ParameterName = "Id",
+                    Value = entry.Id
+                });
+
+                cmd.ExecuteNonQuery();
+            });
+        }
+
+        private static void DeleteAll<T, K>(K id, string keyName)
+        {
+            Type type = typeof(T);
+            if (!TableExists(type.Name)) return;
+            CreateQuery($"DELETE FROM {type.Name} WHERE {keyName}=@id", cmd =>
+            {
+                cmd.Parameters.Add(new SqliteParameter
+                {
+                    ParameterName = "Id",
+                    Value = id
+                });
+
+                cmd.ExecuteNonQuery();
+            });
+        }
+
+        private static void ReadEntry<T>(T entry, TableInfo table, SqliteDataReader reader)
+        {
+            Dictionary<string, object> values = GetColumnValues(reader);
+
+            GetSetMember[] fields = table.fields;
+            object v;
+            for (int i = 0; i < fields.Length; i++)
+            {
+                GetSetMember field = fields[i];
+                if (values.TryGetValue(field.Name, out v))
+                    field.SetValue(entry, v);
+            }
+
+            if (values.TryGetValue(table.identifier.Name, out v))
+            {
+                table.identifier.SetValue(entry, v);
+            }
         }
 
         private static Dictionary<string, object> GetColumnValues(SqliteDataReader reader)
@@ -111,12 +199,122 @@ namespace IgnitedBox.SaveData.Databases.Sqlite
 
         private static void CreateTable(TableInfo table)
         {
-            //Check if table needs updating
+            (bool create, bool rebuild) = VerifyTable(table);
 
-            CreateQuery(table.create, cmd =>
+            if (rebuild)
             {
-                var result = cmd.ExecuteNonQuery();
+                RebuildTable(table);
+                return;
+            }
+
+            if (create) CreateQuery(table.create, cmd => cmd.ExecuteNonQuery());
+        }
+
+        private static void RebuildTable(TableInfo table)
+        {
+            List<Dictionary<string, object>> entries = new List<Dictionary<string, object>>();
+
+            using (SqliteConnection connection = new SqliteConnection(dbPath))
+            {
+                connection.Open();
+                using (SqliteCommand cmd = connection.CreateCommand())
+                {
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = $"select * from {table.name}";
+                    using (SqliteDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Dictionary<string, object> entry = GetColumnValues(reader);
+                            entries.Add(entry);
+                        }
+                    }
+
+                    cmd.CommandText = $"drop table {table.name}";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = table.create;
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = table.save;
+
+                    for (int i = 0; i < entries.Count; i++)
+                    {
+                        Dictionary<string, object> entry = entries[i];
+
+                        cmd.Parameters.Add(new SqliteParameter
+                        {
+                            ParameterName = "Id",
+                            Value = entry["Id"]
+                        });
+
+                        GetSetMember[] fields = table.fields;
+
+                        for (int j = 0; j < fields.Length; j++)
+                        {
+                            GetSetMember field = fields[i];
+
+                            entry.TryGetValue(field.Name, out object v);
+
+                            cmd.Parameters.Add(new SqliteParameter
+                            {
+                                ParameterName = field.Name,
+                                Value = v
+                            });
+                        }
+
+                        var result = cmd.ExecuteNonQuery();
+                    }
+                }
+
+            }
+        }
+
+        private static (bool, bool) VerifyTable(TableInfo table)
+        {
+            bool create = false;
+            bool rebuild = false;
+            CreateQuery($"PRAGMA table_info({table.name})", cmd =>
+            {
+                cmd.ExecuteNonQuery();
+                using (SqliteDataReader reader = cmd.ExecuteReader())
+                {
+                    if (!reader.Read())
+                    {
+                        create = true;
+                        return;
+                    }
+
+                    Dictionary<string, Dictionary<string, object>> data = new Dictionary<string, Dictionary<string, object>>();
+                    do
+                    {
+                        Dictionary<string, object> values = GetColumnValues(reader);
+                        data.Add(values["name"].ToString(), values);
+                    }
+                    while (reader.Read());
+
+
+
+                    if (data.ContainsKey("Id")) data.Remove("Id");
+                    else rebuild = true;
+
+                    for (int i = 0; !rebuild && i < table.fields.Length; i++)
+                    {
+                        GetSetMember mem = table.fields[i];
+
+                        if (data.TryGetValue(mem.Name, out Dictionary<string, object> f))
+                        {
+                            string type = f["type"].ToString();
+                            if (type.Equals(SqlType(mem.ValueType), StringComparison.OrdinalIgnoreCase))
+                                data.Remove("Id");
+                            else rebuild = true;
+                        }
+                        else rebuild = true;
+                    }
+                }
             });
+
+            return (create, rebuild);
         }
 
         private static string JoinFields(string seperator, GetSetMember[] fields, Func<GetSetMember, string> parse)
@@ -131,7 +329,7 @@ namespace IgnitedBox.SaveData.Databases.Sqlite
             return str;
         }
 
-        private static object SqlType(Type type)
+        private static string SqlType(Type type)
         {
             if (type == typeof(string) || type == typeof(char))
                 return "TEXT";
@@ -181,12 +379,16 @@ namespace IgnitedBox.SaveData.Databases.Sqlite
 
             public string Name => isField ? field.Name : prop.Name;
             public Type ValueType => isField ? field.FieldType : prop.PropertyType;
+            public MemberInfo Member => (isField ? field : (MemberInfo)prop);
+
+            public bool IsNotSerializable => isField ? field.IsNotSerialized 
+                : !(prop.SetMethod.IsPublic && prop.GetMethod.IsPublic);
 
             private readonly bool isField;
             private readonly FieldInfo field;
             private readonly PropertyInfo prop;
 
-            private Type parent => isField ? field.DeclaringType : prop.DeclaringType;
+            private Type Parent => isField ? field.DeclaringType : prop.DeclaringType;
 
             public GetSetMember(MemberInfo member)
             {
@@ -207,7 +409,10 @@ namespace IgnitedBox.SaveData.Databases.Sqlite
 
             public void SetValue(object instance, object value)
             {
-                if(ValueType == typeof(int))
+                if (value.GetType() == typeof(DBNull))
+                    value = null;
+
+                if (ValueType == typeof(int))
                 {
                     value = Convert.ToInt32((long)value);
                 }
@@ -217,17 +422,21 @@ namespace IgnitedBox.SaveData.Databases.Sqlite
                     value = Convert.ToInt16((long)value);
                 }
 
+                
+
                 if (isField) field.SetValue(instance, value);
                 else prop.SetValue(instance, value);
             }
 
             public override string ToString()
-             => $"{parent.Name}.{Name} ({ValueType.Name})";
+             => $"{Parent.Name}.{Name} ({ValueType.Name})";
         }
 
         private class TableInfo
         {
-            public readonly FieldInfo identifier;
+            public readonly string name;
+
+            public readonly GetSetMember identifier;
 
             public readonly GetSetMember[] fields;
 
@@ -237,14 +446,15 @@ namespace IgnitedBox.SaveData.Databases.Sqlite
 
             public TableInfo(Type type)
             {
-                identifier = type.GetField("Id");
+                name = type.Name;
+                identifier = type.GetProperty("Id");
                 fields = LoadSerializableFields(type);
 
-                select = $"SELECT * FROM {type.Name} WHERE Id = @Id";
+                select = $"SELECT * FROM {type.Name} WHERE {{0}} = @Id";
 
-                create = $"CREATE TABLE IF NOT EXISTS '{type.Name}' ("
-                + $"'Id' {SqlType(identifier.FieldType)} PRIMARY KEY,"
-                + JoinFields(",", fields, field => $" '{field.Name}' {SqlType(field.ValueType)}")
+                create = $"CREATE TABLE '{type.Name}' ("
+                + $"'Id' {SqlType(identifier.ValueType)} PRIMARY KEY {HasIncrement(type)},"
+                + JoinFields(",", fields, field => $" '{field.Name}' {SqlType(field.ValueType)}{HasIncrement(field.Member)}")
                 + ");";
 
                 save = "INSERT or REPLACE INTO " + $"{type.Name} " +
@@ -260,29 +470,60 @@ namespace IgnitedBox.SaveData.Databases.Sqlite
 
                 List<MemberInfo> members = new List<MemberInfo>(self.GetFields(bindingFlags));
                 members.AddRange(self.GetProperties(bindingFlags));
+
                 List<GetSetMember> serialized = new List<GetSetMember>();
+
                 for (int i = 0; i < members.Count; i++)
                 {
-                    MemberInfo member = members[i];
-                    if (member.Name == "Id" || (member is FieldInfo field && field.IsNotSerialized))
-                        continue;
-
-                    serialized.Add(member);
+                    GetSetMember member = members[i];
+                    if (member.Name == "Id" || member.IsNotSerializable) continue;
+                    Type type = member.ValueType;
+                    if (type.IsPrimitive || type == typeof(string) || type == typeof(DateTime)) serialized.Add(member);
                 }
 
                 return serialized.ToArray();
             }
+
+            private string HasIncrement(MemberInfo member)
+            {
+                if (member.IsDefined(typeof(AutoIncrement)))
+                    return "AUTOINCREMENT";
+                return null;
+            }
         }
 
-        public abstract class SqlTable<I>
+        public interface ITable
         {
-            public static T Load<T>(I id, bool createIfNone = false) 
-                where T : SqlTable<I>, new()
-                => Load<T, I>(id, createIfNone);
+            void Save();
+        }
 
-            public I Id;
+        public interface ISqlTable<K>
+        {
+            K Id { get; set; }
+        }
+
+        public abstract class SqlTable<TKey> : ISqlTable<TKey>, ITable
+        {
+            public static TEntry LoadOne<TEntry>(TKey id, bool createIfNone = false) 
+                where TEntry : class, ITable, new() => LoadOne<TEntry, TKey>(id, "Id", createIfNone);
+
+            public static TEntry[] LoadAll<TEntry>(TKey id, string keyName = "Id")
+                where TEntry : class, ITable, new() => SqliteHandler.LoadAll<TEntry, TKey>(id, keyName);
+
+            public static TEntry[] LoadAll<TEntry, TForeign>(TForeign id, string keyName = "ForeignKey")
+                where TEntry : class, ITable, new() => SqliteHandler.LoadAll<TEntry, TForeign>(id, keyName);
+
+            public static void DeleteAll<TEntry, TForeign>(TForeign id, string keyName = "Id")
+                where TEntry : class, ITable, new() => SqliteHandler.DeleteAll<TEntry, TForeign>(id, keyName);
+
+            public TKey Id { get; set; }
 
             public void Save() => SaveEntity(this);
+
+            public void Delete() => DeleteEntity(this);
         } 
+
+        [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
+        public class AutoIncrement : Attribute { }
     }
 }
