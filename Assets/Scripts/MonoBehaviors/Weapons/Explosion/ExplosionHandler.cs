@@ -14,6 +14,8 @@ namespace Scripts.Explosion
             readonly ExplosionHandler handler;
             readonly float multiplier;
 
+            public BaseController Sender => handler.Sender;
+
             private Vector3 Position => handler.transform.position; 
 
             public float GetDamage()
@@ -34,7 +36,7 @@ namespace Scripts.Explosion
                 return force * (1 - handler.Progress) * handler.Intensity * multiplier;
             }
 
-            public bool Teammate(int team) => team == handler.ignoreTeam;
+            public bool Teammate(int team) => team == handler.IgnoreTeam;
 
             internal Effect(ExplosionHandler handler, float m)
             {
@@ -115,7 +117,8 @@ namespace Scripts.Explosion
         }
 
         public float damage = 10;
-        public int ignoreTeam = -1;
+        public BaseController Sender { get; set; }
+        public int IgnoreTeam => Sender.Team;
 
         enum State { Stopped, Starting, Playing }
 

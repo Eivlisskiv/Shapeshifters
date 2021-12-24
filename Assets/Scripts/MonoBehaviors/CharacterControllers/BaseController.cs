@@ -249,7 +249,7 @@ public abstract class BaseController : HealthEntity,
         perks.Activate<IReceiveDamage>(1,
                 perk => perk.OnHit(this, hit, ref damage));
 
-        ModifyHealth(-damage);
+        ProcessDamage(damage, effect.Sender, hit);
 
         return true;
     }

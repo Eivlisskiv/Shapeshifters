@@ -28,7 +28,7 @@ public class PlayerController : BaseController
 
         GameObject pointer = Resources.Load<GameObject>("UI/ObjectivePointer");
         pointer = Instantiate(pointer, player.transform);
-        pointer.transform.localPosition = Vector3.zero;
+        pointer.transform.localPosition = new Vector3(0, 0, -5);
 
         return player;
     }
@@ -87,6 +87,11 @@ public class PlayerController : BaseController
             var perk = new Mine_Drop();
             perk.LevelUp(1);
             perks.Add(perk, UI);
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            perks.Add(PerksHandler.Random(), UI);
         }
 
         if (Input.GetKeyDown(KeyCode.H))

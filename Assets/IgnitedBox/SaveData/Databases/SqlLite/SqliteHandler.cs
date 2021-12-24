@@ -235,6 +235,8 @@ namespace IgnitedBox.SaveData.Databases.Sqlite
                     cmd.CommandText = table.create;
                     cmd.ExecuteNonQuery();
 
+                    if (entries.Count == 0) return;
+
                     cmd.CommandText = table.save;
 
                     for (int i = 0; i < entries.Count; i++)
@@ -251,9 +253,15 @@ namespace IgnitedBox.SaveData.Databases.Sqlite
 
                         for (int j = 0; j < fields.Length; j++)
                         {
-                            GetSetMember field = fields[i];
+                            GetSetMember field = fields[j];
+                            Type t = field.ValueType;
 
-                            entry.TryGetValue(field.Name, out object v);
+                            if (!entry.TryGetValue(field.Name, out object v)) v = GetDefault(t);
+                            else if (!v.GetType().Equals(t))
+                            {
+                                try { v = Convert.ChangeType(v, t); }
+                                catch(Exception) { v = GetDefault(t); }
+                            }
 
                             cmd.Parameters.Add(new SqliteParameter
                             {
@@ -267,6 +275,9 @@ namespace IgnitedBox.SaveData.Databases.Sqlite
                 }
             }
         }
+
+        private static object GetDefault(Type t)
+            => t.IsValueType ? Activator.CreateInstance(t) : null;
 
         private static (bool, bool) VerifyTable(TableInfo table)
         {

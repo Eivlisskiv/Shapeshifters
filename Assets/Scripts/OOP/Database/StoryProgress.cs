@@ -1,6 +1,5 @@
 ﻿using Scripts.OOP.Perks;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Scripts.OOP.Database
 {
@@ -25,8 +24,6 @@ namespace Scripts.OOP.Database
             return prog;
         }
 
-        public float BestTimeSeconds { get; set; }
-
         public float Experience { get; set; }
 
         public SerializedPerk[] Perks
@@ -34,13 +31,13 @@ namespace Scripts.OOP.Database
             get
             {
                 if(_perks == null)
-                    _perks = SerializedPerk.LoadAll<SerializedPerk, string>(Id, "LevelKey");
+                    _perks = LoadAll<SerializedPerk, string>(Id, "LevelKey");
                 return _perks;
             }
 
             set
             {
-                SerializedPerk.DeleteAll<SerializedPerk, string>(Id, "LevelKey");
+                DeleteAll<SerializedPerk, string>(Id, "LevelKey");
                 _perks = value;
                 for (int i = 0; i < _perks.Length; i++) _perks[i].Save();
             }
@@ -56,21 +53,6 @@ namespace Scripts.OOP.Database
 
             if (cache.ContainsKey(Id)) cache[Id] = this;
             else cache.Add(Id, this);
-        }
-
-        public string BestTime()
-        {
-            float seconds = BestTimeSeconds;
-            int minutes;
-            int hours = (int)(seconds / 3600);
-
-            seconds -= hours * 3600;
-            minutes = (int)(seconds / 60);
-            seconds = Mathf.Round((seconds - (minutes * 60)) * 100) / 100;
-
-            return hours > 0 ? $"{hours}:{minutes}:{seconds}"
-                : minutes > 0 ? $"{minutes}:{seconds}"
-                : $"{seconds}";
         }
     }
 }

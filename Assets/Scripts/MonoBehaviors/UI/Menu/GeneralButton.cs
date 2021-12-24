@@ -49,12 +49,14 @@ public class GeneralButton : MonoBehaviour
     private static readonly Dictionary<string, GeneralButton> GroupFocused = new Dictionary<string, GeneralButton>();
     private static readonly Dictionary<string, GeneralButton> GroupSelected = new Dictionary<string, GeneralButton>();
 
+    public bool HasGroup => !string.IsNullOrEmpty(group);
+    
     [SerializeField]
     public string group;
 
     public bool selectBeforePress = true;
 
-    public Color Color => group != null && Selected ? selectColor : offColor;
+    public Color Color => HasGroup && Selected ? selectColor : offColor;
 
     public Color offColor = Color.white;
     public Color focusColor = Color.cyan;
@@ -66,7 +68,9 @@ public class GeneralButton : MonoBehaviour
         set 
         {
             enabled = value;
-            TweenColor(value ? Color.white : Color.red, 1);
+            ChangeFocus(false);
+            ChangeSelect(false);
+            TweenColor(value ? Color : Color.red, 1);
         }
     }
 
@@ -127,7 +131,7 @@ public class GeneralButton : MonoBehaviour
 
     private void SelectGroup(GroupType gt)
     {
-        if (group != null && group.Length == 0) return;
+        if (!HasGroup) return;
 
         var groups = GetGroup(gt);
 
@@ -152,7 +156,7 @@ public class GeneralButton : MonoBehaviour
 
     private void DeselectGroup(GroupType gt)
     {
-        if (group != null && group.Length == 0) return;
+        if (!HasGroup) return;
 
         var groups = GetGroup(gt);
 
@@ -171,6 +175,9 @@ public class GeneralButton : MonoBehaviour
 
             if(selectBeforePress) return;
         }
+
+        //Group buttons are selected, not re clicked
+        if (Selected && HasGroup) return;
 
         ChangeSelect(!Selected);
 

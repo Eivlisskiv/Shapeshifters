@@ -148,7 +148,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
             stage = Stage.PassGate;
 
             objective = Objectives.CreateObjective("Gate", Color.cyan);
-            objective.Track = NextGate(0, true);
+            objective.Track = NextGate(true);
             objective.Get<Text>("Title", t =>
             {
                 t.text = "Reach the next room ---->";

@@ -12,6 +12,8 @@ namespace Scripts.OOP.Game_Modes.Story
 
         public override void MapEntered(RoomHandler room, Collider2D subject)
         {
+            if (!ongoing) return;
+
             //The next map is the one we want to enter
             if (room != map.loading) return;
             PlayerController player = subject.gameObject.GetComponent<PlayerController>();
@@ -33,6 +35,8 @@ namespace Scripts.OOP.Game_Modes.Story
 
         public override void MapExited(RoomHandler room, Collider2D subject)
         {
+            if (!ongoing) return;
+
             //The next map is the one we want to enter
             if (room != map.loading) return;
             PlayerController player = subject.gameObject.GetComponent<PlayerController>();
@@ -46,6 +50,8 @@ namespace Scripts.OOP.Game_Modes.Story
 
         public override void MemberDestroyed(BaseController member)
         {
+            if (!ongoing) return;
+
             base.MemberDestroyed(member);
 
             Score++;

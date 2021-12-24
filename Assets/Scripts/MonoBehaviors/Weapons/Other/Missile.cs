@@ -52,7 +52,7 @@ namespace Scripts.MonoBehaviors.Weapons.Other
 
             if (owner)
             {
-                explosion.ignoreTeam = owner.Team;
+                explosion.Sender = owner;
                 Physics2D.IgnoreCollision(BodyCollider, owner.Body.Collider);
                 body.GetComponent<SpriteRenderer>().color = owner.GetColor(0);
             }

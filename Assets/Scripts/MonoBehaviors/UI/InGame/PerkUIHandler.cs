@@ -71,7 +71,7 @@ public class PerkUIHandler : MonoBehaviour
     }
 
     public void SetCharge(float charge)
-        => this.charge.text = Mathf.Ceil(charge).ToString();
+        => this.charge.text = charge > 99 ? "99+" : Mathf.Ceil(charge).ToString();
 
     public void Remove()
     {

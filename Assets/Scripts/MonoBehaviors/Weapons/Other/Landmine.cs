@@ -28,7 +28,7 @@ public class Landmine : OtherProjectile
 
         if (owner)
         {
-            explosion.ignoreTeam = owner.Team;
+            explosion.Sender = owner;
             Physics2D.IgnoreCollision(BodyCollider, owner.Body.Collider);
             teamColor.color = owner.GetColor(0);
         }

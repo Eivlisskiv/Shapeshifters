@@ -141,21 +141,11 @@ namespace Scripts.OOP.Game_Modes
 
         protected virtual void ScoreChanged() { }
 
-        public ObjectiveTracking? NextGate(int i, bool openGame)
+        public ObjectiveTracking? NextGate(bool openGame)
         {
-            RoomHandler mapp = null;
-            switch (i)
-            {
-                case -1: mapp = map.previous; break;
-                case 0: mapp = map.current; break;
-                case 1: mapp = map.loading; break;
-            };
-
-            if (!mapp) return null;
-
-            Vector2 pos = mapp.MapPosition(mapp.OpenGate(openGame));
-            Vector2 mid = mapp.MapPosition(new Vector2Int(mapp.Width / 2, mapp.Height / 2));
-            return pos + ((pos - mid).normalized * 6);
+            Vector2 pos = map.current.MapPosition(map.current.OpenGate(openGame));
+            Vector2 mid = map.loading.MapPosition(new Vector2Int(map.loading.Width / 2, map.loading.Height / 2));
+            return pos + ((mid - pos).normalized * 6);
         }
 
         public virtual void MapEntered(RoomHandler room, Collider2D subject) { }

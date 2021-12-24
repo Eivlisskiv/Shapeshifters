@@ -180,7 +180,7 @@ namespace Scripts.UI.Menu.Story
                     OOP.Perks.SerializedPerk perk = data.Perks[i];
                     Image img = Components.CreateGameObject<Image>(perk.Name, perks);
                     img.sprite = Resources.Load<Sprite>("Sprites/Perks/" + perk.Name);
-                    img.rectTransform.sizeDelta = new Vector2(75, 75);
+                    img.rectTransform.sizeDelta = new Vector2(80, 80);
 
                     Components.CreateGameObject<Text>("Level", img.transform, level =>
                     {
@@ -201,10 +201,11 @@ namespace Scripts.UI.Menu.Story
 
         }
 
-        public void PlaySelectedEpisode()
+        public void PlaySelectedEpisode(GeneralButton button)
         {
             if (selectedChapter < 0 || selectedEpisode < 0) return;
 
+            button.ChangeFocus(false);
             GeneralButton.GroupOffStatus("StoryMenuEpisode");
             GeneralButton.GroupOffStatus("StoryMenuChapter");
 

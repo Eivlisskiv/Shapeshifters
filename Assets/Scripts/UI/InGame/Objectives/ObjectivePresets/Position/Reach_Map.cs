@@ -16,7 +16,7 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Position
         {
             base.Initialize(data);
 
-            Track = Game.NextGate(0, true);
+            Track = Game.NextGate(true);
             Get<Text>("Title", (t) => t.text = LoadParam(data, 0, "Reach the next room.") );
 
             playerCount = Game.GetTeam(0).Count;

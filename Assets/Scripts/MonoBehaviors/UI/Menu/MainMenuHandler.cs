@@ -5,7 +5,6 @@ using System;
 using UnityEngine;
 using IgnitedBox.Tweening.Tweeners.VectorTweeners;
 using IgnitedBox.Tweening;
-using Scripts.MonoBehaviors.UI.Menu;
 using Scripts.UI.InGame.Objectives;
 using System.Collections.Generic;
 using UnityEngine.UI;
@@ -129,7 +128,7 @@ public class MainMenuHandler : MonoBehaviour
     public void OnClick_TabButton(RectTransform tab)
         => SwitchTab(tab);
 
-    public void OnClick_Arcade(TabButton button)
+    public void OnClick_Arcade(Scripts.MonoBehaviors.UI.Menu.TabButton button)
     {
         if (!arcade) arcade = button;
 
@@ -168,7 +167,7 @@ public class MainMenuHandler : MonoBehaviour
         gamemode.StartMap();
     }
 
-    public void OnClick_Story(TabButton button)
+    public void OnClick_Story(Scripts.MonoBehaviors.UI.Menu.TabButton button)
     {
         if (!story) story = button;
 

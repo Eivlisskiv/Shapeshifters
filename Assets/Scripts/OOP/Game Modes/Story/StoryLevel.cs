@@ -26,7 +26,6 @@ namespace Scripts.OOP.Game_Modes.Story
             if (!LevelCompleted) return;
 
             StoryProgress progress = StoryProgress.Load(story.Chapter, story.Episode, true);
-            progress.LastScore = Score;
             if (Score > progress.TopScore)
                 progress.TopScore = Score;
 
