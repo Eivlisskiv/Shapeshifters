@@ -10,18 +10,55 @@ using UnityEngine.UI;
 
 public class GeneralButton : MonoBehaviour
 {
-    public static void DeselectGroup(string group)
+    public enum GroupType
     {
-        if (!GroupSelected.TryGetValue(group, out GeneralButton selected)) return;
-        if (!selected) return;
-        selected.ChangeSelect(false);
-        GroupSelected[group] = null;
+        Focus, Selected
     }
 
+    public static void GroupOffStatus(string group)
+    {
+        GroupOffStatus(GroupType.Focus, group);
+        GroupOffStatus(GroupType.Selected, group);
+    }
+
+    public static void GroupOffStatus(GroupType gt, string group)
+    {
+        Dictionary<string, GeneralButton> groups = GetGroup(gt);
+
+        if (!groups.TryGetValue(group, out GeneralButton selected)) return;
+        if (!selected) return;
+        switch (gt)
+        {
+            case GroupType.Focus: selected.ChangeFocus(false); break;
+            case GroupType.Selected: selected.ChangeSelect(false); break;
+        }
+        groups[group] = null;
+    }
+
+    private static Dictionary<string, GeneralButton> GetGroup(GroupType gt)
+    {
+        switch (gt)
+        {
+            case GroupType.Focus: return GroupFocused;
+            case GroupType.Selected: return GroupSelected;
+        };
+
+        return null;
+    }
+
+    private static readonly Dictionary<string, GeneralButton> GroupFocused = new Dictionary<string, GeneralButton>();
     private static readonly Dictionary<string, GeneralButton> GroupSelected = new Dictionary<string, GeneralButton>();
 
     [SerializeField]
     public string group;
+
+    public bool selectBeforePress = true;
+
+    public Color Color => group != null && Selected ? selectColor : offColor;
+
+    public Color offColor = Color.white;
+    public Color focusColor = Color.cyan;
+    public Color selectColor = Color.yellow;
 
     public bool Enabled 
     {
@@ -33,15 +70,14 @@ public class GeneralButton : MonoBehaviour
         }
     }
 
-    protected Button Button { get; private set;}
+    public Button Button { get; private set;}
+    protected bool Focused { get; private set; }
     protected bool Selected { get; private set; }
 
     public UnityEvent OnPress => onPress;
 
     [SerializeField]
     private UnityEvent onPress = new UnityEvent();
-
-
 
     private void Start()
     {
@@ -59,56 +95,84 @@ public class GeneralButton : MonoBehaviour
 
     protected virtual void OnStart() { }
 
+    public void ChangeFocus(bool focus)
+    {
+        if (!Enabled) return;
+        if (focus == Focused) return;
+
+        Focused = focus;
+        if (focus)
+        {
+            SelectGroup(GroupType.Focus);
+            OnFocus();
+        }
+        else
+        {
+            DeselectGroup(GroupType.Focus);
+            OnUnfocus();
+        }
+    }
+
     public void ChangeSelect(bool selected)
     {
         if (!Enabled) return;
         if (selected == Selected) return;
 
         Selected = selected;
-        if (selected)
-        {
-            SelectGroup();
-            OnSelect();
-        }
-        else
-        {
-            DeselectGroup();
-            OnDeselect();
-        }
+        if (Selected) SelectGroup(GroupType.Selected);
+        else  DeselectGroup(GroupType.Selected);
+
+        if (!Focused) TweenColor(Color, .2f);
     }
 
-    private void SelectGroup()
+    private void SelectGroup(GroupType gt)
     {
         if (group != null && group.Length == 0) return;
-        
-        if(!GroupSelected.TryGetValue(group, out GeneralButton current))
+
+        var groups = GetGroup(gt);
+
+        if(!groups.TryGetValue(group, out GeneralButton current))
         {
-            GroupSelected.Add(group, this);
+            groups.Add(group, this);
             return;
         }
 
-        if(current) current.ChangeSelect(false);
-        GroupSelected[group] = this;
+        if (current)
+        {
+            switch (gt)
+            {
+                case GroupType.Focus: current.ChangeFocus(false); break;
+                case GroupType.Selected: current.ChangeSelect(false); break;
+            }
+            
+        }
+
+        groups[group] = this;
     }
 
-    private void DeselectGroup()
+    private void DeselectGroup(GroupType gt)
     {
         if (group != null && group.Length == 0) return;
 
-        if (!GroupSelected.TryGetValue(group, out _)) return;
+        var groups = GetGroup(gt);
 
-        GroupSelected[group] = null;
+        if (!groups.ContainsKey(group)) return;
+
+        groups[group] = null;
     }
 
     public void ButtonPress()
     {
         if (!Enabled) return;
 
-        if (!Selected)
+        if (!Focused)
         {
-            ChangeSelect(true);
-            return;
+            ChangeFocus(true);
+
+            if(selectBeforePress) return;
         }
+
+        ChangeSelect(!Selected);
 
         OnActivate();
         OnPress.Invoke();
@@ -116,22 +180,22 @@ public class GeneralButton : MonoBehaviour
 
     protected virtual void OnActivate() { }
 
-    protected virtual void OnSelect()
+    protected virtual void OnFocus()
     {
         transform.parent.Tween<Transform, Vector3, ScaleTween>(
             new Vector3(1.15f, 1.15f, 1), .8f, easing: ElasticEasing.Out)
             .scaledTime = false;
 
-        TweenColor(Color.cyan, 0.5f);
+        TweenColor(focusColor, 0.5f);
     }
 
-    protected virtual void OnDeselect()
+    protected virtual void OnUnfocus()
     {
         transform.parent.Tween<Transform, Vector3, ScaleTween>(
             new Vector3(1, 1, 1), .3f, easing: BackEasing.Out)
             .scaledTime = false;
 
-        TweenColor(Color.white, .2f);
+        TweenColor(Color, .2f);
     }
 
     protected virtual void TweenColor(Color target, float time)

@@ -17,16 +17,21 @@ namespace Scripts.OOP.Game_Modes.Story
 
         public override int LoadProgress()
         {
-            StoryProgress progress = StoryProgress.Load(story.Chapter, story.Episode);
-            return progress.TopScore;
+            StoryProgress progress = StoryProgress.Load(story.Chapter, story.Episode, false);
+            return progress?.TopScore ?? 0;
         }
 
         public override void SaveProgress()
         {
-            StoryProgress progress = StoryProgress.Load(story.Chapter, story.Episode);
+            if (!LevelCompleted) return;
+
+            StoryProgress progress = StoryProgress.Load(story.Chapter, story.Episode, true);
             progress.LastScore = Score;
             if (Score > progress.TopScore)
                 progress.TopScore = Score;
+
+            if (progress.BestTimeSeconds == 0 || game_timer < progress.BestTimeSeconds)
+                progress.BestTimeSeconds = game_timer;
 
             PlayerController player = (PlayerController)GetTeam(0)[0];
 
@@ -50,7 +55,7 @@ namespace Scripts.OOP.Game_Modes.Story
             PlayerController player = base.SpawnPlayer();
             if (story.Episode > 1)
             {
-                StoryProgress previous = StoryProgress.Load(story.Chapter, story.Episode - 1);
+                StoryProgress previous = StoryProgress.Load(story.Chapter, story.Episode - 1, true);
                 player.LoadProgress(previous);
             }
             return player;

@@ -19,14 +19,14 @@ namespace Scripts.MonoBehaviors.UI.Menu
         {
             if (Input.touchCount > 0) return;
             if (!Button) return;
-            Button.ChangeSelect(true);
+            Button.ChangeFocus(true);
         }
 
         public override void OnPointerExit(PointerEventData eventData)
         {
             if (Input.touchCount > 0) return;
             if (!Button) return;
-            Button.ChangeSelect(false);
+            Button.ChangeFocus(false);
         }
     }
 }

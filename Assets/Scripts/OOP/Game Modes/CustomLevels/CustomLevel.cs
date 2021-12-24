@@ -7,10 +7,10 @@ namespace Scripts.OOP.Game_Modes.Story
 {
     public abstract partial class CustomLevel : AGameMode
     {
-        private float game_timer;
+        protected float game_timer { get; private set; }
 
         private bool ongoing;
-        private bool LevelCompleted => ObjectivesProgress >= levelSettings.Main.Length;
+        protected bool LevelCompleted => ObjectivesProgress >= levelSettings.Main.Length;
 
         protected LevelSettings levelSettings;
         protected int ObjectivesProgress { get; private set; }

@@ -76,13 +76,13 @@ public class ShopHandler : MonoBehaviour
         if (perk.Level == 1)
         {
             btnTitle.text = "Purchase";
-            purchase.ChangeSelect(false);
+            purchase.ChangeFocus(false);
             InfoTextGreen($"Purchase {perk.Name} for {cost} points");
         }
         else
         {
             btnTitle.text = "Upgrade";
-            purchase.ChangeSelect(false);
+            purchase.ChangeFocus(false);
             InfoTextGreen($"Upgrade {perk.Name} to level {perk.Level} for {cost} points");
         }
     }

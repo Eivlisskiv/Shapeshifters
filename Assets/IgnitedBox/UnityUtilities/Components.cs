@@ -5,6 +5,23 @@ namespace IgnitedBox.UnityUtilities
 {
     public static class Components
     {
+        public static void Center(this RectTransform rect)
+        {
+            rect.sizeDelta = Vector2.zero;
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+        }
+
+        public static void DestroyChildren(this Transform t)
+        {
+            int c = t.childCount;
+            for(int i = 0; i < c; i++)
+            {
+                var child = t.GetChild(i);
+                if (child) UnityEngine.Object.Destroy(child.gameObject);
+            }    
+        }
+
         public static bool IsPrefab(this GameObject obj)
             => obj.scene.rootCount == 0 && string.IsNullOrEmpty(obj.scene.name);
 
@@ -39,7 +56,7 @@ namespace IgnitedBox.UnityUtilities
         {
             T component = obj.AddComponent<T>();
             if(parent)
-            component.transform.SetParent(parent);
+            component.transform.SetParent(parent, false);
             action?.Invoke(component);
             return component;
         }

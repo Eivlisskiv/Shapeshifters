@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace IgnitedBox.SaveData.Databases.Sqlite
@@ -245,7 +244,7 @@ namespace IgnitedBox.SaveData.Databases.Sqlite
                         cmd.Parameters.Add(new SqliteParameter
                         {
                             ParameterName = "Id",
-                            Value = entry["Id"]
+                            Value = entry[table.identifier.Name]
                         });
 
                         GetSetMember[] fields = table.fields;
@@ -266,7 +265,6 @@ namespace IgnitedBox.SaveData.Databases.Sqlite
                         var result = cmd.ExecuteNonQuery();
                     }
                 }
-
             }
         }
 
@@ -293,9 +291,13 @@ namespace IgnitedBox.SaveData.Databases.Sqlite
                     }
                     while (reader.Read());
 
-
-
-                    if (data.ContainsKey("Id")) data.Remove("Id");
+                    if (data.TryGetValue(table.identifier.Name, out Dictionary<string, object> idf))
+                    {
+                        string type = idf["type"].ToString();
+                        if (type.Equals(SqlType(table.identifier.ValueType), StringComparison.OrdinalIgnoreCase))
+                            data.Remove(table.identifier.Name);
+                        else rebuild = true;
+                    }
                     else rebuild = true;
 
                     for (int i = 0; !rebuild && i < table.fields.Length; i++)
@@ -306,11 +308,14 @@ namespace IgnitedBox.SaveData.Databases.Sqlite
                         {
                             string type = f["type"].ToString();
                             if (type.Equals(SqlType(mem.ValueType), StringComparison.OrdinalIgnoreCase))
-                                data.Remove("Id");
+                                data.Remove(mem.Name);
                             else rebuild = true;
                         }
                         else rebuild = true;
                     }
+
+                    if (data.Count > 0) //There are extra columns
+                        rebuild = true;
                 }
             });
 
@@ -518,9 +523,9 @@ namespace IgnitedBox.SaveData.Databases.Sqlite
 
             public TKey Id { get; set; }
 
-            public void Save() => SaveEntity(this);
+            public virtual void Save() => SaveEntity(this);
 
-            public void Delete() => DeleteEntity(this);
+            public virtual void Delete() => DeleteEntity(this);
         } 
 
         [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]

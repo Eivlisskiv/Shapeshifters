@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using IgnitedBox.Tweening.Tweeners.ColorTweeners;
 using Scripts.OOP.Game_Modes.Story;
+using Scripts.UI.Menu.Story;
 
 public class MainMenuHandler : MonoBehaviour
 {
@@ -53,6 +54,8 @@ public class MainMenuHandler : MonoBehaviour
     private GeneralButton arcade;
     private GeneralButton story;
 
+    public StoryMenu StoryMenu { get; private set; }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -89,7 +92,7 @@ public class MainMenuHandler : MonoBehaviour
 
         if (openTab)//Close existing tab
         {
-            GeneralButton.DeselectGroup(openTab.name);
+            GeneralButton.GroupOffStatus(openTab.name);
 
             openTab.Tween<RectTransform, Vector3, RectSizeTween>(
                 new Vector2(-1, openTab.sizeDelta.y), speed,
@@ -155,15 +158,14 @@ public class MainMenuHandler : MonoBehaviour
     public void StartGame(Type mode, string description)
     {
         if (action == MenuAction.Loading) return;
-            LoadingStarting();
+
+        LoadingStarting();
+        SwitchTab(null);
+        SetStartButton(false);
 
         AGameMode gamemode = (AGameMode)Activator.CreateInstance(mode, this, map);
         gamemode.description = description;
         gamemode.StartMap();
-
-        SwitchTab(null);
-
-        SetStartButton(false);
     }
 
     public void OnClick_Story(TabButton button)
@@ -176,30 +178,27 @@ public class MainMenuHandler : MonoBehaviour
             return;
         }
 
-        LoadingStarting();
-        SwitchTab(null);
-        StoryLevel game = new StoryLevel(Chapter.Episodes[0][0], this, map);
-        game.StartMap();
+        if (button.tab)
+        {
+            if (!StoryMenu)
+            {
+                StoryMenu = button.tab.GetComponent<StoryMenu>();
+                StoryMenu.mainMenu = this;
+                StoryMenu.InitializeChapters();
+            }
 
-        //if (button.tab) SwitchTab(button.tab);
+            SwitchTab(button.tab);
+        }
     }
 
-    public void OnClick_Story2(TabButton button)
+    public void StartStory(int chapterIndex, int episodeIndex)
     {
-        if (!story) story = button;
-
-        if (action == MenuAction.Loading)
-        {
-            SetStartButton(false);
-            return;
-        }
-
         LoadingStarting();
         SwitchTab(null);
-        StoryLevel game = new StoryLevel(Chapter.Episodes[0][1], this, map);
-        game.StartMap();
+        SetStartButton(false);
 
-        //if (button.tab) SwitchTab(button.tab);
+        StoryLevel game = new StoryLevel(Chapter.Episodes[chapterIndex][episodeIndex], this, map);
+        game.StartMap();
     }
 
     public void OnClick_Perks(RectTransform tab)

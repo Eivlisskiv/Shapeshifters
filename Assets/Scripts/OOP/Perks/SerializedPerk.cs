@@ -2,8 +2,7 @@
 
 namespace Scripts.OOP.Perks
 {
-    [SqliteHandler.AutoIncrement]
-    public class SerializedPerk : SqliteHandler.SqlTable<int>
+    public class SerializedPerk : SqliteHandler.SqlTable<string>
     {
         public string LevelKey { get; set; }
         public string Name { get; set; }
@@ -17,6 +16,9 @@ namespace Scripts.OOP.Perks
         {
             LevelKey = storyId;
             Name = perk.Name;
+
+            Id = $"{LevelKey}_{Name}";
+
             Level = perk.Level;
             Buff = perk.Buff;
             Charge = perk.Charge;

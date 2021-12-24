@@ -21,15 +21,15 @@ public class GameModeButton : GeneralButton
         desc.localScale = new Vector3(0, 1, 1);
     }
 
-    protected override void OnSelect()
+    protected override void OnFocus()
     {
-        base.OnSelect();
+        base.OnFocus();
         desc.Tween<Transform, Vector3, ScaleTween>
             (new Vector3(1, 1, 1), 0.2f,
             easing: BackEasing.Out,
             callback: () =>
             {
-                if (Selected) text.color = Color.white;
+                if (Focused) text.color = Color.white;
                 if(desc.sizeDelta.y == 5)
                 {
                     var t2 = text.GetComponent<RectTransform>();
@@ -39,9 +39,9 @@ public class GameModeButton : GeneralButton
         );
     }
 
-    protected override void OnDeselect()
+    protected override void OnUnfocus()
     {
-        base.OnDeselect();
+        base.OnUnfocus();
         text.color = new Color(0, 0, 0, 0);
         desc.Tween<Transform, Vector3, ScaleTween>(
             new Vector3(0, 1, 1), 0.2f);
