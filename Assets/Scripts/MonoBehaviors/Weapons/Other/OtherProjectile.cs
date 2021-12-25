@@ -12,6 +12,19 @@ namespace Assets.Scripts.MonoBehaviors.Weapons.Other
         Collider2D bodyCollider;
 
         protected BaseController owner;
+
+        public int IgnoreTeam
+        {
+            get => owner ? owner.Team : _ignoreTeam;
+            protected set
+            {
+                if (owner) return;
+                _ignoreTeam = value;
+            }
+        }
+
+        private int _ignoreTeam = -1;
+
         protected float damage;
         protected float force;
 
@@ -53,7 +66,7 @@ namespace Assets.Scripts.MonoBehaviors.Weapons.Other
         {
             active = false;
 
-            bodyCollider.enabled = false;
+            BodyCollider.enabled = false;
             var rdb = GetComponent<Rigidbody2D>();
             if (rdb) Destroy(rdb);
             Destroy(BodyCollider);

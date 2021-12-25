@@ -1,5 +1,4 @@
-﻿using Scripts.OOP.Game_Modes;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Scripts.MonoBehaviors.TileMap
 {
@@ -8,10 +7,10 @@ namespace Scripts.MonoBehaviors.TileMap
         public RoomHandler room;
 
         private void OnTriggerEnter2D(Collider2D collider)
-            => GameModes.GameMode?.MapEntered(room, collider);
+            => OOP.Game_Modes.GameModes.GameMode?.MapEntered(room, collider);
 
         private void OnTriggerExit2D(Collider2D collider)
-            => GameModes.GameMode?.MapExited(room, collider);
+            => OOP.Game_Modes.GameModes.GameMode?.MapExited(room, collider);
 
     }
 }

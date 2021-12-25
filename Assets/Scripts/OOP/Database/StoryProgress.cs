@@ -8,6 +8,9 @@ namespace Scripts.OOP.Database
         public static readonly Dictionary<string, StoryProgress> cache
             = new Dictionary<string, StoryProgress>();
 
+        public static bool Completed(int chapter, int episode)
+            => Load(chapter, episode, false) != null;
+
         public static StoryProgress Load(int chapter, int episode, bool create)
         {
             string id = $"IBS/{chapter}.{episode}";

@@ -3,7 +3,7 @@ using Scripts.UI.InGame.Objectives.ObjectivePresets;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Scripts.OOP.Game_Modes.Story
+namespace Scripts.OOP.Game_Modes.CustomLevels
 {
     public abstract partial class CustomLevel : AGameMode
     {
@@ -44,9 +44,11 @@ namespace Scripts.OOP.Game_Modes.Story
 
         protected void NextMap()
         {
-            if (mapProgress + 1 >= levelSettings.Maps.Length) return;
             mapProgress++;
-            map.NextRoom(levelSettings.Maps[mapProgress], false);
+            var preset = mapProgress >= levelSettings.Maps.Length ?
+                null : levelSettings.Maps[mapProgress];
+
+            map.NextRoom(preset, false);
         }
 
         public override void OnLoaded()
@@ -96,6 +98,8 @@ namespace Scripts.OOP.Game_Modes.Story
                 GameOver();
                 return;
             }
+
+            if (!ongoing) return;
 
             ObjectiveData data = levelSettings.Main[ObjectivesProgress];
             CurrentObjective = ObjectivePreset.Create(data);

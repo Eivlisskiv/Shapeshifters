@@ -1,6 +1,6 @@
 ﻿using IgnitedBox.Utilities;
 using Scripts.OOP.Game_Modes;
-using Scripts.OOP.Game_Modes.Story;
+using Scripts.OOP.Game_Modes.CustomLevels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

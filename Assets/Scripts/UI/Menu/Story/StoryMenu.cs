@@ -27,7 +27,7 @@ namespace Scripts.UI.Menu.Story
         [NonSerialized]
         public MainMenuHandler mainMenu;
 
-        private GeneralButton[] _chapters;
+        private GeneralButton[] chapters;
 
         private GeneralButton[][] episodes;
         private Transform[] episodeWindows;
@@ -37,9 +37,41 @@ namespace Scripts.UI.Menu.Story
 
         private GameObject selectedWindow;
 
+        public void GoToUnlocked(int chapter, int episode)
+        {
+            bool locked = chapter > 0 || episode > 0;
+            while (locked)
+            {
+                //Has not completed the first episode of this chapter
+                if (chapter > 0 && !StoryProgress.Completed(chapter + 1, 1))
+                {
+                    chapter--; //Then get the last ep of the previous chapter
+                    episode = Chapter.Episodes[chapter].Length - 1;
+                    continue;
+                }
+
+                if(!StoryProgress.Completed(chapter + 1, episode + 1))
+                {
+                    episode--;
+                }
+
+                locked = false;
+            }
+
+            SelectChapter(chapter);
+
+            GeneralButton btn = chapters[chapter];
+            btn.ChangeSelect(true);
+
+            SelectEpisode(episode);
+
+            btn = episodes[chapter][episode];
+            btn.ChangeSelect(true);
+        }
+
         private void SetText(GeneralButton button, string text)
         {
-            Transform child = button.transform.GetChild(0);
+            Transform child = button.transform.GetChild(1);
             if (!child) return;
 
             Text ttext = child.GetComponent<Text>();
@@ -50,7 +82,7 @@ namespace Scripts.UI.Menu.Story
 
         private GeneralButton GetButton(GameObject button, string group)
         {
-            Transform child = button.transform.GetChild(1);
+            Transform child = button.transform;
             if (!child) return null;
 
             var btn = child.GetComponent<GeneralButton>();
@@ -64,12 +96,12 @@ namespace Scripts.UI.Menu.Story
 
         public void InitializeChapters()
         {
-            if (_chapters != null) return;
+            if (chapters != null) return;
 
-            _chapters = new GeneralButton[Chapter.Episodes.Length];
-            episodeWindows = new Transform[_chapters.Length];
+            chapters = new GeneralButton[Chapter.Episodes.Length];
+            episodeWindows = new Transform[chapters.Length];
 
-            for (int i = 0; i < _chapters.Length; i++)
+            for (int i = 0; i < chapters.Length; i++)
             {
                 GameObject button = Instantiate(buttonPrefab);
                 GeneralButton chapter = GetButton(button, "Chapter");
@@ -84,17 +116,18 @@ namespace Scripts.UI.Menu.Story
                 int index = i;
                 chapter.OnPress.AddListener(() => SelectChapter(index));
 
-                _chapters[i] = chapter;
+                chapters[i] = chapter;
             }
 
 
-            episodes = new GeneralButton[_chapters.Length][];
+            episodes = new GeneralButton[chapters.Length][];
         }
 
         private void SelectChapter(int index)
         {
             if (index == selectedChapter) return;
-            if(selectedChapter >= 0) _chapters[selectedEpisode].ChangeFocus(false);
+
+            if (selectedChapter >= 0) chapters[selectedChapter].ChangeFocus(false);
             selectedChapter = index;
 
             GeneralButton.GroupOffStatus("StoryMenuEpisode");
@@ -104,8 +137,19 @@ namespace Scripts.UI.Menu.Story
             if (episodes[index] == null) CreateEpisodes(index);
 
             if (selectedWindow) selectedWindow.SetActive(false);
+            ChangeEpisodeWindow(index);
+        }
+
+        private void ChangeEpisodeWindow(int index)
+        {
             selectedWindow = episodeWindows[index].gameObject;
             selectedWindow.SetActive(true);
+
+            int c = episodes[index].Length;
+            for (int i = 0; i < c; i++)
+            {
+                VerifyUnlocked(index, i);
+            }
         }
 
         private void CreateEpisodes(int index)
@@ -144,24 +188,51 @@ namespace Scripts.UI.Menu.Story
                 rect.sizeDelta = new Vector2(250, 75);
 
                 int epIndex = i;
-                ep.OnPress.AddListener(() => SelectEpisode(index, epIndex));
+                ep.OnPress.AddListener(() => GoToUnlocked(index, epIndex));
 
                 episodes[index][i] = ep;
+
+                VerifyUnlocked(index, i);
             }
         }
 
-        private void SelectEpisode(int chapter, int ep)
+        private void SelectEpisode(int ep)
         {
             if (ep == selectedEpisode) return;
+
+            GeneralButton btn = episodes[selectedChapter][ep];
+            if (btn.Locked)
+            {
+                GoToUnlocked(selectedChapter, ep);
+                return;
+            }
 
             selectedEpisode = ep;
 
             if (!details.activeSelf) details.SetActive(true);
 
-            details_Title.text = Chapter.Episodes[chapter][ep].Name ?? $"Episode {ep + 1}";
+            details_Title.text = Chapter.Episodes[selectedChapter][ep].Name ?? $"Episode {ep + 1}";
 
-            StoryProgress data = StoryProgress.Load(chapter + 1, ep + 1, false);
+            StoryProgress data = StoryProgress.Load(selectedChapter + 1, ep + 1, false);
             WriteDetails(data);
+        }
+
+        private void VerifyUnlocked(int chapter, int episode)
+        {
+            int chap = chapter;
+            int ep = episode;
+            if (episode == 0)
+            {
+                if (chapter == 0)
+                {
+                    episodes[chapter][episode].Locked = false;
+                    return;
+                }
+                chap = chapter - 1;
+                ep = Chapter.Episodes[chap].Length - 1;
+            }
+
+            episodes[chapter][episode].Locked = !StoryProgress.Completed(chap + 1, ep);
         }
 
         private void WriteDetails(StoryProgress data)

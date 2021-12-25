@@ -6,6 +6,8 @@ namespace Scripts.OOP.UI
 {
     public abstract class GameModeUI
     {
+        public GeneralButton Button { get; private set; }
+
         private Text score;
 
         public void SetScore(int score)
@@ -13,8 +15,8 @@ namespace Scripts.OOP.UI
 
         private void InitButton(MainMenuHandler menu, Transform child)
         {
-            GeneralButton button = child.GetComponent<GeneralButton>();
-            button.OnPress.AddListener(GetOnClick(menu));
+            Button = child.GetComponent<GeneralButton>();
+            Button.OnPress.AddListener(GetOnClick(menu));
         }
 
         protected abstract UnityAction GetOnClick(MainMenuHandler menu);
@@ -33,7 +35,7 @@ namespace Scripts.OOP.UI
         {
             InitScore(ui.transform.GetChild(0));
             InitTitle(ui.transform.GetChild(1));
-            InitButton(menu, ui.transform.GetChild(2));
+            InitButton(menu, ui.transform);
             InitDescription(ui.transform.GetChild(3));
         }
 

@@ -1,15 +1,13 @@
 ﻿using Scripts.OOP.MongoRealm;
 using System;
-using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 
 namespace Scripts.OOP.UI
 {
     public class ArcadeModeUI : GameModeUI
     {
         public readonly Type mode;
-        private readonly string desc;
+        public readonly string desc;
         private string name;
 
         public ArcadeModeUI(Type mode, string description)
@@ -27,7 +25,7 @@ namespace Scripts.OOP.UI
         }
 
         protected override UnityAction GetOnClick(MainMenuHandler menu)
-            => () => menu.StartGame(mode, desc);
+            => () => menu.StartGame(this);
 
         protected override int GetTopScore()
         {

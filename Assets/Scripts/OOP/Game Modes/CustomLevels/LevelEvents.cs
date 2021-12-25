@@ -3,7 +3,7 @@ using Scripts.UI.InGame.Objectives.ObjectivePresets.Position;
 using Scripts.UI.InGame.Objectives.ObjectivePresets.Spawns;
 using UnityEngine;
 
-namespace Scripts.OOP.Game_Modes.Story
+namespace Scripts.OOP.Game_Modes.CustomLevels
 {
     public partial class CustomLevel
     {

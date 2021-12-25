@@ -1,5 +1,5 @@
 ﻿using Scripts.OOP.Game_Modes;
-using Scripts.OOP.Game_Modes.Story;
+using Scripts.OOP.Game_Modes.CustomLevels;
 using Scripts.OOP.TileMaps;
 using Scripts.OOP.TileMaps.Procedural;
 using System;
@@ -101,7 +101,7 @@ public class MapHandler : MonoBehaviour
             loading = null;
         }
 
-        QueuRoom(preset);
+        if(preset != null) QueuRoom(preset);
     }
 
     public void NextProceduralRoom(int size)

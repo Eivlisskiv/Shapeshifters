@@ -21,10 +21,10 @@ namespace Scripts.OOP.Database
             minutes = (int)(seconds / 60);
             seconds = Mathf.Round((seconds - (minutes * 60)) * 100) / 100;
 
-            string hs = hours >= 0 ? null : 
+            string hs = hours <= 0 ? null : 
                 (hours < 10 ? $"0{hours}:" : $"{hours}:");
 
-            string ms = minutes >= 0 ? null :
+            string ms = minutes <= 0 ? null :
                 (minutes < 10 ? $"0{minutes}:" : $"{minutes}:");
 
             string ss = seconds < 10 ? $"0{seconds}" : $"{seconds}";

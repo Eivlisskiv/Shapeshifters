@@ -1,5 +1,4 @@
-﻿using IgnitedBox.UnityUtilities.Vectors;
-using Scripts.OOP.Game_Modes.Story;
+﻿using Scripts.OOP.Game_Modes.CustomLevels;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -40,6 +39,13 @@ namespace Scripts.OOP.TileMaps
 
                 prop.transform.localPosition = (Vector2)mp.position;
                 prop.SetActive(false);
+
+                if (mp.parameters != null)
+                {
+                    prop.GetComponent<ILevelProp>()?
+                        .LoadParameters(mp.parameters);
+                }
+
                 this.props.Add(mp.id, prop);
             }
         }

@@ -285,8 +285,7 @@ public abstract class BaseController : HealthEntity,
     public void ProcessDamage(float damage, BaseController attacker, Vector2? direction)
     {
         if (direction.HasValue) SpawnHitParticles(direction.Value);
-        if (ModifyHealth(-damage))
-            if (attacker) attacker.OnKill(this);
+        if (ModifyHealth(-damage) && attacker) attacker.OnKill(this);
 
         Events.Invoke(ControllerEvents.DamageTaken, this, attacker);
     }

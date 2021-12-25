@@ -14,23 +14,37 @@ namespace Scripts.OOP.Game_Modes
         internal static void SetInstance(AGameMode aGameMode)
             => _instance = aGameMode;
 
-        public static readonly Dictionary<Type, string> modes = new Dictionary<Type, string>()
+        public static readonly Dictionary<Type, ModeData> arcadeModes = new Dictionary<Type, ModeData>()
         {
             {
                 typeof(Arena.Arena),
-                  " Survive enemy spawns." +
-                "\n Gain a random perk every 5 levels." +
-                "\n Gain a temporary buff when" +
-                "\n elimenating an enemy." +
-                "\n Your weapon randomly switches every 5 eliminations"
+                new ModeData()
+                {
+                    description = " Survive enemy spawns." +
+                    "\n Gain a random perk every 5 levels." +
+                    "\n Gain a temporary buff when" +
+                    "\n elimenating an enemy." +
+                    "\n Your weapon randomly switches every 5 eliminations",
+                    storyRequirement = ( 0, 0 )
+                }
             },
 
             {
                 typeof(Rogue.Rogue),
-                  " Go through rooms of enemies. " +
-                "\n Purchase perks after each room."
+                new ModeData()
+                {
+                    description =" Go through rooms of enemies. " +
+                    "\n Purchase perks after each room.",
+                    storyRequirement = ( 0, 0 )
+                }
             }
         };
+
+        public class ModeData
+        {
+            public string description;
+            public (int, int) storyRequirement;
+        }
 
         public static void Run<T>(Action<T> func)
         {

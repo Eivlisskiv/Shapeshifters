@@ -33,7 +33,7 @@ public class RoomHandler : MonoBehaviour
         if (bounds)
         {
             bounds.transform.position = new Vector2(Width/2f, Height/2f);
-            bounds.size = new Vector2(Width - 2, Height - 2);
+            bounds.size = new Vector2(Width - 2, Height - 2) * 3;
         }
     }
 

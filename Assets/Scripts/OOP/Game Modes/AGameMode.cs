@@ -11,6 +11,9 @@ namespace Scripts.OOP.Game_Modes
 {
     public abstract class AGameMode
     {
+
+        public readonly Color[] teamColors;
+
         private string _name;
 
 #pragma warning disable IDE0074 // Use compound assignment
@@ -44,7 +47,6 @@ namespace Scripts.OOP.Game_Modes
         public int TeamCount => teams.Length;
 
         private readonly List<BaseController>[] teams;
-        private readonly Color[] teamColors;
         private readonly Transform gameTransform;
         public readonly (Transform parent, Transform debris)[] teamTransforms;
 
@@ -145,7 +147,7 @@ namespace Scripts.OOP.Game_Modes
         {
             Vector2 pos = map.current.MapPosition(map.current.OpenGate(openGame));
             Vector2 mid = map.loading.MapPosition(new Vector2Int(map.loading.Width / 2, map.loading.Height / 2));
-            return pos + ((mid - pos).normalized * 6);
+            return pos + ((mid - pos).normalized * 9);
         }
 
         public virtual void MapEntered(RoomHandler room, Collider2D subject) { }
@@ -217,7 +219,7 @@ namespace Scripts.OOP.Game_Modes
             Objectives.transform.Tween<Transform, Vector3, PositionTween>
                 (Objectives.transform.localPosition + new Vector3(0, 200, 0),
                 0.5f, callback: () => Object.Destroy(Objectives.gameObject));
-            MainMenuHandler.GameOver();
+            menu.GameOver();
         }
 
         public virtual void EndGame()

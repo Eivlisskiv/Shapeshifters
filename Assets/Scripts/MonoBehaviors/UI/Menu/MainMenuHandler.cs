@@ -11,18 +11,11 @@ using UnityEngine.UI;
 using IgnitedBox.Tweening.Tweeners.ColorTweeners;
 using Scripts.OOP.Game_Modes.Story;
 using Scripts.UI.Menu.Story;
+using Scripts.OOP.Database;
 
 public class MainMenuHandler : MonoBehaviour
 {
     private enum MenuAction { None, Loading, GameOver }
-
-    private static MainMenuHandler instance;
-
-    public static void GameOver()
-    {
-        //Play a game over animation
-        instance.GameOverUI();
-    }
 
     public GameOverHandler gameOver;
     public GameObject container;
@@ -53,7 +46,7 @@ public class MainMenuHandler : MonoBehaviour
     private GeneralButton arcade;
     private GeneralButton story;
 
-    public StoryMenu StoryMenu { get; private set; }
+    public StoryMenu storyMenu;
 
     // Start is called before the first frame update
     void Start()
@@ -65,7 +58,8 @@ public class MainMenuHandler : MonoBehaviour
         background.transform.SetParent(transform, true);
         background.transform.SetSiblingIndex(0);
 
-        instance = this;
+        storyMenu.mainMenu = this;
+        storyMenu.InitializeChapters();
     }
 
     // Update is called once per frame
@@ -143,27 +137,52 @@ public class MainMenuHandler : MonoBehaviour
         if (Modes == null)
         {
             Modes = new Dictionary<Type, ArcadeModeUI>();
-            foreach (var mode in GameModes.modes)
+            foreach (KeyValuePair<Type, GameModes.ModeData> mode in GameModes.arcadeModes)
             {
-                ArcadeModeUI ui = new ArcadeModeUI(mode.Key, mode.Value);
+                ArcadeModeUI ui = new ArcadeModeUI(mode.Key, mode.Value.description);
                 ui.InitializeUI(Instantiate(gameModePrefab, button.tab), this);
+                VerifyUnlocked(ui);
                 Modes.Add(mode.Key, ui);
             }
+        }
+        else
+        {
+            foreach (ArcadeModeUI mode in Modes.Values)
+                VerifyUnlocked(mode);
         }
 
         SwitchTab(button.tab);
     }
     
-    public void StartGame(Type mode, string description)
+    private void VerifyUnlocked(ArcadeModeUI ui)
+    {
+        GameModes.ModeData data = GameModes.arcadeModes[ui.mode];
+        (int chap, int ep) = data.storyRequirement;
+        ui.Button.Locked = !StoryProgress.Completed(chap, ep);
+    }
+
+    public void StartGame(ArcadeModeUI ui)
     {
         if (action == MenuAction.Loading) return;
+
+        if (ui.Button.Locked)
+        {
+            GameModes.ModeData data = GameModes.arcadeModes[ui.mode];
+            (int chap, int ep) = data.storyRequirement;
+            //if(!StoryProgress.Completed(chap, ep)) { }
+            if(story) story.ChangeSelect(true); else arcade.ChangeSelect(false);
+            SwitchTab(storyMenu.transform.GetComponent<RectTransform>());
+            storyMenu.GoToUnlocked(chap, ep);
+
+            return;
+        }
 
         LoadingStarting();
         SwitchTab(null);
         SetStartButton(false);
 
-        AGameMode gamemode = (AGameMode)Activator.CreateInstance(mode, this, map);
-        gamemode.description = description;
+        AGameMode gamemode = (AGameMode)Activator.CreateInstance(ui.mode, this, map);
+        gamemode.description = ui.desc;
         gamemode.StartMap();
     }
 
@@ -179,13 +198,6 @@ public class MainMenuHandler : MonoBehaviour
 
         if (button.tab)
         {
-            if (!StoryMenu)
-            {
-                StoryMenu = button.tab.GetComponent<StoryMenu>();
-                StoryMenu.mainMenu = this;
-                StoryMenu.InitializeChapters();
-            }
-
             SwitchTab(button.tab);
         }
     }
@@ -229,6 +241,12 @@ public class MainMenuHandler : MonoBehaviour
     {
         action = MenuAction.Loading;
         background.Tween<Graphic, Color, GraphicColorTween>(Color.clear, 2);
+    }
+
+    public void GameOver()
+    {
+        //Play a game over animation
+        GameOverUI();
     }
 
     private void GameOverUI()

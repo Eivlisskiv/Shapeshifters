@@ -2,7 +2,7 @@
 using IgnitedBox.UnityUtilities.Vectors;
 using System;
 
-namespace Scripts.OOP.Game_Modes.Story
+namespace Scripts.OOP.Game_Modes.CustomLevels
 {
     public class StorySettings : LevelSettings
     {
@@ -63,6 +63,15 @@ namespace Scripts.OOP.Game_Modes.Story
         public string prefabPath;
         public SerializableFloat2 position;
         public object[] parameters;
+
+        public MapProp() { }
+        public MapProp(string id, string path, float x, float y, params object[] parms) 
+        {
+            this.id = id;
+            prefabPath = path;
+            position = new SerializableFloat2(x, y);
+            parameters = parms;
+        }
     }
 
     [Serializable]

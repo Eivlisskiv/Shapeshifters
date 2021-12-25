@@ -1,5 +1,5 @@
 ﻿using IgnitedBox.EventSystem;
-using Scripts.OOP.Game_Modes.Story;
+using Scripts.OOP.Game_Modes.CustomLevels;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;

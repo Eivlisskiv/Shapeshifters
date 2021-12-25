@@ -118,7 +118,17 @@ namespace Scripts.Explosion
 
         public float damage = 10;
         public BaseController Sender { get; set; }
-        public int IgnoreTeam => Sender.Team;
+        public int IgnoreTeam
+        {
+            get => Sender ? Sender.Team : _ignoreTeam;
+            set
+            {
+                if (Sender) return;
+                _ignoreTeam = value;
+            }
+        }
+
+        private int _ignoreTeam = -1;
 
         enum State { Stopped, Starting, Playing }
 

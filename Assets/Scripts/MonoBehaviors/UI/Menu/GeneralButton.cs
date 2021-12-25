@@ -56,23 +56,42 @@ public class GeneralButton : MonoBehaviour
 
     public bool selectBeforePress = true;
 
-    public Color Color => HasGroup && Selected ? selectColor : offColor;
+    public Color Color => Enabled ? (Locked ? lockedColor : EnabledColor) : disabledColor;
+    public virtual Color EnabledColor => HasGroup && Selected ? selectColor : offColor;
 
     public Color offColor = Color.white;
     public Color focusColor = Color.cyan;
     public Color selectColor = Color.yellow;
+    private Color lockedColor = Color.magenta;
+    public Color disabledColor = Color.red;
 
     public bool Enabled 
     {
         get => enabled;
         set 
         {
+            if (enabled == value) return;
             enabled = value;
             ChangeFocus(false);
             ChangeSelect(false);
-            TweenColor(value ? Color : Color.red, 1);
+            TweenColor(Color, 1);
         }
     }
+
+    public bool Locked
+    {
+        get => _locked;
+        set
+        {
+            if (_locked == value) return;
+            _locked = value;
+            if (Padlock) Padlock.enabled = _locked;
+            TweenColor(Color, 1);
+        }
+    }
+
+    private bool _locked;
+
 
     public Button Button { get; private set;}
     protected bool Focused { get; private set; }
@@ -82,6 +101,21 @@ public class GeneralButton : MonoBehaviour
 
     [SerializeField]
     private UnityEvent onPress = new UnityEvent();
+
+    private Image Padlock
+    {
+        get
+        {
+            if (!_lockSprite)
+            {
+                Transform child = transform.GetChild(2);
+                _lockSprite = child.GetComponent<Image>();
+            }
+
+            return _lockSprite;
+        }
+    }
+    private Image _lockSprite;
 
     private void Start()
     {
@@ -189,7 +223,9 @@ public class GeneralButton : MonoBehaviour
 
     protected virtual void OnFocus()
     {
-        transform.parent.Tween<Transform, Vector3, ScaleTween>(
+        Transform target = Locked ? Padlock.transform : transform;
+
+        target.Tween<Transform, Vector3, ScaleTween>(
             new Vector3(1.15f, 1.15f, 1), .8f, easing: ElasticEasing.Out)
             .scaledTime = false;
 
@@ -198,7 +234,9 @@ public class GeneralButton : MonoBehaviour
 
     protected virtual void OnUnfocus()
     {
-        transform.parent.Tween<Transform, Vector3, ScaleTween>(
+        Transform target = Locked ? Padlock.transform : transform;
+
+        target.Tween<Transform, Vector3, ScaleTween>(
             new Vector3(1, 1, 1), .3f, easing: BackEasing.Out)
             .scaledTime = false;
 
@@ -207,7 +245,7 @@ public class GeneralButton : MonoBehaviour
 
     protected virtual void TweenColor(Color target, float time)
     {
-        var image = transform.parent.GetComponent<Image>();
+        var image = transform.GetComponent<Image>();
         if (image)
         {
             image.Tween<Graphic, Color, GraphicColorTween>

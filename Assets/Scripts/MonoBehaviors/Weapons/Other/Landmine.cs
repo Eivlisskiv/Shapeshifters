@@ -1,10 +1,12 @@
 ﻿using Assets.Scripts.MonoBehaviors.Weapons.Other;
 using IgnitedBox.Tweening;
 using IgnitedBox.Tweening.Tweeners.ColorTweeners;
+using IgnitedBox.Utilities;
 using Scripts.Explosion;
+using Scripts.OOP.Game_Modes.CustomLevels;
 using UnityEngine;
 
-public class Landmine : OtherProjectile
+public class Landmine : OtherProjectile, ILevelProp
 {
     public FireworkExplosionHandler explosion;
 
@@ -54,7 +56,7 @@ public class Landmine : OtherProjectile
 
         var controller = collision.gameObject.GetComponent<BaseController>();
 
-        if (!controller || controller.Team == owner.Team) return;
+        if (!controller || controller.Team == IgnoreTeam) return;
 
         OnHit(null);
 
@@ -73,5 +75,19 @@ public class Landmine : OtherProjectile
         Destroy(teamColor.gameObject);
         Destroy(activeLight.gameObject);
         Destroy(gameObject, explosion.Duration + 0.5f);
+    }
+
+    public void LoadParameters(object[] param)
+    {
+        int team = param.ParamAs<int>(0);
+        explosion.IgnoreTeam = team;
+        IgnoreTeam = team;
+
+        teamColor.color = Scripts.OOP.Game_Modes.GameModes.GameMode?.teamColors[team] ?? Color.red;
+
+        float damage = param.ParamAs<float>(1, 10);
+        float force = param.ParamAs<float>(2, 10);
+
+        Activate(damage, force, null);
     }
 }

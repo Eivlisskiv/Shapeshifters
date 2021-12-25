@@ -116,7 +116,7 @@ namespace Scripts.UI.InGame.Objectives
             rect.Tween<Transform, Vector3, PositionTween>
             (
                 new Vector3(0, -rect.sizeDelta.y / 2, 0),
-                0.2f, easing: ExponentEasing.Out, callback: OnReady
+                0.3f, easing: ExponentEasing.Out, callback: OnReady
             );
         }
 

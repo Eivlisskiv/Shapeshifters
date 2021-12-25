@@ -17,8 +17,7 @@ namespace Scripts.OOP.TileMaps.Procedural
 
         public CaveRoom(Vector2Int size, RoomHandler previous,
             Transform propsContainer)
-            : base(size, previous, propsContainer)
-        { }
+            : base(size, previous, propsContainer) { }
 
         public override void Initialize()
         {

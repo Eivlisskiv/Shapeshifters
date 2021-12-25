@@ -1,4 +1,4 @@
-﻿using Scripts.OOP.Game_Modes.Story;
+﻿using Scripts.OOP.Game_Modes.CustomLevels;
 
 namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Spawns
 {

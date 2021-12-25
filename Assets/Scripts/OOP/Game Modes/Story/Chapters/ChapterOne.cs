@@ -1,4 +1,5 @@
 ﻿using IgnitedBox.UnityUtilities.Vectors;
+using Scripts.OOP.Game_Modes.CustomLevels;
 
 namespace Scripts.OOP.Game_Modes.Story.Chapters
 {
@@ -9,7 +10,7 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
             new StorySettings(1, 1, "System Check")
             {
                 Description = "ERROR \\\\\\\\ INCOMING INSTRUCTIONS \\\\\\\\",
-                PlayerSpawn = new SerializableInt2(1, 2),
+                PlayerSpawn = new SerializableInt2(2, 2),
                 Maps = new MapPreset[]
                 {
                     new MapPreset()
@@ -29,15 +30,6 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                             { 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1,},
                             { 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1,}
                         },
-                        props = new MapProp[]
-                        {
-                            new MapProp()
-                            {
-                                id = "PerkSelector1",
-                                prefabPath = "Props",
-                                position = new SerializableFloat2(-2, 4),
-                            }
-                        }
                     },
                     new MapPreset()
                     {
@@ -85,6 +77,15 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
                             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
                             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, }
+                        },
+                        props = new MapProp[]
+                        {
+                            new MapProp("LandMine1", "Projectiles/Landmine", -10.27f, 8.52f, 0, 100),
+                            new MapProp("LandMine2", "Projectiles/Landmine", 2.39f, 8.52f, 0, 100),
+                            new MapProp("LandMine3", "Projectiles/Landmine", -10.27f, 0, 0, 100),
+                            new MapProp("LandMine4", "Projectiles/Landmine", 2.39f, 0, 0, 100),
+                            new MapProp("LandMine5", "Projectiles/Landmine", -10.27f, -10f, 0, 100),
+                            new MapProp("LandMine6", "Projectiles/Landmine", 4.34f, -10f, 0, 100),
                         }
                     }
 
@@ -95,7 +96,7 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                     {
                         id = "Reach Map",
                         color = new SerializableFloat4(0, 0, 1, 1),
-                        parameters = new object[] { "\\\\\\ PROCEED \\_ NEXT ST4GE 0\\0\\0\\0\\0" }
+                        parameters = new object[] { "PROCEED \\_ NEXT ST4GE" }
                     },
                     new ObjectiveData()
                     {
@@ -103,7 +104,7 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                         color = new SerializableFloat4(0, 0, 1, 1),
                         parameters = new object[]
                         {
-                            "HOSTILE \\ CLEAR THREAT",
+                            "HOSTILES \\ CLEAR THREAT",
                             1,
                             new (string, int)[][]
                             {
@@ -130,66 +131,45 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                     {
                         id = "Reach Map",
                         color = new SerializableFloat4(0, 0, 1, 1),
-                        parameters = new object[] { "\\00000\\ CONTINUE \\_ ST4GE \\0[u10]\\0" }
+                        parameters = new object[] { "CONTINUE \\_ STAAAAAAGE" }
+                    },
+                    new ObjectiveData()
+                    {
+                        id = "Waves",
+                        color = new SerializableFloat4(0, 0, 1, 1),
+                        parameters = new object[]
+                        {
+                            "HOSTILES \\ CLEAR THREAT",
+                            1,
+                            new (string, int)[][]
+                            {
+                                new (string, int)[] {
+                                    ("Regular/Tier1/Regular", 0),
+                                },
+                                new (string, int)[] {
+                                    ("Regular/Tier1/Regular", 0),
+                                    ("Regular/Tier1/Regular", 3),
+                                },
+                                new (string, int)[] {
+                                    ("Regular/Tier1/Bomber", 5),
+                                    ("Regular/Tier1/Regular", 0),
+                                },
+                                new (string, int)[] {
+                                    ("Regular/Tier1/Bomber", 5),
+                                    ("Regular/Tier1/Regular", 0),
+                                    ("Regular/Tier1/Regular", 0),
+                                }
+                            }
+                        }
                     }
-                    //*/
                 }
-            },
-            new StorySettings(1, 2, "System Check v2")
+            },/*
+            new StorySettings(1, 2, "Modular Equipment")
             {
-                Description = "ERROR \\\\\\\\ INCOMING INSTRUCTIONS \\\\\\\\",
+                Description = "Systems Functional. Proceed",
                 PlayerSpawn = new SerializableInt2(1, 2),
                 Maps = new MapPreset[]
                 {
-                    new MapPreset()
-                    {
-                        tileBaseIndex = 0,
-                        tiles = new int[,]
-                        {
-                            { 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
-                            { 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,},
-                            { 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1,},
-                            { 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1,},
-                            { 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2,},
-                            { 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 2,},
-                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 2,},
-                            { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1,},
-                            { 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1,},
-                            { 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1,},
-                            { 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1,}
-                        },
-                        props = new MapProp[]
-                        {
-                            new MapProp()
-                            {
-                                id = "PerkSelector1",
-                                prefabPath = "Props",
-                                position = new SerializableFloat2(-2, 4),
-                            }
-                        }
-                    },
-                    new MapPreset()
-                    {
-                        tileBaseIndex = 0,
-                        tiles = new int[,]
-                        {
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 1, 1, 1, },
-                            { 1, 1, 1, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, },
-                            { 1, 1, 0, 3, 3, 3, 3, 1, 3, 3, 3, 3, 1, },
-                            { 1, 1, 0, 0, 3, 3, 1, 1, 1, 3, 3, 3, 1, },
-                            { 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 3, 3, 1, },
-                            { 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 1, },
-                            { 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 3, 3, 1, },
-                            { 1, 1, 0, 0, 0, 0, 1, 1, 1, 3, 3, 3, 1, },
-                            { 1, 1, 0, 0, 0, 3, 3, 1, 3, 3, 3, 3, 1, },
-                            { 1, 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 0, 1, },
-                            { 1, 1, 1, 1, 0, 3, 3, 3, 3, 3, 0, 2, 2, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, }
-                        }
-                    },
                     new MapPreset()
                     {
                         tileBaseIndex = 0,
@@ -214,6 +194,10 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
                             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
                             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, }
+                        },
+                        props = new MapProp[]
+                        {
+                            new MapProp("Module1", "", 0, 0, "", 0, 10, 100),
                         }
                     }
 
@@ -222,9 +206,9 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                 {
                     new ObjectiveData()
                     {
-                        id = "Reach Map",
+                        id = "ActivateProp",
                         color = new SerializableFloat4(0, 0, 1, 1),
-                        parameters = new object[] { "\\\\\\ PROCEED \\_ NEXT ST4GE 0\\0\\0\\0\\0" }
+                        parameters = new object[] { "COLLECT MODULE/PERK", "Module1" }
                     },
                     new ObjectiveData()
                     {
@@ -232,11 +216,13 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                         color = new SerializableFloat4(0, 0, 1, 1),
                         parameters = new object[]
                         {
-                            "HOSTILE \\ CLEAR THREAT",
+                            "SYSTEM INTRUSION \\ CLEAR THREAT",
                             1,
                             new (string, int)[][]
                             {
                                 new (string, int)[] {
+                                    ("Regular/Tier1/Regular", 0),
+                                    ("Regular/Tier1/Regular", 0),
                                     ("Regular/Tier1/Regular", 0),
                                 },
                                 new (string, int)[] {
@@ -259,11 +245,11 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                     {
                         id = "Reach Map",
                         color = new SerializableFloat4(0, 0, 1, 1),
-                        parameters = new object[] { "\\00000\\ CONTINUE \\_ ST4GE \\0[u10]\\0" }
+                        parameters = new object[] { "CONTINUE NEXT STAGE" }
                     }
                     //*/
                 }
-            },
+            },//*/
         };
     }
 }
