@@ -3,7 +3,9 @@ using IgnitedBox.Tweening;
 using IgnitedBox.Tweening.Tweeners.ColorTweeners;
 using IgnitedBox.Utilities;
 using Scripts.Explosion;
+using Scripts.OOP.Game_Modes;
 using Scripts.OOP.Game_Modes.CustomLevels;
+using Scripts.UI.InGame.Objectives.ObjectivePresets.Other;
 using UnityEngine;
 
 public class Landmine : OtherProjectile, ILevelProp
@@ -12,6 +14,8 @@ public class Landmine : OtherProjectile, ILevelProp
 
     public SpriteRenderer teamColor;
     public SpriteRenderer activeLight;
+
+    public bool Consumed { get; private set; }
 
     private void Start()
     {
@@ -70,6 +74,12 @@ public class Landmine : OtherProjectile, ILevelProp
 
     protected override void Destroy()
     {
+        Consumed = true;
+
+        if (GameModes.GameMode is CustomLevel level)
+            level.ObjectiveEvents.Invoke<ILevelProp, string>
+                (typeof(Prop_Activation), this, gameObject.name);
+
         base.Destroy();
 
         Destroy(teamColor.gameObject);
@@ -83,7 +93,7 @@ public class Landmine : OtherProjectile, ILevelProp
         explosion.IgnoreTeam = team;
         IgnoreTeam = team;
 
-        teamColor.color = Scripts.OOP.Game_Modes.GameModes.GameMode?.teamColors[team] ?? Color.red;
+        teamColor.color = GameModes.GameMode?.teamColors[team] ?? Color.red;
 
         float damage = param.ParamAs<float>(1, 10);
         float force = param.ParamAs<float>(2, 10);

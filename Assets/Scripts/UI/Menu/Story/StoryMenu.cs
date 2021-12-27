@@ -50,7 +50,7 @@ namespace Scripts.UI.Menu.Story
                     continue;
                 }
 
-                if(!StoryProgress.Completed(chapter + 1, episode + 1))
+                if(!StoryProgress.Completed(chapter + 1, episode))
                 {
                     episode--;
                 }

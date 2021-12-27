@@ -30,6 +30,10 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                             { 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1,},
                             { 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1,}
                         },
+                        props = new MapProp[]
+                        {
+                            new MapProp("Module1", "Props/Perks/PerkModule", -4.53f, 11.89f, "Shield", 5),
+                        }
                     },
                     new MapPreset()
                     {
@@ -163,7 +167,7 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                         }
                     }
                 }
-            },/*
+            },
             new StorySettings(1, 2, "Modular Equipment")
             {
                 Description = "Systems Functional. Proceed",
@@ -197,7 +201,9 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                         },
                         props = new MapProp[]
                         {
-                            new MapProp("Module1", "", 0, 0, "", 0, 10, 100),
+                            new MapProp("Module1", "Props/Perks/PerkModule", 0, 0, "Shield", 5),
+                            new MapProp("Module2", "Props/Perks/PerkModule", 0, 0, "Health Regen", 5),
+                            new MapProp("Module3", "Props/Perks/PerkModule", 0, 0, "Shield", 5),
                         }
                     }
 
@@ -247,7 +253,6 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                         color = new SerializableFloat4(0, 0, 1, 1),
                         parameters = new object[] { "CONTINUE NEXT STAGE" }
                     }
-                    //*/
                 }
             },//*/
         };

@@ -77,7 +77,7 @@ namespace Scripts.OOP.Game_Modes.Arena
             if (!victim || !killer) return;
 
             if (victim.perks.Count > 0)
-                killer.perks.Add(victim.perks.RandomDrop(), killer is PlayerController player ? player.UI : null);
+                killer.AddPerk(victim.perks.RandomDrop());
         }
 
         protected override void OnMapStarted()
@@ -131,7 +131,7 @@ namespace Scripts.OOP.Game_Modes.Arena
                 if (player.Level == 1 || player.Level % 5 == 0)
                 {
                     Perk perk = PerksHandler.Random();
-                    player.perks.Add(perk, player.UI);
+                    player.AddPerk(perk);
                 }
             }
         }

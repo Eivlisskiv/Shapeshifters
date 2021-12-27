@@ -53,9 +53,7 @@ public class WeaponCrate : MonoBehaviour
         if (shuffle) shuffle = false;
 
         player.SetWeapon(weapon);
-        player.perks.Add(
-            PerksHandler.RandomCharge(player.Level, 10)
-            , player.UI);
+        player.AddPerk(PerksHandler.RandomCharge(player.Level, 10));
 
         Destroy(gameObject);
 

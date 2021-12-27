@@ -101,6 +101,9 @@ public class PlayerController : BaseController
 #endif
     }
 
+    public override void AddPerk(Perk perk)
+        => perks.Add(perk, UI);
+
     public override bool IsFiring(out float angle)
     {
         if(!Input.GetMouseButton(0) && !Input.GetKey(KeyCode.Space))

@@ -86,4 +86,10 @@ public class RoomHandler : MonoBehaviour
     public Vector2Int OpenGate(bool v) => current.OpenGate(v, map, tile);
 
     public Vector2Int RandomSpawn() => current.RandomSpawn();
+
+    public bool TryGetProp(string id, out GameObject obj)
+    {
+        obj = null;
+        return current is FixedMapRoom fmr && fmr.TryGetProp(id, out obj);
+    }
 }

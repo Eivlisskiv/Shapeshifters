@@ -214,6 +214,9 @@ namespace Scripts.OOP.Game_Modes
         public virtual void PlayerElimenated(PlayerController player)
             => GameOver();
 
+        public bool TryGetProp(string id, out GameObject obj)
+            => map.current.TryGetProp(id, out obj);
+
         protected virtual void GameOver()
         {
             Objectives.transform.Tween<Transform, Vector3, PositionTween>

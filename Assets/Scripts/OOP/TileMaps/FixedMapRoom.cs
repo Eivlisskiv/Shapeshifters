@@ -64,6 +64,9 @@ namespace Scripts.OOP.TileMaps
             ForEachProp(prop => prop.SetActive(true));
         }
 
+        public bool TryGetProp(string id, out GameObject obj)
+            => props.TryGetValue(id, out obj);
+
         protected void ForEachProp(System.Action<GameObject> action)
         {
             foreach (KeyValuePair<string, GameObject> prop in props)

@@ -45,10 +45,7 @@ namespace Scripts.OOP.Game_Modes.Story
             progress.Save();
         }
 
-        public override void UpdateMenu(MainMenuHandler menu)
-        {
-            
-        }
+        public override void UpdateMenu(MainMenuHandler menu) { }
 
         protected override PlayerController SpawnPlayer()
         {

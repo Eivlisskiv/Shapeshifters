@@ -172,7 +172,7 @@ public class MainMenuHandler : MonoBehaviour
             //if(!StoryProgress.Completed(chap, ep)) { }
             if(story) story.ChangeSelect(true); else arcade.ChangeSelect(false);
             SwitchTab(storyMenu.transform.GetComponent<RectTransform>());
-            storyMenu.GoToUnlocked(chap, ep);
+            storyMenu.GoToUnlocked(chap - 1, ep - 1);
 
             return;
         }

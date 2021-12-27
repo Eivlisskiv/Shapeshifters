@@ -174,6 +174,9 @@ public abstract class BaseController : HealthEntity,
         return wep;
     }
 
+    public virtual void AddPerk(Perk perk)
+        => perks.Add(perk);
+
     private void Fire(float angle)
     {
         Sounds.PlayRandom("Fire");

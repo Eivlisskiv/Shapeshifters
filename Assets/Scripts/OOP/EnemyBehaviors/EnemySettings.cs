@@ -81,7 +81,7 @@ namespace Scripts.OOP.EnemyBehaviors
                 if (perk == null) continue;
 
                 perk.LevelUp(level);
-                self.perks.Add(perk);
+                self.AddPerk(perk);
                 charge -= level;
             }
 
@@ -92,7 +92,7 @@ namespace Scripts.OOP.EnemyBehaviors
         private void RandomPerk(int level, EnemyController self)
         {
             Perk perk = PerksHandler.Random(level);
-            self.perks.Add(perk);
+            self.AddPerk(perk);
         }
 
         private void RandomPerks(EnemyController self)

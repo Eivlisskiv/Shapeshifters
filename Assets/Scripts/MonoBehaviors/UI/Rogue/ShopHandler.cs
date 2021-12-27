@@ -105,7 +105,7 @@ public class ShopHandler : MonoBehaviour
     {
         var add = (Perk)Activator.CreateInstance(perk.GetType());
         add.LevelUp(); //Set to level 1;
-        player.perks.Add(add, player.UI);
+        player.AddPerk(add);
 
         perk.LevelUp();
         title.text = $"{perk.Name} lvl. {perk.Level}";

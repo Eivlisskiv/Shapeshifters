@@ -2,6 +2,7 @@
 {
     public interface ILevelProp
     {
+        bool Consumed { get; }
         void LoadParameters(object[] param);
     }
 }
