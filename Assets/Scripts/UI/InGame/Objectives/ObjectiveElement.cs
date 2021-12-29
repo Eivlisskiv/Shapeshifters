@@ -33,7 +33,7 @@ namespace Scripts.UI.InGame.Objectives
         private readonly Dictionary<string, GameObject> elements = new Dictionary<string, GameObject>();
 
         private readonly Transform container;
-        private bool isSpawning;
+        protected bool IsSpawning { get; private set; }
 
         public ObjectiveElement(GameObject element)
         {
@@ -44,7 +44,7 @@ namespace Scripts.UI.InGame.Objectives
 
         protected virtual void OnReady()
         {
-            isSpawning = false;
+            IsSpawning = false;
         }
 
         protected virtual void OnRemoved(ObjectiveHandler handler) 
@@ -99,7 +99,7 @@ namespace Scripts.UI.InGame.Objectives
 
         public void Spawn(float y)
         {
-            isSpawning = true;
+            IsSpawning = true;
 
             rect.localScale = new Vector2(0, 0);
             rect.localPosition = new Vector3(0, y, 0);
@@ -132,7 +132,7 @@ namespace Scripts.UI.InGame.Objectives
 
         public void Expand()
         {
-            if (isSpawning) return;
+            if (IsSpawning) return;
 
             rect.Tween<Transform, Vector3, ScaleTween>
                 (new Vector3(1, 1, 1), 1, 1.5f, ExponentEasing.Out);

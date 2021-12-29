@@ -12,18 +12,13 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Position
 
         public Reach_Map(GameObject element, ObjectiveData data) : base(element, data) { }
 
-        protected override void Initialize(ObjectiveData data)
+        protected override Text Initialize(ObjectiveData data)
         {
-            base.Initialize(data);
-
             Track = Game.NextGate(true);
-            Get<Text>("Title", (t) =>
-            {
-                t.alignment = TextAnchor.MiddleCenter;
-                t.text = LoadParam(data, 0, "Reach the next room.");
-            });
 
             playerCount = Game.GetTeam(0).Count;
+
+            Text title = base.Initialize(data);
 
             if (playerCount > 1)
             {
@@ -36,6 +31,8 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Position
 
             Game.ObjectiveEvents.Subscribe<CustomLevel, int> 
                     (typeof(Reach_Map), MapProgress);
+
+            return title;
         }
 
         private void MapProgress(CustomLevel game, int progress)

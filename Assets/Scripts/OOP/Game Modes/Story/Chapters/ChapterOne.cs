@@ -32,7 +32,7 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                         },
                         props = new MapProp[]
                         {
-                            new MapProp("Module1", "Props/Perks/PerkModule", -4.53f, 11.89f, "Shield", 5),
+                            new MapProp("Module1", "Props/Perks/PerkModule", -4.53f, 11.89f, "Shield", 5, 0, 0),
                         }
                     },
                     new MapPreset()
@@ -171,7 +171,7 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
             new StorySettings(1, 2, "Modular Equipment")
             {
                 Description = "Systems Functional. Proceed",
-                PlayerSpawn = new SerializableInt2(1, 2),
+                PlayerSpawn = new SerializableInt2(10, 14),
                 Maps = new MapPreset[]
                 {
                     new MapPreset()
@@ -192,34 +192,97 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                             { 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, },
                             { 1, 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 0, 0, 1, 1, 1, },
                             { 1, 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 0, 0, 0, 1, 1, 1, },
-                            { 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, },
-                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,},
+                            { 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 2, 2, 2, },
+                            { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, },
                             { 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, }
+                        },
+                    },
+                    new MapPreset()
+                    {
+                        tileBaseIndex = 0,
+                        tiles = new int[,]
+                        {
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, },
+                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
                             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
                             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
                             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, }
                         },
                         props = new MapProp[]
                         {
-                            new MapProp("Module1", "Props/Perks/PerkModule", 0, 0, "Shield", 5),
-                            new MapProp("Module2", "Props/Perks/PerkModule", 0, 0, "Health Regen", 5),
-                            new MapProp("Module3", "Props/Perks/PerkModule", 0, 0, "Shield", 5),
+                            new MapProp("Module1", "Props/Perks/PerkModule", -16.7f, -14.03f, "Shield", 5, 0, 0),
+                            new MapProp("Module2", "Props/Perks/PerkModule", 0, -14.03f, "Health Regen", 5, 0, 0),
+                            new MapProp("Module3", "Props/Perks/PerkModule", 16.7f, -14.03f, "Shield", 5, 0, 0),
                         }
+                    },
+                    new MapPreset()
+                    {
+                        tileBaseIndex = 0,
+                        tiles = new int[,]
+                        {
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 2, 2, 2,},
+                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2,},
+                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,},
+                            { 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 3, 3, 3, 3, 1,},
+                            { 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 1,},
+                            { 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 1,},
+                            { 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1,},
+                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1,},
+                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1,},
+                            { 1, 1, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1,},
+                            { 1, 1, 1, 1, 1, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1,},
+                            { 1, 1, 1, 1, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1,},
+                            { 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1,},
+                            { 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1,},
+                            { 1, 1, 1, 1, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1,},
+                            { 1, 1, 1, 1, 1, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1,},
+                            { 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,}
+                        },
                     }
-
                 },
                 Main = new ObjectiveData[]
                 {
                     new ObjectiveData()
                     {
-                        id = "ActivateProp",
+                        id = "Reach Map",
                         color = new SerializableFloat4(0, 0, 1, 1),
-                        parameters = new object[] { "COLLECT MODULE/PERK", "Module1" }
+                        parameters = new object[] { "PROCEED" }
+                    },
+                    new ObjectiveData()
+                    {
+                        id = "Prop Activation",
+                        color = new SerializableFloat4(0, 1, 0, 1),
+                        parameters = new object[] { "COLLECT MODULE/PERK", "Module2" }
+                    },
+                    new ObjectiveData()
+                    {
+                        id = "Reach Map",
+                        color = new SerializableFloat4(0, 0, 1, 1),
+                        parameters = new object[] { "PROCEED" }
                     },
                     new ObjectiveData()
                     {
                         id = "Waves",
-                        color = new SerializableFloat4(0, 0, 1, 1),
+                        color = new SerializableFloat4(1, 0, 0, 1),
                         parameters = new object[]
                         {
                             "SYSTEM INTRUSION \\ CLEAR THREAT",
@@ -249,12 +312,43 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                     },
                     new ObjectiveData()
                     {
-                        id = "Reach Map",
+                        id = "Timer",
                         color = new SerializableFloat4(0, 0, 1, 1),
-                        parameters = new object[] { "CONTINUE NEXT STAGE" }
-                    }
+                        parameters = new object[] { "Prepare for next wave...", 30f }
+                    },
+                    new ObjectiveData()
+                    {
+                        id = "Waves",
+                        color = new SerializableFloat4(1, 0, 0, 1),
+                        parameters = new object[]
+                        {
+                            "SYSTEM INTRUSION \\ CLEAR THREAT",
+                            1,
+                            new (string, int)[][]
+                            {
+                                new (string, int)[] {
+                                    ("Regular/Tier1/Regular", 0),
+                                    ("Regular/Tier1/Regular", 0),
+                                    ("Regular/Tier1/Regular", 0),
+                                },
+                                new (string, int)[] {
+                                    ("Regular/Tier1/Regular", 0),
+                                    ("Regular/Tier1/Regular", 3),
+                                },
+                                new (string, int)[] {
+                                    ("Regular/Tier1/Bomber", 5),
+                                    ("Regular/Tier1/Regular", 0),
+                                },
+                                new (string, int)[] {
+                                    ("Regular/Tier1/Bomber", 5),
+                                    ("Regular/Tier1/Regular", 0),
+                                    ("Regular/Tier1/Regular", 0),
+                                }
+                            }
+                        }
+                    },
                 }
-            },//*/
+            },
         };
     }
 }

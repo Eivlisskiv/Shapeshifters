@@ -6,7 +6,7 @@ using IgnitedBox.Utilities;
 using Scripts.OOP.Game_Modes;
 using Scripts.OOP.Game_Modes.CustomLevels;
 using Scripts.OOP.Perks;
-using Scripts.UI.InGame.Objectives.ObjectivePresets.Other;
+using Scripts.UI.InGame.Objectives.ObjectivePresets.Props;
 using UnityEngine;
 
 namespace Assets.Scripts.Items.InGame.Props.Perks

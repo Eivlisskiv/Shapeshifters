@@ -5,7 +5,7 @@ using IgnitedBox.Utilities;
 using Scripts.Explosion;
 using Scripts.OOP.Game_Modes;
 using Scripts.OOP.Game_Modes.CustomLevels;
-using Scripts.UI.InGame.Objectives.ObjectivePresets.Other;
+using Scripts.UI.InGame.Objectives.ObjectivePresets.Props;
 using UnityEngine;
 
 public class Landmine : OtherProjectile, ILevelProp

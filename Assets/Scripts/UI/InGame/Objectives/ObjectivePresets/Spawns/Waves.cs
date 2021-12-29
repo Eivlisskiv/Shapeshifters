@@ -19,22 +19,28 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Spawns
 
         public Waves(GameObject element, ObjectiveData data) : base(element, data) { }
 
-        protected override void Initialize(ObjectiveData data)
+        protected override Text Initialize(ObjectiveData data)
         {
             spawns = new List<BaseController>();
-
-            base.Initialize(data);
-
-            Get<Text>("Title", (t) => t.text = LoadParam(data, 0, "AI Waves"));
 
             team = LoadParam(data, 1, 1);
 
             waves = LoadParam(data, 2, new (string, int)[][] { new (string, int)[] { ("Regular/Tier 1/Regular", 0) } });
 
-            progress = Get<Text>("Progress", t => t.text = GetProgress());
+            Text title = base.Initialize(data);
+
+            title.alignment = TextAnchor.MiddleLeft;
+
+            progress = Get<Text>("Progress", t =>
+            {
+                t.text = GetProgress();
+                t.alignment = TextAnchor.MiddleRight;
+            });
 
             Game.ObjectiveEvents.Subscribe<CustomLevel, BaseController>
                 (typeof(IControllerElimenated), Progress);
+
+            return title;
         }
 
         protected override void OnReady()

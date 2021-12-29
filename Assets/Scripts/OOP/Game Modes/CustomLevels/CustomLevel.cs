@@ -30,11 +30,6 @@ namespace Scripts.OOP.Game_Modes.CustomLevels
             ObjectivesProgress = -1;
         }
 
-        public override void OnUpdate()
-        {
-            if(ongoing) game_timer += Time.deltaTime;
-        }
-
         protected override void OnMapStarted()
         {
             //Load the first map

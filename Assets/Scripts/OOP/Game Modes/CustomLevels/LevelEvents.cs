@@ -1,6 +1,7 @@
 ﻿using IgnitedBox.EventSystem;
 using Scripts.UI.InGame.Objectives.ObjectivePresets.Position;
 using Scripts.UI.InGame.Objectives.ObjectivePresets.Spawns;
+using Scripts.UI.InGame.Objectives.ObjectivePresets.Time;
 using UnityEngine;
 
 namespace Scripts.OOP.Game_Modes.CustomLevels
@@ -9,6 +10,15 @@ namespace Scripts.OOP.Game_Modes.CustomLevels
     {
         public EventsHandler<System.Type> ObjectiveEvents
         { get; private set; } = new EventsHandler<System.Type>();
+
+        public override void OnUpdate()
+        {
+            if (!ongoing) return;
+            
+            game_timer += Time.deltaTime;
+
+            ObjectiveEvents.Invoke(typeof(IOnUpdate), this, Time.deltaTime);
+        }
 
         public override void MapEntered(RoomHandler room, Collider2D subject)
         {

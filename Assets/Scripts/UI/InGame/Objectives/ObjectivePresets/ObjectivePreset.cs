@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Scripts.UI.InGame.Objectives.ObjectivePresets
 {
@@ -25,13 +26,19 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets
 
         protected ObjectivePreset(GameObject element, ObjectiveData data = null) : base(element) 
         {
+            Game = (CustomLevel)GameModes.GameMode;
             if (data != null) Initialize(data);
         }
 
-        protected virtual void Initialize(ObjectiveData data)
+        protected virtual Text Initialize(ObjectiveData data)
         {
             if(data.track != null) Track = (Vector2)data.track;
-            Game = (CustomLevel)GameModes.GameMode;
+
+            return Get<Text>("Title", t =>
+            {
+                t.text = LoadParam(data, 0, "_<Unknown Objective>");
+                t.alignment = TextAnchor.MiddleCenter;
+            });
         }
 
         protected override void OnRemoved(ObjectiveHandler handler)
