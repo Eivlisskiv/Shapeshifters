@@ -115,7 +115,7 @@ namespace Scripts.OOP.Game_Modes
         public EnemyController SpawnEnemy(GameObject mob, int team, int level, Vector2Int? coords = null)
         {
             if (mob.IsPrefab()) mob = Object.Instantiate(mob);
-            mob.transform.position = map.current.MapPosition(coords ?? map.current.RandomSpawn());
+            mob.transform.position = map.Current.MapPosition(coords ?? map.Current.RandomSpawn());
             var enemy = mob.GetComponent<EnemyController>();
             enemy.Set(level);
             AddMember(team, enemy);
@@ -145,8 +145,8 @@ namespace Scripts.OOP.Game_Modes
 
         public ObjectiveTracking? NextGate(bool openGame)
         {
-            Vector2 pos = map.current.MapPosition(map.current.OpenGate(openGame));
-            Vector2 mid = map.loading.MapPosition(new Vector2Int(map.loading.Width / 2, map.loading.Height / 2));
+            Vector2 pos = map.Current.MapPosition(map.Current.OpenGate(openGame));
+            Vector2 mid = map.Loading.MapPosition(new Vector2Int(map.Loading.Width / 2, map.Loading.Height / 2));
             return pos + ((mid - pos).normalized * 9);
         }
 
@@ -215,7 +215,7 @@ namespace Scripts.OOP.Game_Modes
             => GameOver();
 
         public bool TryGetProp(string id, out GameObject obj)
-            => map.current.TryGetProp(id, out obj);
+            => map.Current.TryGetProp(id, out obj);
 
         protected virtual void GameOver()
         {

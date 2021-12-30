@@ -13,6 +13,8 @@ namespace Assets.Scripts.Items.InGame.Props.Perks
 {
     public class PerksModule : MonoBehaviour, ILevelProp
     {
+        public bool Enabled { get => enabled; set => enabled = value; }
+
         public string PerkName
         {
             get => perkName;
@@ -62,8 +64,9 @@ namespace Assets.Scripts.Items.InGame.Props.Perks
 
             consumed = true;
 
-            Perk perk = PerksHandler.Load(perkName);
-            if (perk == null) PerksHandler.Random(0);
+            Perk perk = string.IsNullOrEmpty(perkName) ? 
+                PerksHandler.Random(0) : PerksHandler.Load(perkName);
+            perk ??= PerksHandler.Random(0);
 
             if (perkLevel > 0) perk.LevelUp(perkLevel);
             if (perkBuff > 0) perk.ChargeBuff(perkBuff, perkCharge);
@@ -95,9 +98,9 @@ namespace Assets.Scripts.Items.InGame.Props.Perks
         public void LoadParameters(object[] param)
         {
             PerkName = param.ParamAs<string>(0);
-            perkLevel = param.ParamAs(1, 0);
-            perkBuff = param.ParamAs(2, 5);
-            perkCharge = param.ParamAs(3, 20);
+            perkLevel = param.ParamAs(1, 1);
+            perkBuff = param.ParamAs(2, 0);
+            perkCharge = param.ParamAs(3, 0);
         }
     }
 }

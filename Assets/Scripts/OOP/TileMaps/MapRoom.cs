@@ -75,6 +75,8 @@ namespace Scripts.OOP.TileMaps
             Initialize();
         }
 
+        public virtual void OnCurrent() { }
+
         public abstract void Initialize();
 
         public abstract void LoadFinished();

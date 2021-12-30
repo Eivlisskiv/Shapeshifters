@@ -47,6 +47,7 @@ namespace IgnitedBox.Tweening.Tweeners
             Start = GetStart();
             Duration = time;
             Delay = delay;
+            currentDelay = Delay;
 
             Easing = easing;
             Callback = callback;

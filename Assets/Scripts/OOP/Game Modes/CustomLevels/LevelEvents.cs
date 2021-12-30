@@ -25,7 +25,7 @@ namespace Scripts.OOP.Game_Modes.CustomLevels
             if (!ongoing) return;
 
             //The next map is the one we want to enter
-            if (room != map.loading) return;
+            if (room != map.Loading) return;
             PlayerController player = subject.gameObject.GetComponent<PlayerController>();
             if (!player || playersReady.Contains(player)) return;
 
@@ -33,7 +33,7 @@ namespace Scripts.OOP.Game_Modes.CustomLevels
 
             if (count == GetTeam(0).Count)
             {
-                map.current.OpenGate(false);
+                map.Current.OpenGate(false);
                 playersReady.Clear();
                 NextMap();
             }
@@ -48,7 +48,7 @@ namespace Scripts.OOP.Game_Modes.CustomLevels
             if (!ongoing) return;
 
             //The next map is the one we want to enter
-            if (room != map.loading) return;
+            if (room != map.Loading) return;
             PlayerController player = subject.gameObject.GetComponent<PlayerController>();
             if (!player) return;
 

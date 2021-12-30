@@ -24,7 +24,7 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Props
         protected override void OnReady()
         {
             base.OnReady();
-            if (Game.TryGetProp(Target, out propObject))
+            if (Game.TryGetProp(Target, out propObject) && propObject)
             {
                 prop = propObject.GetComponent<ILevelProp>();
                 Track = propObject.transform;

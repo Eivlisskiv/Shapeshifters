@@ -33,7 +33,7 @@ namespace Scripts.OOP.Game_Modes.Arena
 
         public override void OnUpdate()
         {
-            if (map.current == null || !map.current.Loaded) return;
+            if (map.Current == null || !map.Current.Loaded) return;
 
             if (!spawns) return;
 
@@ -113,8 +113,8 @@ namespace Scripts.OOP.Game_Modes.Arena
                 (map.characterPrefab, map.uiPrefab,
                 Camera.main, map.mainCanvas.transform);
 
-            player.transform.position = map.current.MapPosition(new Vector2Int
-                (ProceduralMapRoom.spacing + (ProceduralMapRoom.borderWidth * 2) - 1, map.current.Width / 4));
+            player.transform.position = map.Current.MapPosition(new Vector2Int
+                (ProceduralMapRoom.spacing + (ProceduralMapRoom.borderWidth * 2) - 1, map.Current.Width / 4));
 
             AddMember(0, player);
         }

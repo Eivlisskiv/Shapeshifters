@@ -22,9 +22,20 @@ public class MapHandler : MonoBehaviour
 
     readonly List<RoomHandler> rooms = new List<RoomHandler>();
 
-    internal RoomHandler previous;
-    internal RoomHandler current;
-    internal RoomHandler loading;
+    public RoomHandler Previous { get; private set; }
+    public RoomHandler Current 
+    { 
+        get => _current; 
+        private set
+        {
+            if (_current == value) return;
+            _current = value;
+            if (_current != null) _current.OnCurrent();
+        }
+    }
+    private RoomHandler _current;
+
+    public RoomHandler Loading { get; private set; }
 
     public void StartMap()
     {
@@ -34,7 +45,7 @@ public class MapHandler : MonoBehaviour
             return;
         }
         enabled = true;
-        AlignCamera(0.68f * loading.Width);
+        AlignCamera(0.68f * Loading.Width);
     }
 
     private void AlignCamera(float size)
@@ -51,7 +62,7 @@ public class MapHandler : MonoBehaviour
     public void QueuRoom<T>(int size)
         where T : ProceduralMapRoom
     {
-        if(loading != null)
+        if(Loading != null)
         {
             Debug.LogWarning($"There is already a queud room");
             return;
@@ -60,7 +71,7 @@ public class MapHandler : MonoBehaviour
         CreateRoom((room) => 
         {
             var r = ConstructRoom<T>(new Vector2Int(size, size / 2),
-                current, room.propsContainer);
+                Current, room.propsContainer);
 
             room.SetSettings(r, tilesets[Math.Min
             (r.TileBaseIndex, tilesets.Length - 1)]);
@@ -69,7 +80,7 @@ public class MapHandler : MonoBehaviour
 
     public void QueuRoom(MapPreset preset)
     {
-        if (loading != null)
+        if (Loading != null)
         {
             Debug.LogWarning($"There is already a queud room");
             return;
@@ -77,7 +88,7 @@ public class MapHandler : MonoBehaviour
 
         CreateRoom((room) =>
         {
-            var r = new FixedMapRoom(preset, current, room.propsContainer);
+            var r = new FixedMapRoom(preset, Current, room.propsContainer);
             room.SetSettings(r, tilesets[Math.Min
                 (r.tileBaseIndex, tilesets.Length - 1)]);
         });
@@ -89,16 +100,17 @@ public class MapHandler : MonoBehaviour
 
     public void NextRoom(MapPreset preset, bool isRemoveOld)
     {
-        if (loading != null)
+        if (Loading != null)
         {
-            if (!loading.Loaded) loading.SetTilesPerFrame(999);
+            if (!Loading.Loaded) Loading.SetTilesPerFrame(999);
 
-            if (previous && isRemoveOld) Destroy(previous.gameObject);
+            if (Previous && isRemoveOld) Destroy(Previous.gameObject);
 
-            previous = current;
+            Previous = Current;
 
-            current = loading;
-            loading = null;
+            Current = Loading;
+
+            Loading = null;
         }
 
         if(preset != null) QueuRoom(preset);
@@ -106,19 +118,20 @@ public class MapHandler : MonoBehaviour
 
     public void NextProceduralRoom(int size)
     {
-        if(loading != null && !loading.Loaded)
+        if(Loading != null && !Loading.Loaded)
         {
             Debug.LogWarning($"Loading room is still loading");
             return;
         }
 
-        if (previous) Destroy(previous.gameObject);
-        previous = current;
+        if (Previous) Destroy(Previous.gameObject);
+        Previous = Current;
 
-        previous.OpenGate(false);
+        Previous.OpenGate(false);
 
-        current = loading;
-        loading = null;
+        Current = Loading;
+
+        Loading = null;
 
         QueuRoom<CaveRoom>(size);
     }
@@ -133,7 +146,7 @@ public class MapHandler : MonoBehaviour
         settings(room);
 
         rooms.Add(room);
-        loading = room;
+        Loading = room;
     }
 
     // Update is called once per frame
@@ -147,25 +160,25 @@ public class MapHandler : MonoBehaviour
     private void VerifyLoadingRoom()
     {
         //If room is done loading
-        if (loading != null && loading.Loaded)
+        if (Loading != null && Loading.Loaded)
         {
             //Asign as first room
-            if (current == null)
+            if (Current == null)
                 FirstLoad();
         }
     }
 
     private void FirstLoad()
     {
-        current = loading;
-        loading = null;
+        Current = Loading;
+        Loading = null;
         GameModes.GameMode.OnLoaded();
     }
 
     public void Clear()
     {
-        loading = null;
-        current = null;
+        Loading = null;
+        Current = null;
 
         int c = transform.childCount;
         for (int i = 0; i < c; i++)

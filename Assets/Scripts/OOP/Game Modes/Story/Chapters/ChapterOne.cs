@@ -32,7 +32,7 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                         },
                         props = new MapProp[]
                         {
-                            new MapProp("Module1", "Props/Perks/PerkModule", -4.53f, 11.89f, "Shield", 5, 0, 0),
+                            new MapProp("Module1", "Props/Perks/PerkModule", -4.53f, 11.89f),
                         }
                     },
                     new MapPreset()
@@ -55,6 +55,14 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                             { 1, 1, 1, 1, 0, 3, 3, 3, 3, 3, 0, 2, 2, },
                             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
                             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, }
+                        },
+                        props = new MapProp[]
+                        {
+                            new MapProp("ShieldModule", "Props/Perks/PerkModule", 3f, 0f, "Shield", 5, 0, 0),
+                            new MapProp("Target1", "Props/Targets/TargetPractice", -6.78f, 8.39f, 100, 0),
+                            new MapProp("Target2", "Props/Targets/TargetPractice", 11.81f, 8.59f, 100, 1),
+                            new MapProp("Target3", "Props/Targets/TargetPractice", 11.31f, -11f, 100, 2),
+                            new MapProp("Target4", "Props/Targets/TargetPractice", -6.06f, -9.95f, 100, 3),
                         }
                     },
                     new MapPreset()
@@ -62,28 +70,33 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                         tileBaseIndex = 0,
                         tiles = new int[,]
                         {
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 0, 0, 1, 1, 1, },
-                            { 1, 1, 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 1, 1, 1, },
-                            { 1, 1, 1, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 1, 1, 1, },
-                            { 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, },
-                            { 1, 1, 1, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 1, 3, 0, 0, 1, 1, 1, },
-                            { 1, 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 3, 0, 1, 1, 1, },
-                            { 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, },
-                            { 1, 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 0, 0, 1, 1, 1, },
-                            { 1, 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 0, 0, 0, 1, 1, 1, },
-                            { 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
+                            { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,},
+                            { 1, 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 1, 1, 1,},
+                            { 1, 1, 1, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 1, 1, 1,},
+                            { 1, 1, 1, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 1, 1, 1,},
+                            { 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1,},
+                            { 1, 1, 1, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 3, 0, 0, 1, 1, 1,},
+                            { 1, 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 3, 0, 1, 1, 1,},
+                            { 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1,},
+                            { 1, 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 1, 1, 1,},
+                            { 1, 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 1, 1, 1,},
+                            { 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1,},
                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,},
-                            { 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, }
+                            { 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,},
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,}
                         },
                         props = new MapProp[]
                         {
+                            new MapProp("Target1", "Props/Targets/TargetPractice", -15.86f, 15.89f, 100, 32),
+                            new MapProp("Target2", "Props/Targets/TargetPractice", 15.46f, 10.53f, 100, 32),
+                            new MapProp("Target3", "Props/Targets/TargetPractice", 9.12f, -3f, 100, 32),
+                            new MapProp("Target4", "Props/Targets/TargetPractice", -3.26f, -16.2f, 100, 32),
+
                             new MapProp("LandMine1", "Projectiles/Landmine", -10.27f, 8.52f, 0, 100),
                             new MapProp("LandMine2", "Projectiles/Landmine", 2.39f, 8.52f, 0, 100),
                             new MapProp("LandMine3", "Projectiles/Landmine", -10.27f, 0, 0, 100),
@@ -104,68 +117,58 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                     },
                     new ObjectiveData()
                     {
-                        id = "Waves",
+                        id = "Prop Activation",
                         color = new SerializableFloat4(0, 0, 1, 1),
-                        parameters = new object[]
-                        {
-                            "HOSTILES \\ CLEAR THREAT",
-                            1,
-                            new (string, int)[][]
-                            {
-                                new (string, int)[] {
-                                    ("Regular/Tier1/Regular", 0),
-                                },
-                                new (string, int)[] {
-                                    ("Regular/Tier1/Regular", 0),
-                                    ("Regular/Tier1/Regular", 3),
-                                },
-                                new (string, int)[] {
-                                    ("Regular/Tier1/Bomber", 5),
-                                    ("Regular/Tier1/Regular", 0),
-                                },
-                                new (string, int)[] {
-                                    ("Regular/Tier1/Bomber", 5),
-                                    ("Regular/Tier1/Regular", 0),
-                                    ("Regular/Tier1/Regular", 0),
-                                }
-                            }
-                        }
+                        parameters = new object[] { "Destroy the first target", "Target1", }
+                    },
+                    new ObjectiveData()
+                    {
+                        id = "Prop Activation",
+                        color = new SerializableFloat4(0, 0, 1, 1),
+                        parameters = new object[] { "Destroy the second target", "Target2", }
+                    },
+                    new ObjectiveData()
+                    {
+                        id = "Prop Activation",
+                        color = new SerializableFloat4(0, 0, 1, 1),
+                        parameters = new object[] { "Destroy the third target", "Target3", }
+                    },
+                    new ObjectiveData()
+                    {
+                        id = "Prop Activation",
+                        color = new SerializableFloat4(0, 0, 1, 1),
+                        parameters = new object[] { "Destroy the last target", "Target4", }
                     },
                     new ObjectiveData()
                     {
                         id = "Reach Map",
                         color = new SerializableFloat4(0, 0, 1, 1),
-                        parameters = new object[] { "CONTINUE \\_ STAAAAAAGE" }
+                        parameters = new object[] { "CONTINUE \\_ STAGE" }
                     },
                     new ObjectiveData()
                     {
-                        id = "Waves",
+                        id = "Prop Activation",
                         color = new SerializableFloat4(0, 0, 1, 1),
-                        parameters = new object[]
-                        {
-                            "HOSTILES \\ CLEAR THREAT",
-                            1,
-                            new (string, int)[][]
-                            {
-                                new (string, int)[] {
-                                    ("Regular/Tier1/Regular", 0),
-                                },
-                                new (string, int)[] {
-                                    ("Regular/Tier1/Regular", 0),
-                                    ("Regular/Tier1/Regular", 3),
-                                },
-                                new (string, int)[] {
-                                    ("Regular/Tier1/Bomber", 5),
-                                    ("Regular/Tier1/Regular", 0),
-                                },
-                                new (string, int)[] {
-                                    ("Regular/Tier1/Bomber", 5),
-                                    ("Regular/Tier1/Regular", 0),
-                                    ("Regular/Tier1/Regular", 0),
-                                }
-                            }
-                        }
-                    }
+                        parameters = new object[] { "Destroy the first target", "Target1", }
+                    },
+                    new ObjectiveData()
+                    {
+                        id = "Prop Activation",
+                        color = new SerializableFloat4(0, 0, 1, 1),
+                        parameters = new object[] { "Destroy the second target", "Target2", }
+                    },
+                    new ObjectiveData()
+                    {
+                        id = "Prop Activation",
+                        color = new SerializableFloat4(0, 0, 1, 1),
+                        parameters = new object[] { "Destroy the third target", "Target3", }
+                    },
+                    new ObjectiveData()
+                    {
+                        id = "Prop Activation",
+                        color = new SerializableFloat4(0, 0, 1, 1),
+                        parameters = new object[] { "Destroy the last target", "Target4", }
+                    },
                 }
             },
             new StorySettings(1, 2, "Modular Equipment")

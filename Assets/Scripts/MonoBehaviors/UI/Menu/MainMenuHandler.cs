@@ -83,40 +83,42 @@ public class MainMenuHandler : MonoBehaviour
 
         if (openTab == tab) return;
 
-        if (openTab)//Close existing tab
+        if (openTab != null)//Close existing tab
         {
             GeneralButton.GroupOffStatus(openTab.name);
 
-            openTab.Tween<RectTransform, Vector3, RectSizeTween>(
-                new Vector2(-1, openTab.sizeDelta.y), speed,
-                easing: ExponentEasing.Out, callback: () =>
-                {
-                    if (tab)
-                    {
-                        tab.Tween<RectTransform, Vector3, RectSizeTween>(
-                        new Vector2(width, tab.sizeDelta.y), speed,
-                        easing: ElasticEasing.Out);
-                    }
-                });
+            if (openTab)
+            {
+                openTab.Tween<RectTransform, Vector3, RectSizeTween>(
+                    new Vector2(-1, openTab.sizeDelta.y), speed,
+                    easing: ExponentEasing.Out);
+            }
+            if (tab) //Switching Tab
+            {
+                tab.Tween<RectTransform, Vector3, RectSizeTween>(
+                new Vector2(width, tab.sizeDelta.y), speed, speed,
+                ElasticEasing.Out);
+            }
+            else  //Closing tab
+            {
+                containerRect.Tween<Transform, Vector3, PositionTween>(
+                containerRect.localPosition + new Vector3(width / 2, 0), speed / 2.5f);
+            }
         }
-
-        if (tab == null) //If closing current tab
-        {
-            containerRect.Tween<Transform, Vector3, PositionTween>(
-            containerRect.localPosition + new Vector3(width / 2, 0), speed / 2.5f);
-        }
-        else if (openTab == null) //opening from no tab
+        else if (tab) //opening from no tab
         {
             containerRect.Tween<Transform, Vector3, PositionTween>(
             containerRect.localPosition - new Vector3(width / 2, 0), speed / 2.5f);
 
-            if (tab)
+            if (tab) 
+            {
                 tab.Tween<RectTransform, Vector3, RectSizeTween>(
                 new Vector2(width, tab.sizeDelta.y), speed,
                 easing: ElasticEasing.Out);
+            }
         }
 
-        openTab = tab;
+        openTab = tab ? tab : null;
     }
 
     public void OnClick_TabButton(RectTransform tab)
@@ -214,17 +216,20 @@ public class MainMenuHandler : MonoBehaviour
 
     public void OnClick_Perks(RectTransform tab)
     {
-        RectTransform c = tab.GetChild(0)
-            .GetChild(0).GetChild(0)
-            .GetComponent<RectTransform>();
-
-        perks = new UIPerksList(c, perkDescPrefab);
-        perks.LoadPerks((perk, title, desc) =>
+        if (perks == null)
         {
-            perk.LevelUp();
-            title.text = $"{perk.Name} lvl {perk.Level}";
-            desc.text = perk.Description;
-        });
+            RectTransform c = tab.GetChild(0)
+                .GetChild(0).GetChild(0)
+                .GetComponent<RectTransform>();
+
+            perks = new UIPerksList(c, perkDescPrefab);
+            perks.LoadPerks((perk, title, desc) =>
+            {
+                perk.LevelUp();
+                title.text = $"{perk.Name} lvl {perk.Level}";
+                desc.text = perk.Description;
+            });
+        }
 
         SwitchTab(tab);
     }

@@ -1,4 +1,5 @@
-﻿using Scripts.OOP.Game_Modes;
+﻿using IgnitedBox.Entities;
+using Scripts.OOP.Game_Modes;
 using Scripts.OOP.Perks.Character.Triggers;
 using System;
 using UnityEngine;
@@ -14,17 +15,23 @@ namespace Scripts.OOP.Perks.Character
 
         public bool OnCollide(BaseController controller, Collision2D collision)
         {
-            BaseController other = collision.collider.GetComponent<BaseController>();
-            if (other && !controller.IsTeammate(other))
-            {
-                Vector3 point = collision.contacts[0].point;
-                other.TakeDamage(Intensity, controller, point);
-                point.z = -5;
-                UnityEngine.Object.Destroy(SpawnPrefab(point, null,
-                    GameModes.GetDebrisTransform(controller.Team)), 1f); 
-                return true;
-            }
-            return false;
+            HealthEntity entity = collision.collider.GetComponent<HealthEntity>();
+            if (!entity) return false;
+
+            if(!(entity is BaseController other))
+                other = collision.collider.GetComponent<BaseController>();
+
+            if (other && controller.IsTeammate(other)) return false;
+
+            Vector3 point = collision.contacts[0].point;
+            point.z = -5;
+
+            if (other) other.TakeDamage(Intensity, controller, point);
+            else entity.ModifyHealth(-Intensity);
+
+            UnityEngine.Object.Destroy(SpawnPrefab(point, null,
+                GameModes.GetDebrisTransform(controller.Team)), 1f); 
+            return true;
         }
     }
 

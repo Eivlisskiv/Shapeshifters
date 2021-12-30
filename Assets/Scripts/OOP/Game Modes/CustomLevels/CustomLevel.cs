@@ -72,7 +72,7 @@ namespace Scripts.OOP.Game_Modes.CustomLevels
                 (map.characterPrefab, map.uiPrefab,
                 Camera.main, map.mainCanvas.transform);
 
-            player.transform.position = map.current.MapPosition(levelSettings.PlayerSpawn);
+            player.transform.position = map.Current.MapPosition(levelSettings.PlayerSpawn);
             AddMember(0, player);
             return player;
         }

@@ -10,6 +10,8 @@ using UnityEngine;
 
 public class Landmine : OtherProjectile, ILevelProp
 {
+    public bool Enabled { get => active; set => active = value; }
+
     public FireworkExplosionHandler explosion;
 
     public SpriteRenderer teamColor;

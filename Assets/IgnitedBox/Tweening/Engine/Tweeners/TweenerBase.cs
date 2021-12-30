@@ -83,7 +83,14 @@ namespace IgnitedBox.Tweening.Tweeners
         public abstract void Update(float time);
 
         protected bool ContinueDelay(float time)
-            =>  State == TweenState.Playing && (currentDelay < 0 || (currentDelay -= time) < 0);
+        {
+            if (State != TweenState.Playing) return false;
+            if (Delay <= 0) return true;
+
+            if (currentDelay < 0) return true;
+            currentDelay -= time;
+            return currentDelay < 0;
+        }
 
         protected bool Check(float time, out float percent)
         {

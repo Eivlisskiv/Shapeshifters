@@ -51,6 +51,8 @@ public class RoomHandler : MonoBehaviour
         if (!loaded && current != null) LoadRoom();
     }
 
+    public void OnCurrent() => current.OnCurrent();
+
     private void LoadRoom()
     {
         if (!current.DrawAmount(tilesPerFrame, map, tile, hasCenter))

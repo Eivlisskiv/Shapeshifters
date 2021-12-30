@@ -121,7 +121,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
         private void FinishWave()
         {
             Score++;
-            if (!map.loading.Loaded) map.loading.SetTilesPerFrame(50);
+            if (!map.Loading.Loaded) map.Loading.SetTilesPerFrame(50);
             stage = Stage.Pausing;
             PauseHandler.SetControl(false);
             cooldown = 5;
@@ -159,7 +159,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
         public override void MapEntered(RoomHandler room, Collider2D subject)
         {
             //The next map is the one we want to enter
-            if (stage != Stage.PassGate || room != map.loading) return;
+            if (stage != Stage.PassGate || room != map.Loading) return;
             PlayerController player = subject.gameObject.GetComponent<PlayerController>();
             if (!player || playersReady.Contains(player)) return;
 
@@ -176,7 +176,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
         public override void MapExited(RoomHandler room, Collider2D subject)
         {
             //The next map is the one we want to enter
-            if (stage != Stage.PassGate || room != map.loading) return;
+            if (stage != Stage.PassGate || room != map.Loading) return;
             PlayerController player = subject.gameObject.GetComponent<PlayerController>();
             if (!player) return;
 
@@ -208,14 +208,14 @@ namespace Scripts.OOP.Game_Modes.Rogue
         private void BossRoom()
         {
             map.NextProceduralRoom(80);
-            map.loading.hasCenter = false;
+            map.Loading.hasCenter = false;
         }
 
         public override void OnLoaded()
         {
             base.OnLoaded();
             map.QueuRoom<CaveRoom>(80);
-            map.loading.hasCenter = false;
+            map.Loading.hasCenter = false;
 
             SpawnPlayer();
         }
@@ -247,8 +247,8 @@ namespace Scripts.OOP.Game_Modes.Rogue
                 (map.characterPrefab, map.uiPrefab,
                 Camera.main, map.mainCanvas.transform);
 
-            player.transform.position = map.current.MapPosition(new Vector2Int
-                (ProceduralMapRoom.spacing + (ProceduralMapRoom.borderWidth * 2) - 1, map.current.Width / 4));
+            player.transform.position = map.Current.MapPosition(new Vector2Int
+                (ProceduralMapRoom.spacing + (ProceduralMapRoom.borderWidth * 2) - 1, map.Current.Width / 4));
             shop.player = player;
             AddMember(0, player);
         }
@@ -272,7 +272,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
         private bool SpaceForBossSpawn(Vector2Int coords, int size)
         {
-            var room = map.current;
+            var room = map.Current;
 
             bool __checkDir(Vector2Int dir)
             {
@@ -298,7 +298,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
             if (!boss) return null;
 
-            Vector2Int pos = map.current.RandomSpawn();
+            Vector2Int pos = map.Current.RandomSpawn();
 
             if (!SpaceForBossSpawn(pos, boss.settings.size)) return null;
 
@@ -306,7 +306,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
             boss = bossObject.GetComponent<EnemyController>();
             boss.Set(level);
-            boss.transform.position = map.current.MapPosition(pos);
+            boss.transform.position = map.Current.MapPosition(pos);
 
             AddMember(team, boss);
 

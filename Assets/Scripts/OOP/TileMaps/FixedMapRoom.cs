@@ -40,10 +40,10 @@ namespace Scripts.OOP.TileMaps
                 prop.transform.localPosition = (Vector2)mp.position;
                 prop.SetActive(false);
 
-                if (mp.parameters != null)
+                if (mp.parameters != null && prop.TryGetComponent(out ILevelProp lp))
                 {
-                    prop.GetComponent<ILevelProp>()?
-                        .LoadParameters(mp.parameters);
+                    lp.LoadParameters(mp.parameters);
+                    lp.Enabled = false;
                 }
 
                 this.props.Add(mp.id, prop);
@@ -71,6 +71,15 @@ namespace Scripts.OOP.TileMaps
         {
             foreach (KeyValuePair<string, GameObject> prop in props)
                 if(prop.Value) action(prop.Value);
+        }
+
+        public override void OnCurrent()
+        {
+            ForEachProp(prop => 
+            {
+                if (prop.TryGetComponent(out ILevelProp p))
+                    p.Enabled = true;
+            });
         }
     }
 }
