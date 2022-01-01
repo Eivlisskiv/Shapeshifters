@@ -66,10 +66,11 @@ namespace Scripts.OOP.TileMaps
             if (!previous) start = Vector2Int.zero;
             else
             {
-                var lastPosition = previous.transform.localPosition;
+                var lastPosition = previous.StartV;
                 start = new Vector2Int(
                     Mathf.RoundToInt(lastPosition.x + previous.Width),
-                    Mathf.RoundToInt(lastPosition.y + ((previous.Height - size.y) / 2)));
+                    Mathf.RoundToInt(lastPosition.y + ((previous.Height - size.y) / 2))
+                    );
             }
 
             Initialize();

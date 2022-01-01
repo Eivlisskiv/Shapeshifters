@@ -11,7 +11,7 @@ namespace Scripts.OOP.Perks.Character
         protected override string RessourcePath => "Particles/Sparks";
 
         protected override string GetDescription()
-            => $"Colliding with enemies deals ({Intensity}) damage.";
+            => $"Colliding with enemies deals {Stat(Intensity)} damage.";
 
         public bool OnCollide(BaseController controller, Collision2D collision)
         {
@@ -45,7 +45,7 @@ namespace Scripts.OOP.Perks.Character
         protected override string RessourcePath => "Particles/Shields";
 
         protected override string GetDescription()
-            => $"Grants ({Intensity * 5}) Shields with a 5 seconds recharge delay.";
+            => $"Grants {Stat(Intensity * 5)} Shields with a 5 seconds recharge delay.";
 
         private bool Remaining => Charge > 0 || shield > 0;
 

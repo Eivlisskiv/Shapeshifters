@@ -52,6 +52,7 @@ namespace Scripts.OOP.Game_Modes.CustomLevels
     public class MapPreset
     {
         public int tileBaseIndex;
+        public int yOffset;
         public int[,] tiles;
         public MapProp[] props;
     }

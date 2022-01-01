@@ -74,7 +74,7 @@ public class MapHandler : MonoBehaviour
                 Current, room.propsContainer);
 
             room.SetSettings(r, tilesets[Math.Min
-            (r.TileBaseIndex, tilesets.Length - 1)]);
+            (r.TileBaseIndex, tilesets.Length - 1)], 0);
         });
     }
 
@@ -88,9 +88,9 @@ public class MapHandler : MonoBehaviour
 
         CreateRoom((room) =>
         {
-            var r = new FixedMapRoom(preset, Current, room.propsContainer);
+            FixedMapRoom r = new FixedMapRoom(preset, Current, room.propsContainer);
             room.SetSettings(r, tilesets[Math.Min
-                (r.tileBaseIndex, tilesets.Length - 1)]);
+                (r.tileBaseIndex, tilesets.Length - 1)], preset.yOffset);
         });
     }
 

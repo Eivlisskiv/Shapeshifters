@@ -21,8 +21,8 @@ namespace Scripts.OOP.Perks.Weapons
             Graphs.LimitedGrowthExponent(Intensity, 25 + base_force, 0.99f, base_force);
 
         protected override string GetDescription()
-            => $"Has a ({Mathf.Floor(SpawnChance)}%) chance to drop a mine when firing. " +
-            $"Mine's explosion deals up to ({Intensity * 2}) damage.";
+            => $"Has a {Stat(Mathf.Floor(SpawnChance) + "%")} chance to drop a mine when firing. " +
+            $"Mine's explosion deals up to {Stat(Intensity * 2)} damage.";
 
         public bool OnFire(float angle, Weapon weapon, WeaponStats _)
         {

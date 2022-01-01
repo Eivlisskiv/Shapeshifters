@@ -12,7 +12,7 @@ namespace Scripts.OOP.Perks.Character.Healing
         protected override string RessourcePath => "Particles/Healing";
 
         protected override string GetDescription()
-            => $"Regenerate ({Intensity}) Heath points per 5 second.";
+            => $"Regenerate {Stat(Intensity)} Heath points per 5 second.";
 
         public bool OnControllerUpdate(BaseController controller, float delta)
         {

@@ -11,8 +11,8 @@ namespace Scripts.OOP.Perks.Character.Healing
         protected override int ToBuffCharge => 50;
 
         protected override string GetDescription()
-            => $"After not receiving damage for {cooldown} seconds, regenerate {Intensity / 2f} health per seconds." +
-            $" Healing doubled when also not firing for {cooldown} seconds.";
+            => $"After not receiving damage for {Stat(cooldown)} seconds, regenerate {Stat(Intensity / 2f)} health per seconds." +
+            $" Healing doubled when also not firing for {Stat(cooldown)} seconds.";
 
         private float cooldown = 30;
 

@@ -27,6 +27,9 @@
             Start();
         }
 
+        protected string Stat(object text)
+            => $"<b><color=orange>{text}</color></b>";
+
         protected virtual void Start() { }
 
         //Get\Sets

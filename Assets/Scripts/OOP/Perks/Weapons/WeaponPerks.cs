@@ -7,7 +7,7 @@ namespace Scripts.OOP.Perks.Weapons
         protected override int ToBuffCharge => 2;
 
         protected override string GetDescription()
-            => $"Projectiles air time increase projectile force by 100% and damage by ({(Intensity * 10)}%).";
+            => $"Projectiles air time increase projectile force by 100% and damage by {Stat((Intensity * 10) + "%")}.";
 
         public bool OnHit(ProjectileHandler projectile, BaseController target)
         {
@@ -20,7 +20,7 @@ namespace Scripts.OOP.Perks.Weapons
     public class Barrel_Buff : Perk, IWeaponFire
     {
         protected override string GetDescription()
-            => $"Increases projectile damage by ({Intensity}).";
+            => $"Increases projectile damage by {Stat(Intensity)}.";
 
         public bool OnFire(float _, Weapon weapon, WeaponStats buff)
         {
