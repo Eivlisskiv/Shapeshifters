@@ -97,13 +97,18 @@ namespace IgnitedBox.Tweening.Tweeners
             Time += time;
             float x = Time / Duration;
 
-            if(Easing == null && _curve != null)
+            percent = PerformEasing(x);
+            return x >= 1;
+        }
+
+        protected float PerformEasing(float x)
+        {
+            if (Easing == null && _curve != null)
             {
                 Easing = (t) => { return _curve.Evaluate((float)t); };
             }
 
-            percent = Easing == null ? x : (float)Easing(x);
-            return x >= 1;
+            return Easing == null ? x : (float)Easing(x);
         }
 
         public void SetNormalizedTime(double normalizedTime)

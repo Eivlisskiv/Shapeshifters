@@ -98,6 +98,6 @@ public class RoomHandler : MonoBehaviour
     public bool TryGetProp(string id, out GameObject obj)
     {
         obj = null;
-        return current is FixedMapRoom fmr && fmr.TryGetProp(id, out obj);
+        return !string.IsNullOrEmpty(id) && current is FixedMapRoom fmr && fmr.TryGetProp(id, out obj);
     }
 }

@@ -15,10 +15,7 @@ namespace Scripts.OOP.Audio
         public ReplaySetting replaySetting;
 
         [Range(0f, 1f)]
-        public float volume = 1;
-
-        [Range(0f, 1f)]
-        public float spacialBlend = 0;
+        public float spacialBlend = 0.3f;
 
         private AudioSource source;
 
@@ -27,7 +24,6 @@ namespace Scripts.OOP.Audio
             this.source = source;
             source.clip = clip;
 
-            source.volume = volume;
             source.spatialBlend = spacialBlend;
         }
 
@@ -62,6 +58,7 @@ namespace Scripts.OOP.Audio
 
         private void Play()
         {
+            source.volume = VolumeSetting.Effect.Volume;
             source.Play();
         }
     }

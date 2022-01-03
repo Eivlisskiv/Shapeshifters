@@ -95,7 +95,6 @@ public class Cannon : Weapon
             {
                 clip = LoadRessource<AudioClip>("Cannon Shot"),
                 replaySetting = AudioEntity.ReplaySetting.Restart,
-                volume = 1f,
                 spacialBlend = 1,
             },
         };

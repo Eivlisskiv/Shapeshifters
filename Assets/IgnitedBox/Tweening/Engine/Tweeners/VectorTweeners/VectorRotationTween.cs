@@ -19,9 +19,6 @@ namespace IgnitedBox.Tweening.Tweeners.VectorTweeners
         protected override Vector3 GetStart()
             => Element.localRotation.eulerAngles;
 
-        protected override void OnFinish()
-            => Element.localRotation = Quaternion.Euler(Target);
-
         protected override void OnMove(Vector3 current)
             => Element.localRotation = Quaternion.Euler(current);
     }

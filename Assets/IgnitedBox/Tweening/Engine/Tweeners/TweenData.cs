@@ -55,11 +55,10 @@ namespace IgnitedBox.Tweening.Tweeners
 
         public abstract void Blend(TweenData<TElement, TTween> with);
 
-        public abstract TTween GetTweenAt(float percent);
+        public abstract TTween GetTweenAt(float progress);
 
         protected abstract TTween GetStart();
         protected abstract TTween GetTween();
-        protected abstract void OnFinish();
         protected abstract void OnMove(TTween current);
 
         public override void Update(float time)
@@ -70,7 +69,7 @@ namespace IgnitedBox.Tweening.Tweeners
 
             if(Check(time, out float percent))
             {
-                OnFinish();
+                OnMove(GetTweenAt(PerformEasing(1)));
 
                 Callback?.Invoke();
                 callbackEvent?.Invoke();

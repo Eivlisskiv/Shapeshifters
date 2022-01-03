@@ -24,16 +24,22 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets
         protected CustomLevel Game { get; private set; }
         protected ObjectiveHandler Handler => ObjectiveHandler.Instance;
 
+        private readonly int scoreReward;
+
         protected ObjectivePreset(GameObject element, ObjectiveData data = null) : base(element) 
         {
             Game = (CustomLevel)GameModes.GameMode;
-            if (data != null) Initialize(data);
+
+            if (data != null)
+            {
+                if (data.track != null) Track = (Vector2)data.track;
+                scoreReward = Math.Max(data.scoreReward, 0);
+                Initialize(data);
+            }
         }
 
         protected virtual Text Initialize(ObjectiveData data)
         {
-            if(data.track != null) Track = (Vector2)data.track;
-
             return Get<Text>("Title", t =>
             {
                 t.text = LoadParam(data, 0, "_<Unknown Objective>");
@@ -45,6 +51,12 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets
         {
             base.OnRemoved(handler);
             Game.ObjectiveEvents.CleanInstace(this);
+        }
+
+        protected virtual void Completed()
+        {
+            Game.Score += scoreReward;
+            Handler.Remove(this);
         }
 
         protected T LoadParam<T>(ObjectiveData data, int index, T dftl = default)

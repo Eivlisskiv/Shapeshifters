@@ -17,9 +17,6 @@ namespace IgnitedBox.Tweening.Tweeners.VectorTweeners
         protected override Vector3 GetStart()
             => Element.localScale;
 
-        protected override void OnFinish()
-            => Element.localScale = Target;
-
         protected override void OnMove(Vector3 current)
             => Element.localScale = current;
     }

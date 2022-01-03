@@ -21,9 +21,6 @@ namespace IgnitedBox.Tweening.Tweeners.VectorTweeners
         protected override Vector3 GetStart()
             => Element.sizeDelta;
 
-        protected override void OnFinish()
-            => Element.sizeDelta = Target;
-
         protected override void OnMove(Vector3 current)
             => Element.sizeDelta = current;
     }

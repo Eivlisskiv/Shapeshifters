@@ -14,9 +14,6 @@ namespace IgnitedBox.Tweening.Tweeners.ColorTweeners
         protected override Color GetStart()
             => Element.color;
 
-        protected override void OnFinish()
-            => Element.color = Target;
-
         protected override void OnMove(Color current)
             => Element.color = current;
     }

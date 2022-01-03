@@ -56,8 +56,10 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Spawns
             spawns.Remove(elimenated);
             progress.text = GetProgress();
 
+            Bounce();
+
             //Enemies left
-            if (spawns.Count != 0) return;
+            if (spawns.Count <= 0) return;
 
             wave++;
             if (wave < waves.Length)

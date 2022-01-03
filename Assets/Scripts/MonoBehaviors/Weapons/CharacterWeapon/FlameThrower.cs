@@ -38,7 +38,6 @@ class FlameThrower : BurstWeapon
             {
                 clip = LoadRessource<AudioClip>("Fire 1"),
                 replaySetting = AudioEntity.ReplaySetting.Restart,
-                volume = 0.9f,
                 spacialBlend = 1,
             },
 
@@ -46,7 +45,6 @@ class FlameThrower : BurstWeapon
             {
                 clip = LoadRessource<AudioClip>("Fire 2"),
                 replaySetting = AudioEntity.ReplaySetting.Restart,
-                volume = 0.9f,
                 spacialBlend = 1,
             },
 
@@ -54,7 +52,6 @@ class FlameThrower : BurstWeapon
             {
                 clip = LoadRessource<AudioClip>("Fire 3"),
                 replaySetting = AudioEntity.ReplaySetting.Restart,
-                volume = 0.9f,
                 spacialBlend = 1,
             },
 
@@ -62,7 +59,6 @@ class FlameThrower : BurstWeapon
             {
                 clip = LoadRessource<AudioClip>("Fire 4"),
                 replaySetting = AudioEntity.ReplaySetting.Restart,
-                volume = 0.9f,
                 spacialBlend = 1,
             },
         };

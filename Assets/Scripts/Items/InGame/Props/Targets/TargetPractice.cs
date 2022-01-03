@@ -25,6 +25,9 @@ namespace Scripts.Items.InGame.Props.Targets
         public override float Health => health;
         private float health;
 
+        private SoundHandler sounds;
+        private ParticleSystem particles;
+
         private float speed;
 
         private Collider2D _collider;
@@ -43,6 +46,10 @@ namespace Scripts.Items.InGame.Props.Targets
             if (!_body) _body = gameObject.AddComponent<Rigidbody2D>();
             _body.gravityScale = 0;
 
+            sounds = GetComponent<SoundHandler>();
+            Transform child = transform.GetChild(0);
+            particles = child.GetComponent<ParticleSystem>();
+
             health = maxhealth;
 
             startScale = transform.localScale;
@@ -53,6 +60,12 @@ namespace Scripts.Items.InGame.Props.Targets
             if (destroyed) return;
 
             Move();
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            target = null;
+            if (sounds) sounds.PlayRandom("Collide");
         }
 
         private void Move()
@@ -90,7 +103,7 @@ namespace Scripts.Items.InGame.Props.Targets
         public override void ApplyCollisionForce(Vector2 hit, float magnitude, float push)
         {
             Vector2 dir = (Vector2)transform.position - hit;
-            _body.velocity += dir * (magnitude + push);
+            _body.velocity = dir * (magnitude + push);
         }
 
         public override bool ModifyHealth(float mod)
@@ -114,8 +127,10 @@ namespace Scripts.Items.InGame.Props.Targets
         {
             if (destroyed) return false;
 
+            if (sounds) sounds.PlayRandom("Hit");
+
             float damage = effect.GetDamage();
-            ModifyHealth(damage);
+            ModifyHealth(-damage);
 
             (Vector2 hit, float force, _) = effect.GetHit(transform.position);
 
@@ -129,6 +144,8 @@ namespace Scripts.Items.InGame.Props.Targets
             if (destroyed) return false;
 
             if (!projectile || !projectile.active) return false;
+
+            if (sounds) sounds.PlayRandom("Hit");
 
             ModifyHealth(-projectile.damage);
 
@@ -145,16 +162,25 @@ namespace Scripts.Items.InGame.Props.Targets
 
         private void Destroy()
         {
+            if (destroyed) return;
+
+            if (sounds) sounds.PlayRandom("Destroyed");
+            if (particles)
+            {
+                particles.transform.SetParent(transform.parent, true);
+                particles.Play();
+                Destroy(particles.gameObject, 1f);
+            }
+
             destroyed = true;
 
             transform.Tween<Transform, Vector3, ScaleTween>
-                (Vector3.zero, 0.5f);
+                (Vector3.zero, 0.4f);
 
-            Destroy(gameObject, 0.5f);
+            Destroy(gameObject, 1f);
 
             if (GameModes.GameMode is CustomLevel level)
-                level.ObjectiveEvents.Invoke<ILevelProp, string>
-                    (typeof(Prop_Activation), this, gameObject.name);
+                level.ObjectiveEvents.Invoke(typeof(IOnPropActivation), (ILevelProp)this, gameObject);
         }
     }
 }

@@ -45,8 +45,8 @@ namespace IgnitedBox.EventSystem
             if (container is EventContainer<TSource, TArgument> eventContainer)
                 return eventContainer;
 
-            Debug.LogError($"Event Container {container.GetType()} @ {key} does not match types " +
-                $"{typeof(TSource)} &| {typeof(TArgument)}");
+            Debug.LogError($"Event Container \n {container.GetType()} \n at Key {key} \n does not match types" +
+                $"\n {typeof(TSource)} \n {typeof(TArgument)}");
             return null;
         }
     }

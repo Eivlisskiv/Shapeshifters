@@ -149,5 +149,12 @@ namespace Scripts.UI.InGame.Objectives
                 (new Vector3(0, 0, 0), 1, easing: BackEasing.In,
                 callback: () => UnityEngine.Object.Destroy(element));
         }
+
+        protected void Bounce()
+        {
+            rect.Tween<Transform, Vector3, PositionTween>
+                (rect.localPosition + new Vector3(0, -30, 0),
+                0.5f, 0, d => (-4*Math.Pow(d - 0.5, 2)) + 1);
+        }
     }
 }

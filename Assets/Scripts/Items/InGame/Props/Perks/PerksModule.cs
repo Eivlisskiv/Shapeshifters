@@ -46,12 +46,16 @@ namespace Assets.Scripts.Items.InGame.Props.Perks
 
         private SpriteRenderer _sprite;
 
+        private SoundHandler sounds;
+
         public bool Consumed => consumed;
 
         private bool consumed;
 
         private void Start()
         {
+            sounds = GetComponent<SoundHandler>();
+
             transform.Tween<Transform, Vector3, VectorRotationTween>
                 (new Vector3(0, 360, 0), 1.2f)
                 .loop = TweenerBase.LoopType.ResetLoop;
@@ -74,14 +78,16 @@ namespace Assets.Scripts.Items.InGame.Props.Perks
             controller.AddPerk(perk);
 
             if (GameModes.GameMode is CustomLevel level)
-                level.ObjectiveEvents.Invoke<ILevelProp, string>
-                    (typeof(Prop_Activation), this, gameObject.name);
+                level.ObjectiveEvents.Invoke(typeof(IOnPropActivation),
+                    (ILevelProp)this, gameObject);
 
             Destroy();
         }
 
         private void Destroy()
         {
+            if (sounds) sounds.PlayRandom("Collect");
+
             Collider2D collider = GetComponent<Collider2D>();
             if(collider) Destroy(collider);
 

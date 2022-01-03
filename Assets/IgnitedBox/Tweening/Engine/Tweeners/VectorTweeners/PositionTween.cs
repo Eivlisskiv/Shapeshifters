@@ -14,14 +14,11 @@ namespace IgnitedBox.Tweening.Tweeners.VectorTweeners
         public override void Blend(TweenData<Transform, Vector3> with)
         {
             Duration = Math.Max(Duration, with.Duration);
-            SetPositions(Element.position, Target + with.Target);
+            SetPositions(Element.localPosition, Target + with.Target);
         }
 
         protected override Vector3 GetStart()
             => Element.localPosition;
-
-        protected override void OnFinish()
-            => Element.localPosition = Target;
 
         protected override void OnMove(Vector3 current)
             => Element.localPosition = current;

@@ -19,8 +19,9 @@ public class Landmine : OtherProjectile, ILevelProp
 
     public bool Consumed { get; private set; }
 
-    private void Start()
+    protected override void OnStart()
     {
+        base.OnStart();
         explosion.Angle = 360;
         explosion.Speed = 20;
         explosion.Intensity = 1;
@@ -79,8 +80,7 @@ public class Landmine : OtherProjectile, ILevelProp
         Consumed = true;
 
         if (GameModes.GameMode is CustomLevel level)
-            level.ObjectiveEvents.Invoke<ILevelProp, string>
-                (typeof(Prop_Activation), this, gameObject.name);
+            level.ObjectiveEvents.Invoke(typeof(IOnPropActivation), (ILevelProp)this, gameObject);
 
         base.Destroy();
 

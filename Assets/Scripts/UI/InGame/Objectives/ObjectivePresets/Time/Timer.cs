@@ -42,12 +42,7 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Time
                 return;
             }
 
-            OnEnd();
-        }
-
-        protected virtual void OnEnd()
-        {
-            Handler.Remove(this);
+            Completed();
         }
 
         private string TimeString()

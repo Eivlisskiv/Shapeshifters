@@ -106,22 +106,9 @@ public class PlayerController : BaseController
 
     public override bool IsFiring(out float angle)
     {
-        if(!Input.GetMouseButton(0) && !Input.GetKey(KeyCode.Space))
-        {
-            angle = 0;
-            return false;
-        }
-
-        GameObject selected = EventSystem.current.currentSelectedGameObject;
-        if (selected)
-        {
-            Debug.Log($"Mouse click hit {selected}");
-
-            angle = 0;
-            return false;
-        }
-
-        //Vector2 screenPos = Input.mousePosition;
+        angle = 0;
+        if (!(Input.GetMouseButton(0) || Input.GetKey(KeyCode.Space))
+            || EventSystem.current.currentSelectedGameObject) return false;
 
         //Get the world mouse position
         Vector2 mousePos = cam.MouseToWorld();

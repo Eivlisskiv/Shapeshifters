@@ -1,6 +1,7 @@
 ﻿using IgnitedBox.SaveData.Databases.Sqlite;
 using IgnitedBox.UnityUtilities.Vectors;
 using System;
+using UnityEngine;
 
 namespace Scripts.OOP.Game_Modes.CustomLevels
 {
@@ -81,6 +82,17 @@ namespace Scripts.OOP.Game_Modes.CustomLevels
         public string id;
         public SerializableFloat4 color;
         public SerializableFloat2 track;
+        public int scoreReward;
         public object[] parameters;
+
+        public ObjectiveData() { }
+
+        public ObjectiveData(string id, Color color, int reward = 1, params object[] pars)
+        {
+            this.id = id;
+            this.color = color;
+            scoreReward = reward;
+            parameters = pars;
+        }
     }
 }

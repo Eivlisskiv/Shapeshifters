@@ -45,7 +45,6 @@ public class MachineGun : Weapon
             {
                 clip = LoadRessource<AudioClip>("Gun 1"),
                 replaySetting = AudioEntity.ReplaySetting.Restart,
-                volume = 0.2f,
                 spacialBlend = 1,
             },
 
@@ -53,7 +52,6 @@ public class MachineGun : Weapon
             {
                 clip = LoadRessource<AudioClip>("Gun 2"),
                 replaySetting = AudioEntity.ReplaySetting.Restart,
-                volume = 0.2f,
                 spacialBlend = 1,
             },
 
@@ -61,7 +59,6 @@ public class MachineGun : Weapon
             {
                 clip = LoadRessource<AudioClip>("Gun 3"),
                 replaySetting = AudioEntity.ReplaySetting.Restart,
-                volume = 0.2f,
                 spacialBlend = 1,
             },
 

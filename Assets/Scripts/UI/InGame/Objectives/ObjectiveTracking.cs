@@ -36,5 +36,10 @@ namespace Scripts.UI.InGame.Objectives
 
         Transform mobileTarget;
         Vector3 staticTarget;
+
+        public override bool Equals(object obj)
+            => base.Equals(obj) || (obj is Transform tr && mobileTarget == tr);
+
+        public override int GetHashCode() => base.GetHashCode();
     }
 }

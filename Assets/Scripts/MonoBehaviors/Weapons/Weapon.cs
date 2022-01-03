@@ -180,7 +180,6 @@ public class Weapon : MonoBehaviour
             {
                 clip = LoadRessource<AudioClip>("Retro Laser Gun (1)"),
                 replaySetting = AudioEntity.ReplaySetting.Restart,
-                volume = 0.1f,
                 spacialBlend = 1,
             },
 
@@ -188,7 +187,6 @@ public class Weapon : MonoBehaviour
             {
                 clip = LoadRessource<AudioClip>("Retro Laser Gun (2)"),
                 replaySetting = AudioEntity.ReplaySetting.Restart,
-                volume = 0.1f,
                 spacialBlend = 1,
             },
 
@@ -196,7 +194,6 @@ public class Weapon : MonoBehaviour
             {
                 clip = LoadRessource<AudioClip>("Retro Laser Gun (3)"),
                 replaySetting = AudioEntity.ReplaySetting.Restart,
-                volume = 0.1f,
                 spacialBlend = 1,
             },
 
@@ -204,7 +201,6 @@ public class Weapon : MonoBehaviour
             {
                 clip = LoadRessource<AudioClip>("Retro Laser Gun (5)"),
                 replaySetting = AudioEntity.ReplaySetting.Restart,
-                volume = 0.1f,
                 spacialBlend = 1,
             },
         };

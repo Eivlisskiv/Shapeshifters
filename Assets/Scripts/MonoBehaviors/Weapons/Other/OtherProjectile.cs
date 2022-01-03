@@ -32,6 +32,15 @@ namespace Assets.Scripts.MonoBehaviors.Weapons.Other
 
         protected virtual bool IsTrigger => false;
 
+        private SoundHandler sounds;
+
+        private void Start() => OnStart();
+
+        protected virtual void OnStart() 
+        {
+            sounds = GetComponent<SoundHandler>();
+        }
+
         public abstract void Activate(float damage, float force, BaseController owner);
 
         private void OnCollisionEnter2D(Collision2D collision)
@@ -64,7 +73,10 @@ namespace Assets.Scripts.MonoBehaviors.Weapons.Other
 
         protected virtual void Destroy()
         {
+            if (!active) return;
             active = false;
+
+            if (sounds) sounds.PlayRandom("Trigger");
 
             BodyCollider.enabled = false;
             var rdb = GetComponent<Rigidbody2D>();

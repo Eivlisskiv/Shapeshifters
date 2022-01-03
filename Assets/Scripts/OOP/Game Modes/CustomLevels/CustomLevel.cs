@@ -87,7 +87,6 @@ namespace Scripts.OOP.Game_Modes.CustomLevels
         private void NextObjective()
         {
             ObjectivesProgress++;
-            Score++;
             if(LevelCompleted)
             {
                 GameOver();

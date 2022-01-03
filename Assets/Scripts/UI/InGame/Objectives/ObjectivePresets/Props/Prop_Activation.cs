@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Props
 {
-    public class Prop_Activation : PropTarget
+    public class Prop_Activation : PropTarget, IOnPropActivation
     {
         public Prop_Activation(GameObject element, ObjectiveData data = null) : base(element, data) { }
 
@@ -12,24 +12,23 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Props
         {
             //Subscribe to Game.Prop_Activated
 
-            Game.ObjectiveEvents.Subscribe<ILevelProp, string>
-                (typeof(Prop_Activation), OnPropActivated);
+            Game.ObjectiveEvents.Subscribe<ILevelProp, GameObject>
+                (typeof(IOnPropActivation), OnPropActivation);
 
             return base.Initialize(data);
 
             //in prop, during "activation", call the event
             /*
              if (GameModes.GameMode is CustomLevel level)
-                level.ObjectiveEvents.Invoke<ILevelProp, string>
-                    (typeof(Prop_Activation), this, gameObject.name);
+                level.ObjectiveEvents.Invoke(typeof(IOnPropActivation), this, gameObject);
              */
         }
 
-        private void OnPropActivated(ILevelProp source, string id)
+        public void OnPropActivation(ILevelProp prop, GameObject obj)
         {
-            if (id != Target) return;
+            if (obj.name != Target) return;
 
-            Handler.Remove(this);
+            Completed();
         }
 
         protected override void OnReady()
@@ -39,7 +38,7 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Props
             //If prop could not be found, auto complete the objective not to be stuck
             if(!propObject || prop.Consumed)
             {
-                Handler.Remove(this);
+                Completed();
                 return;
             }
         }

@@ -20,9 +20,6 @@ namespace IgnitedBox.Tweening.Tweeners.FloatTweeners
         protected override float GetStart()
             => Element.fillAmount;
 
-        protected override void OnFinish()
-            => Element.fillAmount = Target;
-
         protected override void OnMove(float current)
             => Element.fillAmount = current;
     }

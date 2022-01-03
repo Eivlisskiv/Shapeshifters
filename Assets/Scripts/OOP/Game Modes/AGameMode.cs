@@ -112,6 +112,12 @@ namespace Scripts.OOP.Game_Modes
             Object.Destroy(gameTransform.gameObject);
         }
 
+        public void InsertInMap(GameObject item)
+        {
+            item.transform.SetParent(map.Current.propsContainer);
+            item.transform.position = map.Current.MapPosition(map.Current.RandomSpawn());
+        }
+
         public EnemyController SpawnEnemy(GameObject mob, int team, int level, Vector2Int? coords = null)
         {
             if (mob.IsPrefab()) mob = Object.Instantiate(mob);

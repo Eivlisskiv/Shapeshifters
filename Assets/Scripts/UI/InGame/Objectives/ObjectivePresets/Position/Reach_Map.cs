@@ -39,7 +39,7 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Position
         {
             if (progress == playerCount)
             {
-                Handler.Remove(this);
+                Completed();
                 return;
             }
 
