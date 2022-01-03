@@ -75,7 +75,8 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Props
         public void OnPropActivation(ILevelProp prop, GameObject obj)
         {
             string id = obj.name;
-            if (targets.ContainsKey(id)) targets.Remove(id);
+            if (!targets.ContainsKey(id)) return;
+            targets.Remove(id);
 
             counter.text = (total - targets.Count) + "/" + total;
 

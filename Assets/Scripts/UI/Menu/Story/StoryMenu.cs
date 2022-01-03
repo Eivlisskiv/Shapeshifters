@@ -238,7 +238,7 @@ namespace Scripts.UI.Menu.Story
         private void WriteDetails(StoryProgress data)
         {
             details_Score.text = data?.TopScore.ToString() ?? "-";
-            details_Time.text = data?.BestTime() ?? "-";
+            details_Time.text = data != null ? LevelProgress.BestTime(data.BestTimeSeconds) : "-";
             details_Level.text = data?.LevelReached.ToString() ?? "-";
             details_Weapon.text = data == null || data?.Weapon == "Weapon" ? "Basic" : data.Weapon;
 

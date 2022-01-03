@@ -4,6 +4,8 @@ using Scripts.OOP.TileMaps;
 using Scripts.OOP.TileMaps.Procedural;
 using Scripts.OOP.Utils;
 using Scripts.UI.InGame.Objectives;
+using Scripts.UI.InGame.Objectives.ObjectivePresets;
+using Scripts.UI.InGame.Objectives.ObjectivePresets.Spawns;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -47,7 +49,6 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
         private readonly GameObject cratePrefab;
         private readonly ShopHandler shop;
-        private readonly ResourceCache<GameObject> Bosses;
         private readonly DropTable<string> bossesPaths;
 
         private readonly List<PlayerController> playersReady
@@ -67,7 +68,6 @@ namespace Scripts.OOP.Game_Modes.Rogue
             shop = Object.Instantiate(shopPrefab, menu.transform.parent).GetComponent<ShopHandler>();
             shop.gameObject.SetActive(false);
 
-            Bosses = new ResourceCache<GameObject>("Enemies/Boss/");
             bossesPaths = new string[]
             { "Pyramid", "Number Four" };
         }
@@ -258,8 +258,13 @@ namespace Scripts.OOP.Game_Modes.Rogue
             if (GetTeam(1).Count >= maxSpawns)
                 return;
 
-            if (isBoss && !SpawnBoss(1, level)) return;
-            else SpawnEnemy(GetRandomEnemy(), 1, level);
+            if (isBoss)
+            {
+                SpawnBoss(1, level);
+                return; 
+            }
+            
+            SpawnEnemy(GetRandomEnemy(), 1, level);
 
             SpawnsLeft--;
             cooldown = 5;
@@ -288,56 +293,15 @@ namespace Scripts.OOP.Game_Modes.Rogue
                     __checkDir(Vector2Int.right);
         }
 
-        private EnemyController SpawnBoss(int team, int level)
+        private void SpawnBoss(int team, int level)
         {
             string bossName = bossesPaths.DropOne(out _);
 
-            if(!Bosses.TryGetPrefab(bossName, out GameObject bossObject)) return null;
+            Color color = new Color(255, 83, 31);
+            CustomLevels.ObjectiveData data = new CustomLevels.ObjectiveData
+                ("Target Enemy", color, 10, "Boss Fight", $"Boss/{bossName}", team, level);
 
-            EnemyController boss = bossObject.GetComponent<EnemyController>();
-
-            if (!boss) return null;
-
-            Vector2Int pos = map.Current.RandomSpawn();
-
-            if (!SpaceForBossSpawn(pos, boss.settings.size)) return null;
-
-            bossObject = Bosses.Instantiate(bossName);
-
-            boss = bossObject.GetComponent<EnemyController>();
-            boss.Set(level);
-            boss.transform.position = map.Current.MapPosition(pos);
-
-            AddMember(team, boss);
-
-            BossObjective(boss);
-
-            return boss;
-        }
-
-        private void BossObjective(EnemyController boss)
-        {
-            objective = Objectives.CreateObjective("Boss Fight", new Color(255, 83, 31));
-            objective.Get<Text>("Title", txt => txt.text = $"Eliminate {boss.Name}");
-            objective.Get<Image>("Skull", img =>
-            {
-                img.sprite = Resources.Load<Sprite>($"Sprites/Bosses/{boss.Name}/Icon");
-                if(!img.sprite) img.sprite = Resources.Load<Sprite>("Sprites/Bosses/Skull");
-
-                img.transform.localScale = new Vector3(0.08f, 0.5f);
-            });
-
-            GameObject bar = Resources.Load<GameObject>("UI/ShieldHealthBar");
-            if (!bar) return;
-
-            bar = Object.Instantiate(bar);
-            bar.name = $"{boss.Name} Health";
-            bar.GetComponent<AspectRatioFitter>().enabled = false;
-
-            objective.Add(bar);
-
-            bar.transform.localScale = new Vector3(20, 0.9f, 1);
-            boss.SetHealthBar(bar.transform);
+            objective = ObjectivePreset.Create(data);
         }
 
         private void BossDrop(EnemyController boss)

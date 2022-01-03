@@ -1,4 +1,5 @@
-﻿using Scripts.OOP.Game_Modes.CustomLevels;
+﻿using Scripts.OOP.Game_Modes;
+using Scripts.OOP.Game_Modes.CustomLevels;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -49,7 +50,7 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Spawns
             SpawnWave();
         }
 
-        public void Progress(CustomLevel mode, BaseController elimenated)
+        public void Progress(AGameMode mode, BaseController elimenated)
         {
             if (!spawns.Contains(elimenated)) return;
 

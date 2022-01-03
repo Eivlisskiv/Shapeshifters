@@ -77,7 +77,7 @@ namespace Scripts.OOP.Game_Modes.CustomLevels
             return player;
         }
 
-        protected override void GameOver()
+        public override void GameOver()
         {
             base.GameOver();
             ongoing = false;

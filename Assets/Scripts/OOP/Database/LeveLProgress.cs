@@ -5,15 +5,9 @@ namespace Scripts.OOP.Database
 {
     public class LevelProgress : SqliteHandler.SqlTable<string>
     {
-        public int TopScore { get; set; }
-
-        public float BestTimeSeconds { get; set; }
-
-        public int LevelReached { get; set; }
-
-        public string BestTime()
+        public static string BestTime(float time)
         {
-            float seconds = BestTimeSeconds;
+            float seconds = time;
             int minutes;
             int hours = (int)(seconds / 3600);
 
@@ -21,7 +15,7 @@ namespace Scripts.OOP.Database
             minutes = (int)(seconds / 60);
             seconds = Mathf.Round((seconds - (minutes * 60)) * 100) / 100;
 
-            string hs = hours <= 0 ? null : 
+            string hs = hours <= 0 ? null :
                 (hours < 10 ? $"0{hours}:" : $"{hours}:");
 
             string ms = minutes <= 0 ? null :
@@ -31,5 +25,11 @@ namespace Scripts.OOP.Database
 
             return hs + ms + ss;
         }
+
+        public int TopScore { get; set; }
+
+        public float BestTimeSeconds { get; set; }
+
+        public int LevelReached { get; set; }
     }
 }

@@ -258,7 +258,10 @@ public class MainMenuHandler : MonoBehaviour
     {
         if(sounds) sounds.PlayRandom("Game Over");
         gameOver.gameObject.SetActive(true);
-        gameOver.SetScores(GameModes.GameMode.LoadProgress());
+
+        (int tscore, int lscore, float ttime, float ltime) = GameModes.GameMode.LoadProgress();
+
+        gameOver.SetScores(tscore, lscore, ttime, ltime);
         cooldown = 5;
         action = MenuAction.GameOver;
     }

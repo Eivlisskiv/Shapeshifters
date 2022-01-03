@@ -73,7 +73,7 @@ namespace Scripts.OOP.Game_Modes
             scoreNamePath = $"Score_{Name}";
         }
 
-        public abstract int LoadProgress();
+        public abstract (int, int, float, float) LoadProgress();
 
         public abstract void SaveProgress();
 
@@ -223,8 +223,10 @@ namespace Scripts.OOP.Game_Modes
         public bool TryGetProp(string id, out GameObject obj)
             => map.Current.TryGetProp(id, out obj);
 
-        protected virtual void GameOver()
+        public virtual void GameOver()
         {
+            PauseControllers(true);
+
             Objectives.transform.Tween<Transform, Vector3, PositionTween>
                 (Objectives.transform.localPosition + new Vector3(0, 200, 0),
                 0.5f, callback: () => Object.Destroy(Objectives.gameObject));

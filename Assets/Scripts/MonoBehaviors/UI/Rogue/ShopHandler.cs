@@ -42,7 +42,7 @@ public class ShopHandler : MonoBehaviour
         mode = ((Rogue)GameModes.GameMode);
         pointsDisplay.text = mode.points.ToString();
 
-        btnTitle = purchase.transform.GetChild(0).GetComponent<Text>();
+        btnTitle = purchase.transform.GetChild(1).GetComponent<Text>();
         purchase.Enabled = false;
     }
 

@@ -219,8 +219,6 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                     new ObjectiveData("Spawn Target", new Color(0, 0, 1, 1), 2, "Destroy the very slow target", 100, 5),
                     new ObjectiveData("Spawn Target", new Color(0, 0, 1, 1), 2, "Destroy the slow target", 100, 10),
                     new ObjectiveData("Spawn Target", new Color(0, 0, 1, 1), 2, "Destroy the standard target", 100, 20),
-                    new ObjectiveData("Spawn Target", new Color(0, 0, 1, 1), 2, "Destroy the fast target", 100, 35),
-                    new ObjectiveData("Spawn Target", new Color(0, 0, 1, 1), 2, "Destroy the very fast target", 100, 40),
                     new ObjectiveData("Reach Map", new Color(0, 0, 1, 1),
                         1, "reach the next stage"),
                     //Room 5

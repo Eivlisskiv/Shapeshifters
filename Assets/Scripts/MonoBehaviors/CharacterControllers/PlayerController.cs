@@ -38,6 +38,8 @@ public class PlayerController : BaseController
     private CharacterUIHandler ui;
     public CharacterUIHandler UI { get => ui; }
 
+    private float aimOffset;
+
     public override void OnStart() 
     {
         stats = new Stats(200);
@@ -51,6 +53,8 @@ public class PlayerController : BaseController
         }
 
         UpdateHealthBar();
+
+        aimOffset = PlayerPrefs.GetFloat("AimOffset", 0);
     }
 
     internal void LoadProgress(StoryProgress previous)
@@ -116,7 +120,7 @@ public class PlayerController : BaseController
         //Get the angle relative to the position
         Vector2 pos = transform.position;
 
-        angle = pos.WorldAngle(mousePos);
+        angle = pos.WorldAngle(mousePos) + aimOffset;
 
         return true;
     }

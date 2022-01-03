@@ -28,7 +28,7 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets
 
         protected ObjectivePreset(GameObject element, ObjectiveData data = null) : base(element) 
         {
-            Game = (CustomLevel)GameModes.GameMode;
+            if(GameModes.GameMode is CustomLevel level) Game = level;
 
             if (data != null)
             {

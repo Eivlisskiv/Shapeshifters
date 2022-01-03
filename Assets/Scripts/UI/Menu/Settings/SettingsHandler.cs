@@ -1,19 +1,22 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Scripts.Ui.Settings
 {
     public class SettingsHandler : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
-        {
+        public Toggle inverter;
 
+        private void Start()
+        {
+            float aimOffset = PlayerPrefs.GetFloat("AimOffset");
+            inverter.isOn = aimOffset > 0;
         }
 
-        // Update is called once per frame
-        void Update()
+        public void ToggleInvertAim()
         {
+            PlayerPrefs.SetFloat("AimOffset", inverter.isOn ? 180 : 0);
+        }        
 
-        }
     }
 }

@@ -32,6 +32,8 @@ public class PauseHandler : MonoBehaviour
 
     public Button button;
 
+    public GeneralButton exit;
+
     private RectTransform left;
     private Vector3 lpos;
     private RectTransform right;
@@ -64,6 +66,17 @@ public class PauseHandler : MonoBehaviour
         UpdatePaused();
     }
 
+    public void ExitGame()
+    {
+        exit.ChangeFocus(false);
+        exit.ChangeSelect(false);
+
+        if (GameModes.GameMode == null) return;
+
+        TogglePaused();
+        GameModes.GameMode.GameOver();
+    }
+
     private void UpdatePaused()
     {
         if (paused)
@@ -81,6 +94,7 @@ public class PauseHandler : MonoBehaviour
 
         grey.enabled = paused;
         text.enabled = paused;
+        exit.gameObject.SetActive(paused);
     }
 
     private void ToPlay()

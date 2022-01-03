@@ -16,10 +16,11 @@ namespace Scripts.OOP.Game_Modes.Story
             story = levelSettings;
         }
 
-        public override int LoadProgress()
+        public override (int, int, float, float) LoadProgress()
         {
             StoryProgress progress = StoryProgress.Load(story.Chapter, story.Episode, false);
-            return progress?.TopScore ?? 0;
+            return (progress?.TopScore ?? 0, LevelCompleted ? Score : -1, 
+                progress?.BestTimeSeconds ?? -1, LevelCompleted ? game_timer : -1);
         }
 
         public override void SaveProgress()
