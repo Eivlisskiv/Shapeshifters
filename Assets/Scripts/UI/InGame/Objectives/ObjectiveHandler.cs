@@ -66,7 +66,6 @@ namespace Scripts.UI.InGame.Objectives
                 (objType != null && objType.IsSubclassOf(typeof(ObjectiveElement))) ?
                 (ObjectiveElement)System.Activator.CreateInstance(objType, element, data)
                 : new ObjectiveElement(element);
-                    
 
             func?.Invoke(oe);
 

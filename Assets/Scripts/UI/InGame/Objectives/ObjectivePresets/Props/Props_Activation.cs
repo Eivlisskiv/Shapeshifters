@@ -57,7 +57,10 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Props
             counter = Get<Text>("Counter", t =>
             {
                 t.text = "0/" + total;
+                t.alignment = TextAnchor.MiddleRight;
             });
+
+            ChangeWidth("Counter", 0.2f);
 
             Game.ObjectiveEvents.Subscribe<ILevelProp, GameObject>
                 (typeof(IOnPropActivation), OnPropActivation);

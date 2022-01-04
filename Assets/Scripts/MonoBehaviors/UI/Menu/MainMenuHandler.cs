@@ -287,7 +287,8 @@ public class MainMenuHandler : MonoBehaviour
         o.transform.SetParent(transform.parent);
         o.transform.localPosition = new Vector3(0, 0, 0);
 
-        var objectiveContainer = Instantiate(objectivePrefab);
+        GameObject objectiveContainer = Instantiate(objectivePrefab);
+        objectiveContainer.name = "Objectives";
         objectiveContainer.transform.SetParent(transform.parent);
         return objectiveContainer.GetComponent<ObjectiveHandler>();
     }

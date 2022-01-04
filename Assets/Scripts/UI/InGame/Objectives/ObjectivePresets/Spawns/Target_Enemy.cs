@@ -1,4 +1,5 @@
-﻿using Scripts.OOP.Game_Modes;
+﻿using IgnitedBox.UnityUtilities;
+using Scripts.OOP.Game_Modes;
 using Scripts.OOP.Game_Modes.CustomLevels;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,9 +16,14 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Spawns
         {
             Text title = base.Initialize(data);
 
+            ChangeWidth("Title", 0.4f);
+
             SpawnTarget(data);
             SetIcon();
             SetHealthBar();
+
+            Game?.ObjectiveEvents.Subscribe<CustomLevel, BaseController>
+                (typeof(IControllerElimenated), Progress);
 
             return title;
         }
@@ -35,13 +41,14 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Spawns
 
         private void SetIcon()
         {
-            Get<Image>("Skull", img =>
-            {
-                img.sprite = Resources.Load<Sprite>($"Sprites/Bosses/{target.Name}/Icon");
-                if (!img.sprite) img.sprite = Resources.Load<Sprite>("Sprites/Bosses/Skull");
+            Components.CreateGameObject<Image>(out GameObject skullObj, 
+                "Skull", null, img => 
+                {
+                    img.sprite = Resources.Load<Sprite>($"Sprites/Bosses/{target.Name}/Icon");
+                    if (!img.sprite) img.sprite = Resources.Load<Sprite>("Sprites/Bosses/Skull");
+                });
 
-                img.transform.localScale = new Vector3(0.08f, 0.5f);
-            });
+            Add(skullObj, 0.1f);
         }
 
         private void SetHealthBar()
@@ -51,11 +58,10 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Spawns
 
             bar = Object.Instantiate(bar);
             bar.name = $"{target.Name} Health";
-            bar.GetComponent<AspectRatioFitter>().enabled = false;
+            //bar.GetComponent<AspectRatioFitter>().enabled = false;
 
-            Add(bar);
+            Add(bar, 0.6f);
 
-            bar.transform.localScale = new Vector3(20, 0.9f, 1);
             target.SetHealthBar(bar.transform);
         }
 

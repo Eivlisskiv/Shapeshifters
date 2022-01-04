@@ -151,7 +151,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
             objective.Track = NextGate(true);
             objective.Get<Text>("Title", t =>
             {
-                t.text = "Reach the next room ---->";
+                t.text = "Reach the next room";
                 t.alignment = TextAnchor.MiddleCenter;
             });
         }
@@ -258,13 +258,8 @@ namespace Scripts.OOP.Game_Modes.Rogue
             if (GetTeam(1).Count >= maxSpawns)
                 return;
 
-            if (isBoss)
-            {
-                SpawnBoss(1, level);
-                return; 
-            }
-            
-            SpawnEnemy(GetRandomEnemy(), 1, level);
+            if (isBoss) SpawnBoss(1, level);
+            else SpawnEnemy(GetRandomEnemy(), 1, level);
 
             SpawnsLeft--;
             cooldown = 5;

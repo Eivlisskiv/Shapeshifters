@@ -226,7 +226,7 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                         "Destroy the last targets", "Target1", "Target2", "Target3", "Target4"),
                 }
             },
-            new StorySettings(1, 2, "Modular Equipment")
+            new StorySettings(1, 2, "Archetypes")
             {
                 Description = "Systems Functional. Proceed",
                 PlayerSpawn = new SerializableInt2(10, 14),
@@ -318,93 +318,16 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                     }
                 },
                 Main = new ObjectiveData[]
-                {
-                    new ObjectiveData()
-                    {
-                        id = "Reach Map",
-                        color = new SerializableFloat4(0, 0, 1, 1),
-                        parameters = new object[] { "PROCEED" }
-                    },
-                    new ObjectiveData()
-                    {
-                        id = "Prop Activation",
-                        color = new SerializableFloat4(0, 1, 0, 1),
-                        parameters = new object[] { "COLLECT MODULE/PERK", "Module2" }
-                    },
-                    new ObjectiveData()
-                    {
-                        id = "Reach Map",
-                        color = new SerializableFloat4(0, 0, 1, 1),
-                        parameters = new object[] { "PROCEED" }
-                    },
-                    new ObjectiveData()
-                    {
-                        id = "Waves",
-                        color = new SerializableFloat4(1, 0, 0, 1),
-                        parameters = new object[]
-                        {
-                            "SYSTEM INTRUSION \\ CLEAR THREAT",
-                            1,
-                            new (string, int)[][]
-                            {
-                                new (string, int)[] {
-                                    ("Regular/Tier1/Regular", 0),
-                                    ("Regular/Tier1/Regular", 0),
-                                    ("Regular/Tier1/Regular", 0),
-                                },
-                                new (string, int)[] {
-                                    ("Regular/Tier1/Regular", 0),
-                                    ("Regular/Tier1/Regular", 3),
-                                },
-                                new (string, int)[] {
-                                    ("Regular/Tier1/Bomber", 5),
-                                    ("Regular/Tier1/Regular", 0),
-                                },
-                                new (string, int)[] {
-                                    ("Regular/Tier1/Bomber", 5),
-                                    ("Regular/Tier1/Regular", 0),
-                                    ("Regular/Tier1/Regular", 0),
-                                }
-                            }
-                        }
-                    },
-                    new ObjectiveData()
-                    {
-                        id = "Timer",
-                        color = new SerializableFloat4(0, 0, 1, 1),
-                        parameters = new object[] { "Prepare for next wave...", 30f }
-                    },
-                    new ObjectiveData()
-                    {
-                        id = "Waves",
-                        color = new SerializableFloat4(1, 0, 0, 1),
-                        parameters = new object[]
-                        {
-                            "SYSTEM INTRUSION \\ CLEAR THREAT",
-                            1,
-                            new (string, int)[][]
-                            {
-                                new (string, int)[] {
-                                    ("Regular/Tier1/Regular", 0),
-                                    ("Regular/Tier1/Regular", 0),
-                                    ("Regular/Tier1/Regular", 0),
-                                },
-                                new (string, int)[] {
-                                    ("Regular/Tier1/Regular", 0),
-                                    ("Regular/Tier1/Regular", 3),
-                                },
-                                new (string, int)[] {
-                                    ("Regular/Tier1/Bomber", 5),
-                                    ("Regular/Tier1/Regular", 0),
-                                },
-                                new (string, int)[] {
-                                    ("Regular/Tier1/Bomber", 5),
-                                    ("Regular/Tier1/Regular", 0),
-                                    ("Regular/Tier1/Regular", 0),
-                                }
-                            }
-                        }
-                    },
+                {/*
+                    new ObjectiveData("Reach Map", new Color(0, 0, 1, 1), 
+                        1, "PROCEED"),
+                    new ObjectiveData("Prop Activation", new Color(0, 1, 0, 1),
+                        1, "COLLECT MODULE/PERK", "Module2"),
+                    new ObjectiveData("Reach Map", new Color(0, 0, 1, 1),
+                        1, "PROCEED"),
+                    //*/
+                    new ObjectiveData("Target Enemy", new Color(1, 0, 0, 1), 5,
+                        "defeat the grunt", "Regular/Tier1/Regular", 1, 0)
                 }
             },
         };
