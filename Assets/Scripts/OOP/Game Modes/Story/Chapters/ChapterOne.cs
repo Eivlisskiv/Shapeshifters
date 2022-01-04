@@ -216,9 +216,12 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                     new ObjectiveData("Reach Map", new Color(0, 0, 1, 1),
                         1, "CONTINUE \\_ STAGE"),
                     //Room 3
-                    new ObjectiveData("Spawn Target", new Color(0, 0, 1, 1), 2, "Destroy the very slow target", 100, 5),
-                    new ObjectiveData("Spawn Target", new Color(0, 0, 1, 1), 2, "Destroy the slow target", 100, 10),
-                    new ObjectiveData("Spawn Target", new Color(0, 0, 1, 1), 2, "Destroy the standard target", 100, 20),
+                    new ObjectiveData("Spawn Prop", new Color(0, 0, 1, 1), 2, "Destroy the very slow target",
+                        "Props/Targets/TargetPractice", 100, 5),
+                    new ObjectiveData("Spawn Prop", new Color(0, 0, 1, 1), 2, "Destroy the slow target",
+                        "Props/Targets/TargetPractice", 100, 10),
+                    new ObjectiveData("Spawn Prop", new Color(0, 0, 1, 1), 2, "Destroy the standard target",
+                        "Props/Targets/TargetPractice", 100, 20),
                     new ObjectiveData("Reach Map", new Color(0, 0, 1, 1),
                         1, "reach the next stage"),
                     //Room 5
@@ -226,7 +229,7 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                         "Destroy the last targets", "Target1", "Target2", "Target3", "Target4"),
                 }
             },
-            new StorySettings(1, 2, "Archetypes")
+            new StorySettings(1, 2, "Modular Equipment")
             {
                 Description = "Systems Functional. Proceed",
                 PlayerSpawn = new SerializableInt2(10, 14),
@@ -265,17 +268,17 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                         {
                             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
                             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, },
+                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, },
+                            { 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, },
+                            { 1, 1, 0, 3, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 3, 1, 1, },
+                            { 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, },
                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, },
                             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
@@ -285,9 +288,37 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                         },
                         props = new MapProp[]
                         {
-                            new MapProp("Module1", "Props/Perks/PerkModule", -16.7f, -14.03f, "Shield", 5, 0, 0),
-                            new MapProp("Module2", "Props/Perks/PerkModule", 0, -14.03f, "Health Regen", 5, 0, 0),
-                            new MapProp("Module3", "Props/Perks/PerkModule", 16.7f, -14.03f, "Shield", 5, 0, 0),
+                            new MapProp("Module1", "Props/Perks/PerkModule", 0, -14.03f, "Health Regen", 5, 0, 0),
+                        }
+                    },
+                    new MapPreset()
+                    {
+                        tileBaseIndex = 0,
+                        tiles = new int[,]
+                        {
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, },
+                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, },
+                            { 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, },
+                            { 1, 1, 0, 3, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 3, 1, 1, },
+                            { 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, },
+                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, }
+                        },
+                        props = new MapProp[]
+                        {
+                            new MapProp("Module1", "Props/Perks/PerkModule", 0, -14.03f, "Shield", 5, 0, 0),
                         }
                     },
                     new MapPreset()
@@ -318,14 +349,23 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                     }
                 },
                 Main = new ObjectiveData[]
-                {/*
-                    new ObjectiveData("Reach Map", new Color(0, 0, 1, 1), 
-                        1, "PROCEED"),
-                    new ObjectiveData("Prop Activation", new Color(0, 1, 0, 1),
-                        1, "COLLECT MODULE/PERK", "Module2"),
-                    new ObjectiveData("Reach Map", new Color(0, 0, 1, 1),
-                        1, "PROCEED"),
-                    //*/
+                {
+                    new ObjectiveData("Reach Map", new Color(0, 0, 1, 1), 1, "PROCEED"),
+
+                    new ObjectiveData("Prop Activation", new Color(0, 1, 0, 1), 1,
+                        "COLLECT MODULE/PERK", "Module1"),
+                    new ObjectiveData("Spawn Prop", new Color(0, 1, 0, 1), 1,
+                        "[health regen] regenerates health periodically", "Props/Perks/PerkModule",
+                        "Health Regen", 5, 0, 0),
+                    new ObjectiveData("Reach Map", new Color(0, 0, 1, 1), 1, "PROCEED"),
+
+                    new ObjectiveData("Prop Activation", new Color(0, 1, 0, 1), 1,
+                        "COLLECT MODULE/PERK", "Module2"),
+                    new ObjectiveData("Spawn Prop", new Color(0, 1, 0, 1), 1,
+                        "[shield] recharges a protective shield", "Props/Perks/PerkModule",
+                        "Shield", 5, 0, 0),
+                    new ObjectiveData("Reach Map", new Color(0, 0, 1, 1), 1, "PROCEED"),
+
                     new ObjectiveData("Target Enemy", new Color(1, 0, 0, 1), 5,
                         "defeat the grunt", "Regular/Tier1/Regular", 1, 0)
                 }

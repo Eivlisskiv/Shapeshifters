@@ -5,22 +5,29 @@ using UnityEngine.UI;
 
 namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Props.Specifics
 {
-    public class Spawn_Target : ObjectivePreset, IOnPropActivation
+    public class Spawn_Prop : ObjectivePreset, IOnPropActivation
     {
         ILevelProp prop;
 
-        public Spawn_Target(GameObject element, ObjectiveData data = null) : base(element, data) { }
+        public Spawn_Prop(GameObject element, ObjectiveData data = null) : base(element, data) { }
 
         protected override Text Initialize(ObjectiveData data)
         {
-            GameObject obj = Resources.Load<GameObject>("Props/Targets/TargetPractice");
+            string prop_path = LoadParam<string>(data, 1);
+            GameObject obj = Resources.Load<GameObject>(prop_path);
             if (obj) 
             {
                 obj = Object.Instantiate(obj);
-                TargetPractice target = obj.GetComponent<TargetPractice>();
-                target.LoadParameters(new object[] { LoadParam(data, 1, 10), LoadParam(data, 2, 10) });
-                prop = target;
+                prop = obj.GetComponent<ILevelProp>();
 
+                int l = data.parameters.Length - 2;
+                if (data.parameters != null && l > 0) 
+                {
+                    object[] prop_params = new object[l];
+                    for (int i = 0; i < l; i++) prop_params[i] = data.parameters[i + 2];
+
+                    prop.LoadParameters(prop_params); 
+                }
                 Game.InsertInMap(obj);
 
                 Track = obj.transform;
