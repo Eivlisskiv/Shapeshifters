@@ -113,5 +113,7 @@ namespace IgnitedBox.Tweening.Tweeners
 
         public void SetNormalizedTime(double normalizedTime)
             => Time = (float)(Duration * normalizedTime);
+
+        public void Stop() => State = TweenState.Finished;
     }
 }

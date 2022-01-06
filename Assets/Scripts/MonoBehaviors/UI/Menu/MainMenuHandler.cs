@@ -28,6 +28,8 @@ public class MainMenuHandler : MonoBehaviour
     public GameObject instructions;
     public GameObject objectivePrefab;
 
+    public Transform gameUIContainer;
+
     private Image background;
 
     private MenuAction action;
@@ -60,6 +62,8 @@ public class MainMenuHandler : MonoBehaviour
 
         storyMenu.mainMenu = this;
         storyMenu.InitializeChapters();
+
+        gameUIContainer = transform.parent.GetChild(0);
     }
 
     // Update is called once per frame
@@ -284,12 +288,12 @@ public class MainMenuHandler : MonoBehaviour
         i.onReady = onReady;
         i.SetObjective(gamemodeDesc);
 
-        o.transform.SetParent(transform.parent);
+        o.transform.SetParent(gameUIContainer);
         o.transform.localPosition = new Vector3(0, 0, 0);
 
         GameObject objectiveContainer = Instantiate(objectivePrefab);
         objectiveContainer.name = "Objectives";
-        objectiveContainer.transform.SetParent(transform.parent);
+        objectiveContainer.transform.SetParent(gameUIContainer);
         return objectiveContainer.GetComponent<ObjectiveHandler>();
     }
 }

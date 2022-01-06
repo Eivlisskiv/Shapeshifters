@@ -7,6 +7,14 @@ namespace IgnitedBox.UnityUtilities
     {
         public static void Center(this RectTransform rect)
         {
+            Vector2 half = Vector2.one / 2;
+            rect.anchorMin = half;
+            rect.anchorMax = half;
+            rect.pivot = half;
+        }
+
+        public static void CenterStretch(this RectTransform rect)
+        {
             rect.sizeDelta = Vector2.zero;
             rect.anchorMin = Vector2.zero;
             rect.anchorMax = Vector2.one;

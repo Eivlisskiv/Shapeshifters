@@ -25,7 +25,7 @@ namespace Scripts.OOP.Game_Modes
                     "\n Gain a temporary buff when" +
                     "\n elimenating an enemy." +
                     "\n Your weapon randomly switches every 5 eliminations",
-                    storyRequirement = ( 1, 1 )
+                    storyRequirement = ( 1, 3 )
                 }
             },
 
@@ -35,7 +35,7 @@ namespace Scripts.OOP.Game_Modes
                 {
                     description =" Go through rooms of enemies. " +
                     "\n Purchase perks after each room.",
-                    storyRequirement = ( 1, 1 )
+                    storyRequirement = ( 1, 3 )
                 }
             }
         };

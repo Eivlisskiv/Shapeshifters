@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IgnitedBox.Tweening.Components;
+using System;
 using UnityEngine;
 
 namespace IgnitedBox.Tweening.Tweeners
@@ -104,6 +105,24 @@ namespace IgnitedBox.Tweening.Tweeners
             currentDelay = Delay; Time = 0;
 
             return true;
+        }
+
+        public void Dispose()
+        {
+            Stop();
+            if(Element is Component unityComponent)
+            {
+                //Component is not available
+                if (!unityComponent) return;
+
+                Tweener tweenComponent = unityComponent.GetComponent<Tweener>();
+
+                tweenComponent.Remove(this);
+
+                return;
+            }
+
+            TweenHandling.Container.Dispose(this);
         }
 
 #if UNITY_EDITOR

@@ -102,4 +102,5 @@ public class Landmine : OtherProjectile, ILevelProp
 
         Activate(damage, force, null);
     }
+
 }

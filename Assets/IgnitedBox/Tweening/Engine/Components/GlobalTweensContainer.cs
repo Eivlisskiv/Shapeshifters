@@ -27,5 +27,8 @@ namespace IgnitedBox.Tweening.Components
 
         public void Add<S, T>(TweenData<S, T> tween)
             => tweens.Add(tween);
+
+        public void Dispose(TweenerBase element)
+            => tweens.Remove(element);
     }
 }

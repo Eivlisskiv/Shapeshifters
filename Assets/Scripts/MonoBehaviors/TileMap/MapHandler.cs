@@ -9,7 +9,7 @@ using UnityEngine.Tilemaps;
 
 public class MapHandler : MonoBehaviour
 {
-    public Canvas mainCanvas;
+    public Transform inGameUI;
 
     public GameObject characterPrefab;
     public GameObject uiPrefab;

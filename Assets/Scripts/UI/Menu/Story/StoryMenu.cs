@@ -150,18 +150,27 @@ namespace Scripts.UI.Menu.Story
             {
                 VerifyUnlocked(index, i);
             }
+
+            RectTransform window = selectedWindow.GetComponent<RectTransform>();
+            RectTransform rect = selectedWindow.transform.parent.GetComponent<RectTransform>();
+            rect.sizeDelta = new Vector2(rect.sizeDelta.x, window.rect.height * 1.5f);
         }
 
         private void CreateEpisodes(int index)
         {
             Transform window = episodeWindows[index];
+            RectTransform rect;
             if (!window)
             {
                 VerticalLayoutGroup layout = Components.CreateGameObject<VerticalLayoutGroup>("Chapter " + index);
                 window = layout.transform;
                 window.SetParent(episodeContent, false);
-                RectTransform rect = window.GetComponent<RectTransform>();
-                rect.Center();
+                rect = window.GetComponent<RectTransform>();
+
+                Vector2 p = new Vector2(0.5f, 1);
+                rect.anchorMin = p;
+                rect.anchorMax = p;
+                rect.pivot = p;
 
                 layout.padding = new RectOffset(0, 0, 25, 0);
                 layout.spacing = 50;
@@ -171,6 +180,7 @@ namespace Scripts.UI.Menu.Story
 
                 episodeWindows[index] = window; 
             }
+            else rect = window.GetComponent<RectTransform>();
 
             int length = Chapter.Episodes[index].Length;
             episodes[index] = new GeneralButton[length];
@@ -184,8 +194,8 @@ namespace Scripts.UI.Menu.Story
 
                 SetText(ep, $"{index + 1}.{i + 1}");
 
-                RectTransform rect = button.GetComponent<RectTransform>();
-                rect.sizeDelta = new Vector2(250, 75);
+                RectTransform brect = button.GetComponent<RectTransform>();
+                brect.sizeDelta = new Vector2(250, 75);
 
                 int epIndex = i;
                 ep.OnPress.AddListener(() => GoToUnlocked(index, epIndex));
@@ -194,6 +204,8 @@ namespace Scripts.UI.Menu.Story
 
                 VerifyUnlocked(index, i);
             }
+
+            rect.sizeDelta = new Vector2(rect.sizeDelta.x, (100 * length) - 50);
         }
 
         private void SelectEpisode(int ep)
@@ -259,7 +271,7 @@ namespace Scripts.UI.Menu.Story
                             ? perk.Level.ToString()
                             : $"+{perk.Buff + perk.Level}";
 
-                        level.rectTransform.Center();
+                        level.rectTransform.CenterStretch();
                         level.alignment = TextAnchor.MiddleCenter;
                         level.resizeTextForBestFit = true;
                         level.resizeTextMaxSize = 50;

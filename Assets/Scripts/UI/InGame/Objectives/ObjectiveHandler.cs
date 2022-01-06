@@ -36,7 +36,7 @@ namespace Scripts.UI.InGame.Objectives
 
         private void Start()
         {
-            var prect = transform.parent.GetComponent<RectTransform>();
+            var prect = transform.parent.parent.GetComponent<RectTransform>();
             mid = -(prect.sizeDelta.y + 70) / 2;
 
             var rect = transform.GetComponent<RectTransform>();

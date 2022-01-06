@@ -56,6 +56,13 @@ namespace Scripts.OOP.Game_Modes.CustomLevels
         public int yOffset;
         public int[,] tiles;
         public MapProp[] props;
+
+        public MapPreset() { }
+        public MapPreset(int tileIndex, int offset = 0)
+        {
+            tileBaseIndex = tileIndex;
+            yOffset = offset;
+        }
     }
 
     [Serializable]

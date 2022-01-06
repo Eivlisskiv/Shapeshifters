@@ -72,8 +72,8 @@ public abstract class BaseController : HealthEntity,
     }
     public Color GetColor(int i) => _colors[i];
 
-    bool controllerEnabled = true;
-    float? dying = null;
+    protected bool ControllerEnabled { get; private set; } = true;
+    protected float? Dying { get; private set; } = null;
 
     // Start is called before the first frame update
     void Start()
@@ -97,7 +97,7 @@ public abstract class BaseController : HealthEntity,
     {
         if (CheckDying()) return;
 
-        if (!controllerEnabled) return;
+        if (!ControllerEnabled) return;
 
         OnUpdate();
         Events.Invoke(ControllerEvents.Update, this, Time.deltaTime);
@@ -124,14 +124,14 @@ public abstract class BaseController : HealthEntity,
     public abstract bool IsFiring(out float angle);
 
     public void DisableController(bool value)
-        => controllerEnabled = !value;
+        => ControllerEnabled = !value;
 
     private bool CheckDying()
     {
-        if (dying.HasValue)
+        if (Dying.HasValue)
         {
-            dying = Math.Max(0, dying.Value - Time.deltaTime);
-            if (dying > 0)
+            Dying = Math.Max(0, Dying.Value - Time.deltaTime);
+            if (Dying > 0)
             {
                 Body.Body.velocity = Vector2.zero;
                 transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(0, 0, 1), Time.deltaTime);
@@ -312,9 +312,9 @@ public abstract class BaseController : HealthEntity,
     {
         stats.health = Math.Min(stats.MaxHealth, stats.health + value);
         OnHealthChange();
-        if (!dying.HasValue && stats.health <= 0 && OnDeath())
+        if (!Dying.HasValue && stats.health <= 0 && OnDeath())
         {
-            dying = 1.5f;
+            Dying = 1.5f;
             Body.Body.velocity = Vector2.zero;
             Body.Body.angularVelocity = 720;
             Body.Collider.enabled = false;
@@ -329,10 +329,10 @@ public abstract class BaseController : HealthEntity,
     }
 
     protected void UpdateHealthBar()
-        => HealthBar?.SetValue(stats.HPP);
+        => HealthBar?.SetHealth(stats.HPP);
 
-    protected void UpdateShieldBar()
-        => HealthBar?.SetShield(stats.HPP);
+    public void UpdateShieldBar(float f)
+        => HealthBar?.SetShield(f);
 
     public virtual void OnHealthChange()
     {

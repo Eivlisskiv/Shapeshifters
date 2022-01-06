@@ -11,6 +11,9 @@ namespace Scripts.OOP.UI.StatsBar
         readonly Image live;
         readonly Image delayed;
 
+        private ImageFillTween liveTween;
+        private ImageFillTween delayedTween;
+
         float target;
         bool healing;
 
@@ -22,33 +25,38 @@ namespace Scripts.OOP.UI.StatsBar
             delayed = container.Find("Delay").GetComponent<Image>();
         }
 
-        public void SetValue(float v)
+        public void SetHealth(float v)
         {
             if (v == target) return;
 
             healing = v > target;
             target = v;
 
-            if (healing) TweenChange(delayed, live);
-            else TweenChange(live, delayed);
+            liveTween?.Dispose();
+            delayedTween?.Dispose();
+
+            if (healing) liveTween = TweenChange(delayed, live);
+            else delayedTween = TweenChange(live, delayed);
         }
 
-        private void TweenChange(Image to, Image from)
+        private ImageFillTween TweenChange(Image to, Image from)
         {
             to.fillAmount = target;
-            TweenFill(from, target, 2.5f);
+            return TweenFill(from, target, 2.5f);
         }
 
-        protected void TweenFill(Image img, float percent, float time)
+        protected ImageFillTween TweenFill(Image img, float percent, float time)
         {
             float change = Mathf.Abs(img.fillAmount - percent);
             if(change < 0.01)
             {
                 img.fillAmount = percent;
-                return;
+                return null;
             }
 
-            img.Tween<Image, float, ImageFillTween>(percent, time, easing: ExponentEasing.Out);
+            return img.Tween<Image, float, ImageFillTween>(percent, 
+                IgnitedBox.Tweening.Components.Tweener.BlendType.Replace,
+                time, easing: ExponentEasing.Out);
         }
 
         public void Update(float v)

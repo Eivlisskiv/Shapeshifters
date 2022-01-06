@@ -15,6 +15,7 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Spawns
         private (string, int)[][] waves;
 
         private Text progress;
+        private Text wprogress;
 
         List<BaseController> spawns;
 
@@ -30,16 +31,27 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Spawns
 
             Text title = base.Initialize(data);
 
-            title.alignment = TextAnchor.MiddleLeft;
-
             progress = Get<Text>("Progress", t =>
             {
-                t.text = GetProgress();
-                t.alignment = TextAnchor.MiddleRight;
+                t.text = GetControllersProgress();
+                t.alignment = TextAnchor.MiddleCenter;
             });
+
+            if (team != 0)
+            {
+                wprogress = Get<Text>("Waves", t =>
+                {
+                    t.text = GetWaveProgress();
+                    t.alignment = TextAnchor.MiddleCenter;
+                });
+
+                ChangeWidth("Waves", 0.8f);
+            }
 
             Game.ObjectiveEvents.Subscribe<CustomLevel, BaseController>
                 (typeof(IControllerElimenated), Progress);
+
+            ChangeWidth("Title", 1.3f);
 
             return title;
         }
@@ -55,14 +67,15 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Spawns
             if (!spawns.Contains(elimenated)) return;
 
             spawns.Remove(elimenated);
-            progress.text = GetProgress();
+            progress.text = GetControllersProgress();
 
             Bounce();
 
             //Enemies left
-            if (spawns.Count <= 0) return;
+            if (spawns.Count > 0) return;
 
             wave++;
+            if (wprogress) wprogress.text = GetWaveProgress();
             if (wave < waves.Length)
             {
                 Game.Score++;
@@ -84,10 +97,13 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Spawns
                 spawns.Add(Game.SpawnEnemy(obj, team, level));
             }
 
-            progress.text = GetProgress();
+            progress.text = GetControllersProgress();
         }
 
-        private string GetProgress()
+        private string GetControllersProgress()
             => $"{spawns.Count} {(team == 0 ? "Allies" : "Hostiles")} left.";
+
+        private string GetWaveProgress()
+            => $"[Wave {wave + 1}/{waves.Length}]";
     }
 }

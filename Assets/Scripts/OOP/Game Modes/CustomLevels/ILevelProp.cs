@@ -4,6 +4,7 @@
     {
         bool Enabled { get; set; }
         bool Consumed { get; }
+
         void LoadParameters(object[] param);
     }
 }

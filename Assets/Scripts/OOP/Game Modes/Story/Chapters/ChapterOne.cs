@@ -14,10 +14,8 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                 PlayerSpawn = new SerializableInt2(5, 6),
                 Maps = new MapPreset[]
                 {
-                    new MapPreset()
+                    new MapPreset(0, -14)
                     {
-                        tileBaseIndex = 0,
-                        yOffset = -14,
                         tiles = new int[,]
                         {
                             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -69,7 +67,6 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                     },
                     new MapPreset()
                     {
-                        tileBaseIndex = 0,
                         tiles = new int[,]
                         {
                             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
@@ -99,7 +96,6 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                     },
                     new MapPreset()
                     {
-                        tileBaseIndex = 0,
                         tiles = new int[,]
                         {
                             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
@@ -135,7 +131,6 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                     },
                     new MapPreset()
                     {
-                        tileBaseIndex = 0,
                         tiles = new int[,]
                         {
                             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
@@ -161,7 +156,6 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                     },
                     new MapPreset()
                     {
-                        tileBaseIndex = 0,
                         tiles = new int[,]
                         {
                             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
@@ -186,10 +180,10 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                         },
                         props = new MapProp[]
                         {
-                            new MapProp("Target1", "Props/Targets/TargetPractice", -15.86f, 15.89f, 100, 32),
-                            new MapProp("Target2", "Props/Targets/TargetPractice", 15.46f, 10.53f, 100, 32),
-                            new MapProp("Target3", "Props/Targets/TargetPractice", 9.12f, -3f, 100, 32),
-                            new MapProp("Target4", "Props/Targets/TargetPractice", -3.26f, -16.2f, 100, 32),
+                            new MapProp("Target1", "Props/Targets/TargetPractice", -15.86f, 15.89f, 20, 15),
+                            new MapProp("Target2", "Props/Targets/TargetPractice", 15.46f, 10.53f, 20, 15),
+                            new MapProp("Target3", "Props/Targets/TargetPractice", 9.12f, -3f, 20, 15),
+                            new MapProp("Target4", "Props/Targets/TargetPractice", -3.26f, -16.2f, 20, 15),
 
                             new MapProp("LandMine1", "Projectiles/Landmine", -10.27f, 8.52f, 0, 100),
                             new MapProp("LandMine2", "Projectiles/Landmine", 2.39f, 8.52f, 0, 100),
@@ -217,11 +211,11 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                         1, "CONTINUE \\_ STAGE"),
                     //Room 3
                     new ObjectiveData("Spawn Prop", new Color(0, 0, 1, 1), 2, "Destroy the very slow target",
-                        "Props/Targets/TargetPractice", 100, 5),
+                        "Props/Targets/TargetPractice", 20, 5),
                     new ObjectiveData("Spawn Prop", new Color(0, 0, 1, 1), 2, "Destroy the slow target",
-                        "Props/Targets/TargetPractice", 100, 10),
+                        "Props/Targets/TargetPractice", 20, 8),
                     new ObjectiveData("Spawn Prop", new Color(0, 0, 1, 1), 2, "Destroy the standard target",
-                        "Props/Targets/TargetPractice", 100, 20),
+                        "Props/Targets/TargetPractice", 20, 12),
                     new ObjectiveData("Reach Map", new Color(0, 0, 1, 1),
                         1, "reach the next stage"),
                     //Room 5
@@ -237,7 +231,6 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                 {
                     new MapPreset()
                     {
-                        tileBaseIndex = 0,
                         tiles = new int[,]
                         {
                             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
@@ -263,37 +256,6 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                     },
                     new MapPreset()
                     {
-                        tileBaseIndex = 0,
-                        tiles = new int[,]
-                        {
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, },
-                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, },
-                            { 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, },
-                            { 1, 1, 0, 3, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 3, 1, 1, },
-                            { 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, },
-                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
-                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, }
-                        },
-                        props = new MapProp[]
-                        {
-                            new MapProp("Module1", "Props/Perks/PerkModule", 0, -14.03f, "Health Regen", 5, 0, 0),
-                        }
-                    },
-                    new MapPreset()
-                    {
-                        tileBaseIndex = 0,
                         tiles = new int[,]
                         {
                             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
@@ -323,7 +285,6 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                     },
                     new MapPreset()
                     {
-                        tileBaseIndex = 0,
                         tiles = new int[,]
                         {
                             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
@@ -352,6 +313,105 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                 {
                     new ObjectiveData("Reach Map", new Color(0, 0, 1, 1), 1, "PROCEED"),
 
+                    new ObjectiveData("Prop Activation", new Color(0, 0, 1, 1), 1,
+                        "COLLECT MODULE/PERK", "Module1"),
+                    new ObjectiveData("Spawn Prop", new Color(0, 0, 1, 1), 1,
+                        "[shield] recharges a protective shield", "Props/Perks/PerkModule",
+                        "Shield", 5, 0, 0),
+                    new ObjectiveData("Reach Map", new Color(0, 0, 1, 1), 1, "PROCEED"),
+
+                    new ObjectiveData("Target Enemy", new Color(1, 0, 0, 1), 5,
+                        "defeat the grunt", "Regular/Tier1/Regular", 1, 2)
+                }
+            },
+            new StorySettings(1, 3, "Archetype: Bomber")
+            {
+                Description = "Find and Defeat the Bomber",
+                PlayerSpawn = new SerializableInt2(4, 6),
+                Maps = new MapPreset[]
+                {
+                    new MapPreset()
+                    {
+                        tiles = new int[,]
+                        {
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, },
+                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, },
+                            { 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, },
+                            { 1, 1, 0, 3, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 3, 1, 1, },
+                            { 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, },
+                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, }
+                        },
+                        props = new MapProp[]
+                        {
+                            new MapProp("Module1", "Props/Perks/PerkModule", 0, -14.03f, "Health Regen", 5, 0, 0),
+                        }
+                    },
+                    new MapPreset()
+                    {
+                        tiles = new int[,]
+                        {
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, },
+                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, },
+                            { 1, 1, 0, 3, 3, 3, 0, 0, 1, 0, 0, 1, 0, 0, 3, 3, 3, 0, 1, 1, },
+                            { 1, 1, 0, 3, 3, 3, 0, 0, 1, 0, 0, 1, 0, 0, 3, 3, 3, 0, 1, 1, },
+                            { 1, 1, 0, 3, 3, 3, 0, 0, 1, 0, 0, 1, 0, 0, 3, 3, 3, 0, 1, 1, },
+                            { 1, 1, 0, 3, 3, 3, 0, 0, 1, 0, 0, 1, 0, 0, 3, 3, 3, 0, 1, 1, },
+                            { 1, 1, 0, 3, 3, 3, 0, 0, 1, 0, 0, 1, 0, 0, 3, 3, 3, 0, 1, 1, },
+                            { 1, 1, 0, 3, 3, 3, 0, 0, 1, 0, 0, 1, 0, 0, 3, 3, 3, 0, 1, 1, },
+                            { 1, 1, 0, 3, 3, 3, 0, 0, 1, 0, 0, 1, 0, 0, 3, 3, 3, 0, 1, 1, },
+                            { 1, 1, 0, 3, 3, 3, 0, 0, 1, 0, 0, 1, 0, 0, 3, 3, 3, 0, 1, 1, },
+                            { 1, 1, 0, 3, 3, 3, 0, 0, 1, 0, 0, 1, 0, 0, 3, 3, 3, 0, 1, 1, },
+                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, },
+                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, },
+                            { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, },
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, }
+                        },
+                    },
+                    new MapPreset()
+                    {
+                        tiles = new int[,]
+                        {
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
+                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,},
+                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,},
+                            { 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 3, 3, 1, 1, 1,},
+                            { 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 3, 3, 3, 3, 3, 1, 1, 1,},
+                            { 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 3, 3, 3, 3, 3, 3, 1, 1, 1,},
+                            { 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1,},
+                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1,},
+                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 1,},
+                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 3, 3, 1,},
+                            { 1, 1, 1, 1, 1, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1,},
+                            { 1, 1, 1, 1, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1,},
+                            { 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 0, 1, 1, 0, 3, 3, 1,},
+                            { 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 0, 1, 1, 1, 1, 0, 3, 1,},
+                            { 1, 1, 1, 1, 0, 0, 0, 0, 3, 3, 3, 0, 1, 1, 1, 1, 1, 1, 0, 1,},
+                            { 1, 1, 1, 1, 1, 0, 0, 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
+                            { 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,}
+                        },
+                    }
+                },
+                Main = new ObjectiveData[]
+                {
                     new ObjectiveData("Prop Activation", new Color(0, 1, 0, 1), 1,
                         "COLLECT MODULE/PERK", "Module1"),
                     new ObjectiveData("Spawn Prop", new Color(0, 1, 0, 1), 1,
@@ -359,17 +419,166 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
                         "Health Regen", 5, 0, 0),
                     new ObjectiveData("Reach Map", new Color(0, 0, 1, 1), 1, "PROCEED"),
 
-                    new ObjectiveData("Prop Activation", new Color(0, 1, 0, 1), 1,
-                        "COLLECT MODULE/PERK", "Module2"),
-                    new ObjectiveData("Spawn Prop", new Color(0, 1, 0, 1), 1,
-                        "[shield] recharges a protective shield", "Props/Perks/PerkModule",
-                        "Shield", 5, 0, 0),
+                    new ObjectiveData("Waves", Color.red, 20, "Elimenate the guards", 1, new (string, int)[][]
+                    { 
+                        new (string, int)[] { ("Regular/Tier 1/Regular", 0) },
+                        new (string, int)[] { ("Regular/Tier 1/Regular", 0), ("Regular/Tier 1/Regular", 0) },
+                    }),
                     new ObjectiveData("Reach Map", new Color(0, 0, 1, 1), 1, "PROCEED"),
 
                     new ObjectiveData("Target Enemy", new Color(1, 0, 0, 1), 5,
-                        "defeat the grunt", "Regular/Tier1/Regular", 1, 0)
+                        "defeat the bomber", "Regular/Tier1/Bomber", 1, 0)
                 }
             },
+            new StorySettings(1, 4, "Combat Test")
+            {
+                Description = "Complete the combat test.",
+                PlayerSpawn = new SerializableInt2(5, 5),
+                Maps = new MapPreset[]
+                {
+                    new MapPreset()
+                    {
+                        tiles = new int[,]
+                        {
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
+                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,},
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
+                        }
+                    }
+                },
+                Main = new ObjectiveData[]
+                {
+                    new ObjectiveData("Spawn Prop", Color.yellow, 2, "Collect module/perk",  "Props/Perks/PerkModule", "Barrel Buff", 1, 0, 0),
+                    new ObjectiveData("Spawn Prop", Color.yellow, 2, "[barrel buff] increases projectile damage", "Props/Perks/PerkModule", "Barrel Buff", 1, 0, 0),
+                    
+                    new ObjectiveData("Waves", Color.red, 20, "Enemies may use modules/perks", 1, new (string, int)[][]
+                    {
+                        new (string, int)[] { ("Regular/Tier1/Regular", 2) },             
+                        new (string, int)[] { ("Regular/Tier1/Bomber", 2), ("Regular/Tier1/Regular", 2) },                        
+                    }),
+
+                    new ObjectiveData("Target Enemy", new Color(1, 0, 0, 1), 5,
+                        "defeat the sniper", "Regular/Tier1/Sniper", 1, 5 ),
+
+                    new ObjectiveData("Spawn Prop", new Color(204/255f, 35/255f, 48/255f), 2, "Collect module/perk",  
+                        "Props/Perks/PerkModule", "Charging Round", 5, 0, 0),
+                    new ObjectiveData("Spawn Prop", new Color(204/255f, 35/255f, 48/255f), 2, "[charging round] increases projectile damage over airtime", 
+                        "Props/Perks/PerkModule", "Charging Round", 5, 0, 0),
+
+                    new ObjectiveData("Waves", Color.red, 20, "defeat the guards", 1, new (string, int)[][]
+                    {
+                        new (string, int)[] { ("Regular/Tier1/Regular", 5) },
+                        new (string, int)[] { ("Regular/Tier1/Bomber", 5), ("Regular/Tier1/Regular", 5) },
+                        new (string, int)[] { ("Regular/Tier1/Bomber", 5), ("Regular/Tier1/Bomber", 8), ("Regular/Tier1/Regular", 5) },
+                    }),
+
+                    new ObjectiveData("Target Enemy", new Color(1, 0, 0, 1), 5,
+                        "defeat the tank", "Regular/Tier1/Tank", 1, 8 ),                   
+                }
+            },
+            new StorySettings(1, 5, "Chase")
+            {
+                Description = "Complete the bomber test.",
+                PlayerSpawn = new SerializableInt2(5, 5),
+                Maps = new MapPreset[]
+                {
+                    new MapPreset()
+                    {
+                        tiles = new int[,]
+                        {
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
+                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 3, 3, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 3, 3, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 1, 1,},
+                            { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,},
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,},
+                        }
+                    }
+                },
+                Main = new ObjectiveData[]
+                {
+                    new ObjectiveData("Spawn Prop", Color.gray, 2, "Collect module/perk",  "Props/Perks/PerkModule", "Mine Drop", 5, 0, 0),
+                    new ObjectiveData("Spawn Prop", Color.gray, 2, "[Mine Drop] grants a chance to lay friendly land mines when firing",
+                        "Props/Perks/PerkModule", "Mine Drop", 5, 0, 0),
+                    
+                    new ObjectiveData("Waves", Color.red, 20, "Survive The waves", 1, new (string, int)[][]
+                    {
+                        new (string, int)[] { ("Regular/Tier1/Bomber", 2), ("Regular/Tier1/Bomber", 2), },                       
+                        new (string, int)[] { ("Regular/Tier1/Bomber", 2), ("Regular/Tier1/Bomber", 2), ("Regular/Tier1/Bomber", 2), },                       
+                        new (string, int)[] { ("Regular/Tier1/Bomber", 6), ("Regular/Tier1/Bomber", 2), ("Regular/Tier1/Bomber", 2), },                       
+                    }),
+
+                    new ObjectiveData("Target Enemy", new Color(1, 0, 0, 1), 5,
+                        "defeat the bomber boss", "Regular/Tier1/Bomber", 1, 10 ),
+
+                    new ObjectiveData("Spawn Prop", new Color(196/255f, 129/255f, 67/255f), 2, "Collect module/perk",  
+                        "Props/Perks/PerkModule", "Thorns", 5, 0, 0),
+                    new ObjectiveData("Spawn Prop", new Color(196/255f, 129/255f, 67/255f), 2, 
+                        "[charging round] increases projectile damage over airtime", "Props/Perks/PerkModule", "Thorns", 5, 0, 0),
+
+                    new ObjectiveData("Waves", Color.red, 20, "Survive The waves", 1, new (string, int)[][]
+                    {
+                        new (string, int)[] { ("Regular/Tier1/Bomber", 6), ("Regular/Tier1/Bomber", 6), },
+                        new (string, int)[] { ("Regular/Tier1/Bomber", 6), ("Regular/Tier1/Bomber", 6), ("Regular/Tier1/Bomber", 6), },
+                        new (string, int)[] 
+                        { 
+                            ("Regular/Tier1/Bomber", 6), ("Regular/Tier1/Bomber", 6), ("Regular/Tier1/Bomber", 6),
+                            ("Regular/Tier1/Bomber", 6), ("Regular/Tier1/Bomber", 6), ("Regular/Tier1/Bomber", 6)
+                        },
+                        new (string, int)[]
+                        {
+                            ("Regular/Tier1/Bomber", 6), ("Regular/Tier1/Bomber", 6), ("Regular/Tier1/Bomber", 6),
+                            ("Regular/Tier1/Bomber", 6), ("Regular/Tier1/Bomber", 6), ("Regular/Tier1/Bomber", 6),
+                            ("Regular/Tier1/Bomber", 6), ("Regular/Tier1/Bomber", 6), ("Regular/Tier1/Bomber", 6)
+                        },
+                    }),
+
+                    new ObjectiveData("Target Enemy", new Color(1, 0, 0, 1), 5,
+                        "defeat the last bomber boss", "Regular/Tier1/Bomber", 1, 12 ),                   
+                }
+            }
         };
     }
 }

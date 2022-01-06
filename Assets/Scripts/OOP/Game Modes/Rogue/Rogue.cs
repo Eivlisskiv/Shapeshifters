@@ -245,7 +245,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
         {
             PlayerController player = PlayerController.Instantiate
                 (map.characterPrefab, map.uiPrefab,
-                Camera.main, map.mainCanvas.transform);
+                Camera.main, map.inGameUI.transform);
 
             player.transform.position = map.Current.MapPosition(new Vector2Int
                 (ProceduralMapRoom.spacing + (ProceduralMapRoom.borderWidth * 2) - 1, map.Current.Width / 4));

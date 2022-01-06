@@ -54,7 +54,7 @@ public class GameOverHandler : MonoBehaviour
         lastTime.SetString(ltime < 0 ? "-" : LevelProgress.BestTime(ltime));
 
         lastTime.number.color = ltime < 0 ? Color.white : 
-            (ltime < ttime ? Color.green : Color.red);
+            (ttime < 0 || ltime < ttime ? Color.green : Color.red);
     }
 
     internal class UITextHandler

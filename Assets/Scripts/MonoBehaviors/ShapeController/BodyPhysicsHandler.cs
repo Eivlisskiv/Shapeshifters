@@ -40,7 +40,13 @@ public class BodyPhysicsHandler : MonoBehaviour
     Rigidbody2D body;
 
     public Rigidbody2D Body
-    { get => body; }
+    { 
+        get
+        {
+            if (!body) body = GetComponent<Rigidbody2D>();
+            return body;
+        }
+    }
 
 
     SpriteShapeController ShapeController => _shapeController != null ? _shapeController :

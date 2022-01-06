@@ -73,6 +73,9 @@ namespace IgnitedBox.Tweening.Components
             tweens.Add(b);
         }
 
+        public void Remove(TweenerBase element)
+            => tweens.Remove(element);
+
         public void Remove(int i) => tweens.RemoveAt(i);
 
         public void Remove(Type key)

@@ -70,7 +70,7 @@ namespace Scripts.OOP.Game_Modes.CustomLevels
         {
             PlayerController player = PlayerController.Instantiate
                 (map.characterPrefab, map.uiPrefab,
-                Camera.main, map.mainCanvas.transform);
+                Camera.main, map.inGameUI.transform);
 
             player.transform.position = map.Current.MapPosition(levelSettings.PlayerSpawn);
             AddMember(0, player);

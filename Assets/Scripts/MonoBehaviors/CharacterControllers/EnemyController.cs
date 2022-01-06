@@ -1,6 +1,9 @@
-﻿using Scripts.OOP.EnemyBehaviors;
+﻿using IgnitedBox.Utilities;
+using Scripts.OOP.EnemyBehaviors;
+using Scripts.OOP.Game_Modes;
+using Scripts.OOP.Game_Modes.CustomLevels;
 
-public class EnemyController : BaseController
+public class EnemyController : BaseController, ILevelProp
 {
     public EnemySettings settings;
 
@@ -13,6 +16,18 @@ public class EnemyController : BaseController
         get => settings?.name ?? base.Name; 
         set => base.Name = value; 
     }
+    public bool Enabled 
+    {
+        get => enabled && ControllerEnabled; 
+        set 
+        {
+            enabled = value;
+            DisableController(!value);
+            gameObject.SetActive(value);
+        } 
+    }
+
+    public bool Consumed => Dying.HasValue;
 
     public void Set(int level)
     {
@@ -35,4 +50,10 @@ public class EnemyController : BaseController
 
     public override bool IsFiring(out float angle)
         => Behavior.Fire(this, out angle);
+
+    public void LoadParameters(object[] param)
+    {
+        Team = param.ParamAs(0, 1);
+        Level = param.ParamAs(1, 0);
+    }
 }

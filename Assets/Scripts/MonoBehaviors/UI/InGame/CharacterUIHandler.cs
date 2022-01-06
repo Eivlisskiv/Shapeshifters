@@ -22,7 +22,7 @@ public class CharacterUIHandler : MonoBehaviour
     }
 
     public void UpdateXP(float percent)
-        => xp.SetValue(percent);
+        => xp.SetHealth(percent);
 
     public void LevelUp(int level)
         => this.level.text = level.ToString();
