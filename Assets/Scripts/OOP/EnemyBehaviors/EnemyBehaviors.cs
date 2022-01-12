@@ -13,8 +13,6 @@
     public interface IAbilitybehavior
     {
         void Initialize(BaseController self);
-
-        //void AbilityUpdate(BaseController self);
     }
 
     public interface IBossAbility { }

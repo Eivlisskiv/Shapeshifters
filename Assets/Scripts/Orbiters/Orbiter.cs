@@ -95,10 +95,10 @@ namespace Scripts.Orbiters
 
             Follow();
 
-            if(Archetype != null)
-                Target = Archetype.FindTarget(Target);
+            if (Archetype == null) return;
 
-            Archetype?.Update(this);
+            Target = Archetype.FindTarget(Target);
+            Archetype.Update(this);
         }
 
         private void Follow()

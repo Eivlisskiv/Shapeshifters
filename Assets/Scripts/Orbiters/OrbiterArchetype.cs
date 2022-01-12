@@ -80,24 +80,23 @@ namespace Scripts.Orbiters
 
             //Target Lost
 
-            if(State == OrbiterState.Charging)
+            //Search for a new target
+            currentTarget = targetting?.Target(SelfOrbiter.Owner);
+            //switch to new target
+            if (currentTarget != null) return currentTarget;
+
+            //No other targets found, stop
+            if (State == OrbiterState.Charging)
             {
                 State = OrbiterState.Idle;
                 OnIdle();
             }
 
-            return targetting?.Target(SelfOrbiter.Owner);
+            return null;
         }
 
         protected bool TargetLost(BaseController currentTarget)
-        {
-            Vector2 position = SelfOrbiter.transform.position;
-            Vector2 target = currentTarget.transform.position;
-
-            //Hits a wall = target lost
-            bool lost = Raycast.TryRaycast2D(position, target - position, 8, out RaycastHit2D ray);
-            return lost;
-        }
+            => !Raycast.CanSee(SelfOrbiter, currentTarget, 8);
 
         public void Update(Orbiter orbiter)
         {

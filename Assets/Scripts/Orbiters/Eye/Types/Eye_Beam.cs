@@ -143,7 +143,7 @@ namespace Scripts.Orbiters.Eye.Types
             fire.transform.localPosition = Vector3.zero;
 
             fireBeam.SetPositions(new Vector3[] { Vector3.zero, Vector3.zero });
-            fireBeam.useWorldSpace = false;
+            fireBeam.useWorldSpace = true;
             fireBeam.startColor = color;
             fireBeam.endColor = color;
 
@@ -372,7 +372,7 @@ namespace Scripts.Orbiters.Eye.Types
             else
             {
                 beamLength += Time.deltaTime * growthSpeed;
-                Vector2.ClampMagnitude(beam, beamLength);
+                beam = Vector2.ClampMagnitude(beam, beamLength);
             }
 
             return beam;
@@ -380,8 +380,9 @@ namespace Scripts.Orbiters.Eye.Types
 
         private void SetBeamPosition(Vector2 hit)
         {
+            Vector2 bstart = Pupil.position;
             fireBeam.SetPositions(new Vector3[]
-                { hit, Vector2.zero });
+                { bstart + hit, bstart });
 
             PolygonCollider2D collider = (PolygonCollider2D)beamHandler.Collider;
             Vector2 perp = Vector2.Perpendicular(-hit).normalized;
@@ -395,7 +396,6 @@ namespace Scripts.Orbiters.Eye.Types
 
                 hit - start,
                 hit + start,
-
             };
         }
 

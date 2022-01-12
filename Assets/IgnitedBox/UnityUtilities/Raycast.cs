@@ -13,7 +13,7 @@ namespace Assets.IgnitedBox.UnityUtilities
             return GetFirstUnignoredRaycast(out raycast, ignores, rays);
         }
 
-        private static bool GetFirstUnignoredRaycast(out RaycastHit2D raycast, Collider2D[] ignores, RaycastHit2D[] rays)
+        public static bool GetFirstUnignoredRaycast(out RaycastHit2D raycast, Collider2D[] ignores, RaycastHit2D[] rays)
         {
             for (int i = 0; i < rays.Length; i++)
             {
@@ -39,6 +39,22 @@ namespace Assets.IgnitedBox.UnityUtilities
             out RaycastHit2D raycast)
         {
             return (raycast = Physics2D.Raycast(startPosition, vectorRay, vectorRay.magnitude));
+        }
+
+        public static bool CanSee(GameObject from, GameObject to, int blockLayerNumber)
+        {
+            Vector3 fromPos = from.transform.position;
+            Vector3 dir = to.transform.position - fromPos;
+
+            return !Physics2D.Raycast(fromPos, dir, dir.magnitude, 1 << blockLayerNumber);
+        }
+
+        public static bool CanSee(Component from, Component to, int blockLayerNumber)
+        {
+            Vector3 fromPos = from.transform.position;
+            Vector3 dir = to.transform.position - fromPos;
+
+            return !Physics2D.Raycast(fromPos, dir, dir.magnitude, 1 << blockLayerNumber);
         }
     }
 }

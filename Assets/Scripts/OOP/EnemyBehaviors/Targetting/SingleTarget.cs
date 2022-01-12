@@ -1,4 +1,5 @@
-﻿using Scripts.OOP.Game_Modes;
+﻿using Assets.IgnitedBox.UnityUtilities;
+using Scripts.OOP.Game_Modes;
 using System.Collections.Generic;
 
 namespace Scripts.OOP.EnemyBehaviors.Targetting
@@ -11,7 +12,14 @@ namespace Scripts.OOP.EnemyBehaviors.Targetting
 
             List<BaseController> targets = GameModes.GameMode?.GetEnemies(self.Team);
             if (targets == null || targets.Count == 0) return null;
-            return targets[0] == null ? null : targets[0];
+
+            for (int i = 0; i < targets.Count; i++)
+            {
+                BaseController t = targets[i];
+                if (Raycast.CanSee(self, t, 8)) return t;
+            }
+
+            return null;
         }
     }
 }
