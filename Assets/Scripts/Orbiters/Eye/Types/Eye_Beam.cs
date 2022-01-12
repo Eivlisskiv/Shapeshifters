@@ -378,24 +378,26 @@ namespace Scripts.Orbiters.Eye.Types
             return beam;
         }
 
-        private void SetBeamPosition(Vector2 hit)
+        private void SetBeamPosition(Vector2 beamVect)
         {
             Vector2 bstart = Pupil.position;
             fireBeam.SetPositions(new Vector3[]
-                { bstart + hit, bstart });
+                { bstart + beamVect, bstart });
 
             PolygonCollider2D collider = (PolygonCollider2D)beamHandler.Collider;
-            Vector2 perp = Vector2.Perpendicular(-hit).normalized;
+            Vector2 perp = Vector2.Perpendicular(-beamVect).normalized;
 
             Vector2 end = perp * (fireBeam.endWidth / 2);
             Vector2 start = perp * (fireBeam.startWidth / 2);
 
+            float m = Pupil.transform.localScale.x * Pupil.transform.parent.localScale.x;
+
             collider.points = new Vector2[]
             {
-                end, -end,
+                end / m, -end / m,
 
-                hit - start,
-                hit + start,
+                (beamVect - start) / m,
+                (beamVect + start) / m,
             };
         }
 
