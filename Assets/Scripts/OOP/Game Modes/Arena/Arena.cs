@@ -49,10 +49,10 @@ namespace Scripts.OOP.Game_Modes.Arena
 
         public override void MemberDestroyed(BaseController member)
         {
+            base.MemberDestroyed(member);
             if(member is PlayerController player)
             {
                 player.cam.Detach();
-                base.MemberDestroyed(member);
                 return;
             }
 
@@ -68,8 +68,6 @@ namespace Scripts.OOP.Game_Modes.Arena
 
                 switchWeapon = 0;
             }
-
-            base.MemberDestroyed(member);
         }
 
         public void Elimination(BaseController victim, BaseController killer)

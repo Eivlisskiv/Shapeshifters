@@ -2,6 +2,7 @@
 using Scripts.OOP.TileMaps.Procedural;
 using Scripts.UI.InGame.Objectives;
 using Scripts.UI.InGame.Objectives.ObjectivePresets.Spawns;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,13 +15,21 @@ namespace Scripts.OOP.Game_Modes.Arena
         private Text countProgress;
         private int eliminations;
 
+        private Target_Enemy bossObjective;
+
+        private ObjectiveElement minionsObjective;
+        private Text minionProgress;
+
         private float spawnCooldown = 10;
 
-        private Target_Enemy enemyObjective;
+        private List<EnemyController> extras;
 
         public Boss_Arena(MainMenuHandler menu, MapHandler map)
-            : base(menu, map, new PathTable("Boss/", "Pyramid"),
-                  Color.green, Color.red) { }
+            : base(menu, map, new PathTable("Boss/", "Number Four"),
+                  Color.green, Color.red) 
+        {
+            extras = new List<EnemyController>();
+        }
 
         public override void OnUpdate()
         {
@@ -86,20 +95,55 @@ namespace Scripts.OOP.Game_Modes.Arena
 
         public override void MemberDestroyed(BaseController member)
         {
+            base.MemberDestroyed(member);
+
             if (member is PlayerController player)
             {
                 player.cam.Detach();
-                base.MemberDestroyed(member);
                 return;
             }
 
-            eliminations++;
-            countProgress.text = eliminations.ToString();
+            bool wasBoss = member == bossObjective?.Target;
+            int count = GetTeam(1).Count;
 
-            if (member == enemyObjective?.Target)
+            if (wasBoss) //Boss was eliminated
+            {
+                Objectives.Remove(bossObjective);
+
+                eliminations++;
+                countProgress.text = eliminations.ToString();
+
+                if(count > 0) //There are minions left
+                {
+                    minionsObjective = Objectives.CreateObjective("Clean Up", Color.red, func: objElement =>
+                    {
+                        objElement.Get<Text>("Title", t => t.text = "Eliminate the Boss' minions", 2);
+                        minionProgress = objElement.Get<Text>("Progress", t => t.text = count.ToString(), 1);
+                    });
+
+                    return;
+                }
+
                 spawnCooldown = 10;
+                return;
+            }
 
-            base.MemberDestroyed(member);
+            if(count > 0) //Not boss and more minions left
+            {
+                if (minionProgress) minionProgress.text = count.ToString();
+                return;
+            }
+
+            //Extra enemies were wiped
+            Objectives.Remove(minionsObjective);
+
+            spawnCooldown = 10;
+        }
+
+        protected override void ExtraMemberAdded(int team, BaseController controller)
+        {
+            base.ExtraMemberAdded(team, controller);
+            if (team == 1 && minionProgress) minionProgress.text = GetTeam(1).Count.ToString();
         }
 
         private void SpawnBoss(int team, int level)
@@ -110,10 +154,10 @@ namespace Scripts.OOP.Game_Modes.Arena
             CustomLevels.ObjectiveData data = new CustomLevels.ObjectiveData
                 ("Target Enemy", color, 10, "Boss Fight", bossPath, team, level);
 
-            enemyObjective = ObjectiveHandler.Instance
+            bossObjective = ObjectiveHandler.Instance
                 .CreateObjective<Target_Enemy>(data.id, data.color, data);
 
-            enemyObjective.Track = enemyObjective.Target.transform;
+            bossObjective.Track = bossObjective.Target.transform;
         }
 
         protected override void AddSpawns(string category, params string[] names) { }

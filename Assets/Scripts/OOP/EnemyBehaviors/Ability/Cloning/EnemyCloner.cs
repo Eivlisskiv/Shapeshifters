@@ -34,6 +34,7 @@ namespace Scripts.OOP.EnemyBehaviors.Ability.Cloning
 
             character = Object.Instantiate(character);
             EnemyController clone = character.GetComponent<EnemyController>();
+
             clones.Add(clone);
 
             clone.settings.size = size;
@@ -41,21 +42,20 @@ namespace Scripts.OOP.EnemyBehaviors.Ability.Cloning
 
             clone.Set(System.Math.Max(1, parent.Level - 1));
 
-
-            clone.transform.position = parent.transform.position
-                + new Vector3(0, (size * 2) + 2);
-
             if (GameModes.GameMode != null)
+            {
                 GameModes.GameMode.AddMember(parent.Team, clone, true);
+                GameModes.GameMode.RandomMapPosition(clone.transform);
+            }
             else
             {
+                clone.transform.position = parent.transform.position
+                + new Vector3(0, (size * 2) + 2);
+
                 clone.Team = parent.Team;
                 clone.SetColor(0, parent.GetColor(0));
                 clone.settings.targettingBehavior = "TestPlayerTarget";
             }
-
-            clone.transform.localScale = new Vector3(0, 0, 0);
-            clone.transform.TweenScale(new Vector3(1, 1, 1), 0.25f);
 
             spawns++;
 

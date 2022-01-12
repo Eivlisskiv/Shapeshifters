@@ -19,7 +19,7 @@ namespace Scripts.OOP.EnemyBehaviors.Ability.Cloning
 
         private float cooldown = 5;
         
-        public EnemySpawner() : base(GetRandomEnemy(), true, 5) { }
+        public EnemySpawner() : base(GetRandomEnemy(), true) { }
 
         public override void Initialize(BaseController self)
         {

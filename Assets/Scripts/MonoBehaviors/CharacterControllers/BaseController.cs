@@ -82,14 +82,18 @@ public abstract class BaseController : HealthEntity,
         Body.SetColor(0, _colors[0]);
         Body.SetColor(1, _colors[1]);
 
-        var size = transform.localScale;
-        transform.localScale = Vector3.zero;
-        transform.Tween<Transform, Vector3, ScaleTween>(size, 2, easing: ElasticEasing.Out);
+        ScaleSpawn();
 
         OnStart();
 
         if (stats == null) stats = new Stats(30 + (Level / 5));
         if (perks == null) perks = new PerksHandler();
+    }
+
+    public void ScaleSpawn()
+    {
+        transform.localScale = Vector3.zero;
+        transform.Tween<Transform, Vector3, ScaleTween>(Vector2.one, 2, easing: ElasticEasing.Out);
     }
 
     // Update is called once per frame
@@ -214,7 +218,7 @@ public abstract class BaseController : HealthEntity,
                 return;
             }
 
-            ModifyHealth(-1);
+            GameModes.GameMode?.RespawnController(this);
         }
     }
 

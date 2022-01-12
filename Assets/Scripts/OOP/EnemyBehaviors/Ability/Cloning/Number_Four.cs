@@ -2,7 +2,7 @@
 {
     public class Number_Four : EnemyCloner, IBossAbility
     {
-        public Number_Four() : base("Boss/Number Four", true, 5) { }
+        public Number_Four() : base("Boss/Number Four", true, 10) { }
 
         public override void Initialize(BaseController self)
         {
@@ -17,8 +17,8 @@
             if (self.stats.HPP > 0 && self.stats.HPP <= next)
             {
                 EnemyController clone = Clone(self);
-                if (clone.settings.size < 2)
-                    clone.settings.abilityBehavior = "NoAbility";
+
+                clone.settings.abilityBehavior = "NoAbility";
             }
         }
     }

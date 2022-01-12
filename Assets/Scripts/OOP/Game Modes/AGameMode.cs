@@ -118,6 +118,17 @@ namespace Scripts.OOP.Game_Modes
             item.transform.position = map.Current.MapPosition(map.Current.RandomSpawn());
         }
 
+        public void RandomMapPosition(Transform transform)
+        {
+            transform.transform.position = map.Current.MapPosition(map.Current.RandomSpawn());
+        }
+
+        public void RespawnController(BaseController controller)
+        {
+            RandomMapPosition(controller.transform);
+           controller.ScaleSpawn();
+        }
+
         public EnemyController SpawnEnemy(GameObject mob, int team, int level, Vector2Int? coords = null)
         {
             if (mob.IsPrefab()) mob = Object.Instantiate(mob);
@@ -157,7 +168,21 @@ namespace Scripts.OOP.Game_Modes
         }
 
         public virtual void MapEntered(RoomHandler room, Collider2D subject) { }
-        public virtual void MapExited(RoomHandler room, Collider2D subject) { }
+
+        public virtual void MapExited(RoomHandler room, Collider2D subject)
+        {
+            if (subject.gameObject.TryGetComponent(out EnemyController controller))
+            {
+                if (!controller || controller.Consumed) return;
+
+                Debug.Log($"{controller.name} left {room.name} at {controller.transform.position}");
+                //RespawnController(controller);
+                return;
+            }
+
+            if (room == map.Current && subject.gameObject.TryGetComponent(out PlayerController player))
+                RespawnController(player);
+        }
 
         public List<BaseController> GetTeam(int team) 
             => teams[team];
