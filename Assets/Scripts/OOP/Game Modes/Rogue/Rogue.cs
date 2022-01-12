@@ -24,6 +24,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
         private float cooldown;
         private int level;
 
+        private EnemyController boss;
         private bool isBoss;
 
         private int SpawnsLeft
@@ -65,7 +66,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
             GameObject shopPrefab = Resources.Load<GameObject>(RessourcePath + "Shop");
             cratePrefab = Resources.Load<GameObject>(RessourcePath + "Crate");
-            shop = Object.Instantiate(shopPrefab, menu.transform.parent).GetComponent<ShopHandler>();
+            shop = Object.Instantiate(shopPrefab, menu.transform.parent.GetChild(0)).GetComponent<ShopHandler>();
             shop.gameObject.SetActive(false);
 
             bossesPaths = new string[]
@@ -111,11 +112,9 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
             UpdateProgress();
 
-            if (GetTeam(1).Count == 0 && SpawnsLeft == 0)
-            {
-                if (isBoss && member is EnemyController boss) BossDrop(boss);
-                FinishWave();
-            }
+            if (isBoss && member == boss) BossDrop();
+
+            if (GetTeam(1).Count == 0 && SpawnsLeft == 0) FinishWave();
         }
 
         private void FinishWave()
@@ -228,8 +227,12 @@ namespace Scripts.OOP.Game_Modes.Rogue
         protected override void OnReady()
         {
             objective = Objectives.CreateObjective("Main", Color.red);
-            objective.Get<Text>("Title").text = "Eliminate all the enemies.";
-            objective.Get<Text>("Objective").text = "Enemies Left: ";
+            objective.Get<Text>("Title", t => t.text = "Eliminate all the enemies.", 1.3f);
+            objective.Get<Text>("Objective", t =>
+            {
+                t.text = "Enemies Left: ";
+                t.alignment = TextAnchor.MiddleCenter;
+            });
 
             progress = objective.Get<Text>("Progress", t =>
             {
@@ -296,10 +299,12 @@ namespace Scripts.OOP.Game_Modes.Rogue
             CustomLevels.ObjectiveData data = new CustomLevels.ObjectiveData
                 ("Target Enemy", color, 10, "Boss Fight", $"Boss/{bossName}", team, level);
 
-            objective = ObjectivePreset.Create(data);
+            Target_Enemy obj = ObjectiveHandler.Instance.CreateObjective<Target_Enemy>(data.id, data.color, data);
+            objective = obj;
+            boss = obj.Target;
         }
 
-        private void BossDrop(EnemyController boss)
+        private void BossDrop()
         {
             maxSpawns++;
             points += level;
@@ -307,6 +312,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
             GameObject crate = Object.Instantiate(cratePrefab);
             crate.transform.position = boss.transform.position;
             crate.transform.localScale = new Vector3(0.25f, 0.25f, 1);
+            boss = null;
         }
 
         public void ControllerLevelUp(BaseController controller)

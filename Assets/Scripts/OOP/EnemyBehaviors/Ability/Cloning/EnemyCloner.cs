@@ -41,6 +41,7 @@ namespace Scripts.OOP.EnemyBehaviors.Ability.Cloning
 
             clone.Set(System.Math.Max(1, parent.Level - 1));
 
+
             clone.transform.position = parent.transform.position
                 + new Vector3(0, (size * 2) + 2);
 

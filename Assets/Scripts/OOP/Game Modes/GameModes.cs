@@ -37,7 +37,18 @@ namespace Scripts.OOP.Game_Modes
                     "\n Purchase perks after each room.",
                     storyRequirement = ( 1, 3 )
                 }
+            },
+
+#if UNITY_EDITOR
+            {
+                typeof(Arena.Boss_Arena),
+                new ModeData()
+                {
+                    description ="Fight bosses.",
+                    storyRequirement = ( 1, 3 )
+                }
             }
+#endif
         };
 
         public class ModeData

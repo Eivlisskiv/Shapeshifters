@@ -7,7 +7,7 @@
 
     interface IElimination
     {
-        void Elimenation(BaseController victim, BaseController killer);
+        void Elimination(BaseController victim, BaseController killer);
     }
 
     interface IRogueMenu

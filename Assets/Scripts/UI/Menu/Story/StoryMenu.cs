@@ -27,6 +27,8 @@ namespace Scripts.UI.Menu.Story
         [NonSerialized]
         public MainMenuHandler mainMenu;
 
+        private GameObject episodeScrollView;
+
         private GeneralButton[] chapters;
 
         private GeneralButton[][] episodes;
@@ -94,7 +96,7 @@ namespace Scripts.UI.Menu.Story
             return btn;
         }
 
-        public void InitializeChapters()
+        public void Initialize()
         {
             if (chapters != null) return;
 
@@ -121,6 +123,8 @@ namespace Scripts.UI.Menu.Story
 
 
             episodes = new GeneralButton[chapters.Length][];
+
+            episodeScrollView = episodeContent.parent.parent.gameObject;
         }
 
         private void SelectChapter(int index)
@@ -130,9 +134,13 @@ namespace Scripts.UI.Menu.Story
             if (selectedChapter >= 0) chapters[selectedChapter].ChangeFocus(false);
             selectedChapter = index;
 
+            if (!episodeScrollView.activeSelf) episodeScrollView.SetActive(true);
+
             GeneralButton.GroupOffStatus("StoryMenuEpisode");
             details.SetActive(false);
             selectedEpisode = -1;
+
+            
 
             if (episodes[index] == null) CreateEpisodes(index);
 
@@ -294,6 +302,7 @@ namespace Scripts.UI.Menu.Story
 
             details.SetActive(false);
             selectedWindow.SetActive(false);
+            episodeScrollView.SetActive(false);
 
             mainMenu.StartStory(selectedChapter, selectedEpisode);
 

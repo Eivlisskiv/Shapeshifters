@@ -18,7 +18,6 @@ public class MainMenuHandler : MonoBehaviour
     private enum MenuAction { None, Loading, GameOver }
 
     public GameOverHandler gameOver;
-    public GameObject container;
     public MapHandler map;
 
     public GameObject perkDescPrefab;
@@ -28,7 +27,10 @@ public class MainMenuHandler : MonoBehaviour
     public GameObject instructions;
     public GameObject objectivePrefab;
 
-    public Transform gameUIContainer;
+    private Transform gameUIContainer;
+
+    private GameObject container;
+    private GameObject titleText;
 
     private Image background;
 
@@ -54,6 +56,11 @@ public class MainMenuHandler : MonoBehaviour
     void Start()
     {
         sounds = GetComponent<SoundHandler>();
+
+        container = transform.GetChild(0).gameObject;
+
+        titleText = transform.GetChild(1).gameObject;
+
         containerRect = container.GetComponent<RectTransform>();
 
         background = container.transform.GetChild(0).GetComponent<Image>();
@@ -61,7 +68,7 @@ public class MainMenuHandler : MonoBehaviour
         background.transform.SetSiblingIndex(0);
 
         storyMenu.mainMenu = this;
-        storyMenu.InitializeChapters();
+        storyMenu.Initialize();
 
         gameUIContainer = transform.parent.GetChild(0);
     }
@@ -83,7 +90,8 @@ public class MainMenuHandler : MonoBehaviour
     private void SwitchTab(RectTransform tab)
     {
         const float speed = 1f;
-        const float width = 650f;
+        const float width = 800f;
+        const float left = width * 0.6f;
 
         if (openTab == tab) return;
 
@@ -106,13 +114,13 @@ public class MainMenuHandler : MonoBehaviour
             else  //Closing tab
             {
                 containerRect.Tween<Transform, Vector3, PositionTween>(
-                containerRect.localPosition + new Vector3(width / 2, 0), speed / 2.5f);
+                containerRect.localPosition + new Vector3(left, 0), speed / 2.5f);
             }
         }
         else if (tab) //opening from no tab
         {
             containerRect.Tween<Transform, Vector3, PositionTween>(
-            containerRect.localPosition - new Vector3(width / 2, 0), speed / 2.5f);
+            containerRect.localPosition - new Vector3(left, 0), speed / 2.5f);
 
             if (tab) 
             {
@@ -238,6 +246,13 @@ public class MainMenuHandler : MonoBehaviour
         SwitchTab(tab);
     }
 
+    internal void Hide(bool hide)
+    {
+        container.SetActive(!hide);
+        titleText.SetActive(!hide);
+        background.gameObject.SetActive(!hide);
+    }
+
     public void SetStartButton(bool active)
     {
         if (arcade) arcade.Enabled = active;
@@ -273,7 +288,7 @@ public class MainMenuHandler : MonoBehaviour
     private void EndGame()
     {
         gameOver.gameObject.SetActive(false);
-        container.SetActive(true);
+        Hide(false);
         GameModes.GameMode.UpdateMenu(this);
         GameModes.GameMode.SaveProgress();
         GameModes.GameMode.EndGame();

@@ -72,7 +72,7 @@ namespace Scripts.OOP.Game_Modes.Arena
             base.MemberDestroyed(member);
         }
 
-        public void Elimenation(BaseController victim, BaseController killer)
+        public void Elimination(BaseController victim, BaseController killer)
         {
             if (!victim || !killer) return;
 
@@ -93,16 +93,22 @@ namespace Scripts.OOP.Game_Modes.Arena
 
         protected override void OnReady()
         {
-            mainObjective = Objectives.CreateObjective("Main", Color.red);
-            mainObjective.Get<Text>("Title").text = "Eliminate enemies.";
-            mainObjective.Get<Text>("Objective").text = "Eliminations: ";
+            mainObjective = Objectives.CreateObjective("Main", Color.red,
+                func: objElement =>
+                {
+                    objElement.Get<Text>("Title", t => t.text = "Eliminate enemies.", 1.5f);
+                    objElement.Get<Text>("Objective", t =>
+                    {
+                        t.text = "Eliminations: ";
+                        t.alignment = TextAnchor.MiddleCenter;
+                    });
+                });
 
-            progress = mainObjective.Get<Text>("Progress", t => 
+            progress = mainObjective.Get<Text>("Progress", t =>
             {
                 t.text = "0";
                 t.alignment = TextAnchor.MiddleCenter;
             });
-
 
             spawns = true;
         }

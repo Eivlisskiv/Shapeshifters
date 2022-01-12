@@ -19,7 +19,7 @@ public class MachineGun : Weapon
         totalDamage = 3;
         life = 5;
         speed = 50;
-        accuracy = 20;
+        accuracy = 15;
     }
 
     protected override ProjectileHandler FireProjectiles(BaseController sender, 

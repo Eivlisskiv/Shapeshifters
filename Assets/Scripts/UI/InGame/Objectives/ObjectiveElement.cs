@@ -78,7 +78,7 @@ namespace Scripts.UI.InGame.Objectives
             handler.Events.CleanInstace(this);
         }
 
-        public T Get<T>(string name, Action<T> action = null) where T : Graphic
+        public T Get<T>(string name, Action<T> action = null, float width = 1) where T : Graphic
         {
             T t;
             if (elements.TryGetValue(name, out ObjectiveContent content))
@@ -94,7 +94,7 @@ namespace Scripts.UI.InGame.Objectives
 
             InitializeDefaults(t);
             action?.Invoke(t);
-            Add(gameObject);
+            Add(gameObject, width);
             return t;
         }
 
@@ -107,10 +107,13 @@ namespace Scripts.UI.InGame.Objectives
 
         public void Add(GameObject obj, float width = 1)
         {
-            obj.transform.SetParent(container, true);
+            var scale = obj.transform.localScale;
+            obj.transform.SetParent(container);
+            obj.transform.localScale = scale;
+
             elements.Add(obj.name, new ObjectiveContent(obj, width));
             widthWeights += width;
-            if (!IsSpawning) UpdateWidths();
+            if (!constructing) UpdateWidths();
         }
 
         public void ChangeWidth(string key, float width)
@@ -130,7 +133,8 @@ namespace Scripts.UI.InGame.Objectives
 
         private void UpdateWidth(ObjectiveContent content)
         {
-            float width = InnerRect.rect.width * content.width / widthWeights;
+            float tsize = /*constructing || IsSpawning ? 650 :*/ InnerRect.rect.width;
+            float width = tsize * content.width / widthWeights;
             content.rect.sizeDelta = new Vector2(width, content.rect.sizeDelta.y);
         }
 

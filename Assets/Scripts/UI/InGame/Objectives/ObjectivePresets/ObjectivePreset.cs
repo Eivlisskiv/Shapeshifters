@@ -50,12 +50,12 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets
         protected override void OnRemoved(ObjectiveHandler handler)
         {
             base.OnRemoved(handler);
-            Game.ObjectiveEvents.CleanInstace(this);
+            Game?.ObjectiveEvents?.CleanInstace(this);
         }
 
         protected virtual void Completed()
         {
-            Game.Score += scoreReward;
+            if(Game != null) Game.Score += scoreReward;
             Handler.Remove(this);
         }
 

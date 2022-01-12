@@ -208,7 +208,7 @@ namespace Scripts.OOP.Game_Modes
         {
             loaded = true;
             menu.SetStartButton(true);
-            menu.container.SetActive(false);
+            menu.Hide(true);
 
             Objectives = menu.SpawnGameUI(description, OnReady);
 

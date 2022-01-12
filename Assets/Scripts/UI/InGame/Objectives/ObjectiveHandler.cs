@@ -76,6 +76,28 @@ namespace Scripts.UI.InGame.Objectives
             return oe;
         }
 
+        public T CreateObjective<T>(string name,
+            Color color = default, ObjectiveData data = null,
+            System.Action<ObjectiveElement> func = null)
+            where T : ObjectiveElement
+        {
+            GameObject element = Instantiate(elementPrefab);
+            element.name = name;
+
+            var image = element.GetComponent<Image>();
+            if (image) image.color = color;
+
+            T oe = (T)System.Activator.CreateInstance(typeof(T), element, data);
+
+            func?.Invoke(oe);
+
+            Add(oe);
+
+            Events.Invoke(EventTypes.Created, this, (ObjectiveElement)oe);
+
+            return oe;
+        }
+
         private void Add(ObjectiveElement element)
         {
             Current?.Shrink();

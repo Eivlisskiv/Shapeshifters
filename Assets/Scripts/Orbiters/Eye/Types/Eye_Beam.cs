@@ -10,7 +10,7 @@ namespace Scripts.Orbiters.Eye.Types
 {
     public class Eye_Beam : EyeOrbiterType
     {
-        const float growthSpeed = 8;
+        const float growthSpeed = 16;
         const float aimSpeed = 20;
 
         protected override float FireDuration => 10;

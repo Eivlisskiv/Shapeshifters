@@ -349,7 +349,7 @@ public abstract class BaseController : HealthEntity,
     public void OnKill(BaseController target)
     {
         AddXP(target.Xp + (target.XPRequired / (Level + 2) ));
-        GameModes.Run<IElimination>(mode => mode.Elimenation(target, this));
+        GameModes.Run<IElimination>(mode => mode.Elimination(target, this));
     }
 
     private void AddXP(float amount)

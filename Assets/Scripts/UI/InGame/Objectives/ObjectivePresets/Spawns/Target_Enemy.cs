@@ -8,7 +8,7 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Spawns
 {
     public class Target_Enemy : ObjectivePreset, IControllerElimenated
     {
-        private EnemyController target;
+        public EnemyController Target { get; private set; }
 
         public Target_Enemy(GameObject element, ObjectiveData data = null) : base(element, data) { }
 
@@ -36,7 +36,7 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Spawns
             GameObject obj = Resources.Load<GameObject>("Enemies/" + target_path);
             if (!obj) obj = Resources.Load<GameObject>("Enemies/Regular/Tier1/Regular");
 
-            target = GameModes.GameMode.SpawnEnemy(obj, team, level);
+            Target = GameModes.GameMode.SpawnEnemy(obj, team, level);
         }
 
         private void SetIcon()
@@ -44,7 +44,7 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Spawns
             Components.CreateGameObject<Image>(out GameObject skullObj, 
                 "Skull", null, img => 
                 {
-                    img.sprite = Resources.Load<Sprite>($"Sprites/Bosses/{target.Name}/Icon");
+                    img.sprite = Resources.Load<Sprite>($"Sprites/Bosses/{Target.Name}/Icon");
                     if (!img.sprite) img.sprite = Resources.Load<Sprite>("Sprites/Bosses/Skull");
                 });
 
@@ -57,17 +57,17 @@ namespace Scripts.UI.InGame.Objectives.ObjectivePresets.Spawns
             if (!bar) return;
 
             bar = Object.Instantiate(bar);
-            bar.name = $"{target.Name} Health";
+            bar.name = $"{Target.Name} Health";
             //bar.GetComponent<AspectRatioFitter>().enabled = false;
 
             Add(bar, 0.6f);
 
-            target.SetHealthBar(bar.transform);
+            Target.SetHealthBar(bar.transform);
         }
 
         public void Progress(AGameMode game, BaseController elimenated)
         {
-            if (elimenated != target) return;
+            if (elimenated != Target) return;
 
             Handler.Remove(this);
         }

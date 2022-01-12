@@ -169,7 +169,6 @@ namespace Scripts.OOP.TileMaps.Procedural
             int margin = spacing + (borderWidth * 2);
             return x < margin || x > size.x - margin;
         }
-                
 
         public bool Next(Vector2Int border)
         {

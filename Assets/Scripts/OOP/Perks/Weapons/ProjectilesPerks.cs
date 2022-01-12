@@ -22,7 +22,7 @@ namespace Scripts.OOP.Perks.Weapons
 
         protected override string GetDescription()
             => $"Has a {Stat(Mathf.Floor(SpawnChance) + "%")} chance to drop a mine when firing. " +
-            $"Mine's explosion deals up to {Stat(Intensity * 2)} damage.";
+            $"Mine's explosion deals up to {Stat(5 + (Intensity * 2))} damage.";
 
         public bool OnFire(float angle, Weapon weapon, WeaponStats _)
         {
@@ -38,7 +38,7 @@ namespace Scripts.OOP.Perks.Weapons
                 landmine.transform.Tween<Transform, Vector3, ScaleTween>
                     (scale, 0.5f, 0.2f, callback: () => 
                     {
-                        landmine.Activate(Intensity * 2, Force, controller);
+                        landmine.Activate(5 + (Intensity * 2), Force, controller);
                         landmine.BodyCollider.isTrigger = false;
                     });
                 return true;

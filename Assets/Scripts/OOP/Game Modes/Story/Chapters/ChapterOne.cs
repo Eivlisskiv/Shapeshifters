@@ -555,8 +555,8 @@ namespace Scripts.OOP.Game_Modes.Story.Chapters
 
                     new ObjectiveData("Spawn Prop", new Color(196/255f, 129/255f, 67/255f), 2, "Collect module/perk",  
                         "Props/Perks/PerkModule", "Thorns", 5, 0, 0),
-                    new ObjectiveData("Spawn Prop", new Color(196/255f, 129/255f, 67/255f), 2, 
-                        "[charging round] increases projectile damage over airtime", "Props/Perks/PerkModule", "Thorns", 5, 0, 0),
+                    new ObjectiveData("Spawn Prop", new Color(196/255f, 129/255f, 67/255f), 2,
+                        "[Thorns] grant impact damage", "Props/Perks/PerkModule", "Thorns", 5, 0, 0),
 
                     new ObjectiveData("Waves", Color.red, 20, "Survive The waves", 1, new (string, int)[][]
                     {
