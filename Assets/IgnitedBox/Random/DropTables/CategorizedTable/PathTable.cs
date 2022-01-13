@@ -14,6 +14,9 @@
         protected override void Set(int index, string value)
             => items[index] = value;
 
+        public override bool Contains(string item)
+            => items.Contains(item);
+
         private protected override int DropIndex()
             => RandomInt(Count);
     }

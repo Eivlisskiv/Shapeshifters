@@ -19,8 +19,8 @@ namespace Scripts.OOP.Game_Modes
                 case 4: AddSpawns("Regular/Tier2/", "Flamer"); break;
                 case 5: AddSpawns("Regular/Tier2/", "Gunner"); break;
                 case 6: AddSpawns("Regular/Tier2/", "Pirate"); break;
-                case 8: AddSpawns("Special/", "Cloner"); break;
-                case 10: AddSpawns("Special/", "Eye Holder"); break;
+                case 8: AddSpawns("Special/", "Eye Holder"); break;
+                case 10: AddSpawns("Special/", "Cloner"); break;
             }
         }
 

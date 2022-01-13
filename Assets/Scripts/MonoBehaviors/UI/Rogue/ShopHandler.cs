@@ -87,9 +87,12 @@ public class ShopHandler : MonoBehaviour
         }
     }
 
-    public void PurchasePerk()
+    public void PurchasePerk(GeneralButton button)
     {
-        if(!selected.HasValue) return;
+        button.ChangeSelect(false);
+        button.ChangeFocus(false);
+
+        if (!selected.HasValue) return;
 
         (Perk perk, Text title, Text desc) = selected.Value;
 
@@ -112,8 +115,11 @@ public class ShopHandler : MonoBehaviour
         desc.text = perk.Description;
     }
 
-    public void Continue()
+    public void Continue(GeneralButton button)
     {
+        button.ChangeSelect(false);
+        button.ChangeFocus(false);
+
         mode.MenuClosed();
         gameObject.SetActive(false);
     }

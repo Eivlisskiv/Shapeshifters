@@ -23,7 +23,7 @@ namespace Scripts.OOP.Game_Modes.Arena
         private int switchWeapon;
 
         public Arena(MainMenuHandler menu, MapHandler map) 
-            : base(menu, map, new ExpTable<PathTable>(1.01, 
+            : base(menu, map, new ExpTable<PathTable>(1.15, 
                 new PathTable("Regular/Tier1/", "Regular")
                 ), Color.green, Color.red)
         {

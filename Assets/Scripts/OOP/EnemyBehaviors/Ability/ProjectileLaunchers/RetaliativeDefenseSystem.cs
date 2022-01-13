@@ -1,4 +1,6 @@
-﻿using Scripts.MonoBehaviors.Weapons.Other;
+﻿using IgnitedBox.Tweening.TweenPresets;
+using Scripts.MonoBehaviors.Weapons.Other;
+using UnityEngine;
 
 namespace Scripts.OOP.EnemyBehaviors.Ability.ProjectileLaunchers
 {
@@ -19,7 +21,7 @@ namespace Scripts.OOP.EnemyBehaviors.Ability.ProjectileLaunchers
         private int charges;
 
         public RetaliativeDefenseSystem(float cooldownTime = 15, int maxCharges = 3,
-            float damage = 20, float range = 10, float force = 1,
+            float damage = 20, float range = 10, float force = 10,
             float statsMultiplier = 0.1f,
             string projectile = "Projectiles/Missile") 
             : base(projectile) 
@@ -65,9 +67,14 @@ namespace Scripts.OOP.EnemyBehaviors.Ability.ProjectileLaunchers
 
             if (!base.TryInstantiate(out _, out Missile missile)) return;
 
-            missile.transform.position = self.transform.position;
+            Vector3 pos = self.transform.position;
+            missile.transform.position = pos;
+
+            missile.RigidBody.velocity = (attacker.transform.position - pos).normalized * 5;
+
             missile.Activate(damage * m, force * m, self, attacker.transform);
             missile.explosion.Range = range * m;
+
 
             charges--;
         }

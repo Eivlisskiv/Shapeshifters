@@ -20,12 +20,12 @@ namespace Scripts.OOP.Game_Modes.Arena
         private ObjectiveElement minionsObjective;
         private Text minionProgress;
 
-        private float spawnCooldown = 10;
+        private float spawnCooldown = 3;
 
         private List<EnemyController> extras;
 
         public Boss_Arena(MainMenuHandler menu, MapHandler map)
-            : base(menu, map, new PathTable("Boss/", "Number Four"),
+            : base(menu, map, new PathTable("Boss/", "PRDS"),
                   Color.green, Color.red) 
         {
             extras = new List<EnemyController>();
@@ -124,7 +124,7 @@ namespace Scripts.OOP.Game_Modes.Arena
                     return;
                 }
 
-                spawnCooldown = 10;
+                spawnCooldown = 5;
                 return;
             }
 

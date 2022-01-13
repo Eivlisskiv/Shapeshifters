@@ -6,35 +6,69 @@ namespace Scripts.MonoBehaviors.Weapons.Other
 {
     public class Missile : OtherProjectile
     {
-        public Transform spinner;
+        const float speed = 12f;
+        const float rotSpeed = speed / 4;
+
+        private ParticleSystem[] particles;
 
         public GameObject body;
         
         public FireworkExplosionHandler explosion;
 
+        public Rigidbody2D RigidBody
+        {
+            get
+            {
+                if (!_rigidBody) _rigidBody = GetComponent<Rigidbody2D>();
+                return _rigidBody;
+            }
+        }
+        private Rigidbody2D _rigidBody;
+
         private Transform target;
-        Vector3 velocity;
 
         private void Update()
         {
             if (!active) return;
-            Move();
             Spin();
+            Move();
+            
         }
 
         private void Spin()
         {
-            spinner.rotation = Quaternion.Euler(spinner.rotation.eulerAngles + new Vector3(0, 0, velocity.magnitude / 5));
+            Transform spin = body.transform;
+            spin.rotation = Quaternion.Euler(spin.rotation.eulerAngles + new Vector3(0, 0, RigidBody.velocity.magnitude * rotSpeed));
         }
 
         private void Move()
         {
-            Vector3 diff = (target.position - transform.position).normalized * 3.5f;
-            velocity += diff;
+            if (!target) return;
 
-            transform.position += velocity * Time.deltaTime;
+            Vector2 diff = (target.position - transform.position).normalized * speed;
+            RigidBody.velocity += diff * Time.deltaTime;
 
-            velocity *= 0.9f;
+        }
+
+        public void SetColor(Color color)
+        {
+            if (particles == null)
+            {
+                particles = new ParticleSystem[3];
+                particles[0] = body.GetComponent<ParticleSystem>();
+                for (int i = 1; i < particles.Length; i++)
+                {
+                    var a = body.transform.GetChild(i - 1);
+                    particles[i] = a.GetComponent<ParticleSystem>();
+                }
+            }
+
+
+            for (int i = 0; i < particles.Length; i++)
+            {
+                var main = particles[i].main;
+                main.startColor = color;
+            }
         }
 
         public void Activate(float damage, float force, BaseController owner, Transform target)
@@ -54,7 +88,7 @@ namespace Scripts.MonoBehaviors.Weapons.Other
             {
                 explosion.Sender = owner;
                 Physics2D.IgnoreCollision(BodyCollider, owner.Body.Collider);
-                body.GetComponent<SpriteRenderer>().color = owner.GetColor(0);
+                SetColor(owner.GetColor(0));
             }
 
             BodyCollider.enabled = true;
@@ -62,7 +96,7 @@ namespace Scripts.MonoBehaviors.Weapons.Other
 
         public override void OnCollide(Collider2D collision)
         {
-            if (!active || collision.gameObject == owner.gameObject) return;
+            if (!active || (owner && collision.gameObject == owner.gameObject)) return;
 
             OnHit(null);
             
@@ -78,7 +112,10 @@ namespace Scripts.MonoBehaviors.Weapons.Other
         {
             base.Destroy();
 
-            Destroy(body);
+            for (int i = 0; i < particles.Length; i++)
+                particles[i].Stop();
+
+            Destroy(body, explosion.Duration + 0.5f);
             Destroy(gameObject, explosion.Duration + 0.5f);
         }
     }

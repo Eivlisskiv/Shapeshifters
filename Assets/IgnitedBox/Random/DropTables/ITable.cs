@@ -31,6 +31,11 @@ namespace IgnitedBox.Random.DropTables
         }
     }
 
+    /// <summary>
+    /// A drop table containing a list of TList items which returns TItem items;
+    /// </summary>
+    /// <typeparam name="TItem">The type of what is returned by the table;</typeparam>
+    /// <typeparam name="TList">The type that the table actually stores;</typeparam>
     public abstract class DropTable<TItem, TList> : Table
     {
         protected readonly List<TList> items;
@@ -60,6 +65,9 @@ namespace IgnitedBox.Random.DropTables
         //List manipulation
 
         protected virtual void OnListChanged() { }
+
+        public virtual bool Contains(TItem item)
+            => items.FindIndex(i => i.Equals(item)) >= 0;
 
         public virtual void Add(TList item)
         {

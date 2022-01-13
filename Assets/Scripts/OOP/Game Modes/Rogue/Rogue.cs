@@ -56,7 +56,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
             = new List<PlayerController>();
 
         public Rogue(MainMenuHandler menu, MapHandler map)
-            : base(menu, map, new ExpTable<PathTable>(1.01,
+            : base(menu, map, new ExpTable<PathTable>(1.15,
                 new PathTable("Regular/Tier1/", "Regular")
                 ), Color.green, Color.red)
         {
@@ -70,7 +70,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
             shop.gameObject.SetActive(false);
 
             bossesPaths = new string[]
-            { "Pyramid", "Number Four" };
+            { "Pyramid", "Number Four", "PRDS" };
         }
 
         public override void OnUpdate()
@@ -273,24 +273,6 @@ namespace Scripts.OOP.Game_Modes.Rogue
             UpdateProgress();
         }
 
-        private bool SpaceForBossSpawn(Vector2Int coords, int size)
-        {
-            var room = map.Current;
-
-            bool __checkDir(Vector2Int dir)
-            {
-                for (int i = 1; i <= size; i++)
-                    if (room.GetTile(coords + (dir * i)) != MapTileType.Empty)
-                        return false;
-                return true;
-            }
-
-            return  __checkDir(Vector2Int.up) &&
-                    __checkDir(Vector2Int.down) &&
-                    __checkDir(Vector2Int.left) &&
-                    __checkDir(Vector2Int.right);
-        }
-
         private void SpawnBoss(int team, int level)
         {
             string bossName = bossesPaths.DropOne(out _);
@@ -312,6 +294,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
             GameObject crate = Object.Instantiate(cratePrefab);
             crate.transform.position = boss.transform.position;
             crate.transform.localScale = new Vector3(0.25f, 0.25f, 1);
+            AddSpawns("Special/", boss.name);
             boss = null;
         }
 
@@ -323,11 +306,43 @@ namespace Scripts.OOP.Game_Modes.Rogue
             }
         }
 
+        protected override void ScoreChanged()
+        {
+            //3, 8
+            switch (Score)
+            {
+                case 1: 
+                    //All tiers must be added before Special is added
+                    //as Special must be last to have the smallest drop chance
+                    AddSpawns("Regular/Tier1/", "Sniper");
+                    AddSpawns("Regular/Tier2/", "Gunner");
+                    break;
+                //after 2 is a boss fight
+                //after 3 unlocks boss fight at 2
+                case 4: AddSpawns("Regular/Tier1/", "Bomber"); break;
+                case 5: AddSpawns("Regular/Tier1/", "Tank"); break;
+                case 6: AddSpawns("Regular/Tier2/", "Flamer"); break;
+                //after 7 is a boss fight
+                //after 8 unclocks boss
+                case 9: AddSpawns("Regular/Tier2/", "Pirate"); break;
+            }
+        }
+
         protected override void AddSpawns(string category, params string[] names)
         {
             int sub = spawnTable.FindIndex(t => t.Name == category);
             if (sub < 0) spawnTable.Add(new PathTable(category, names));
-            else spawnTable[sub].AddRange(names);
+            else
+            {
+                PathTable tab = spawnTable[sub];
+                for (int i = 0; i < names.Length; i++)
+                {
+                    string name = names[i];
+                    if (tab.Contains(name)) continue;
+
+                    spawnTable[sub].Add(names[i]);
+                }
+            }
         }
     }
 }
