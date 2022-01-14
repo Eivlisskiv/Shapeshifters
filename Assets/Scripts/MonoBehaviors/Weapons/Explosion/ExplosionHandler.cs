@@ -117,10 +117,20 @@ namespace Scripts.Explosion
         }
 
         public float damage = 10;
-        public BaseController Sender { get; set; }
+        public BaseController Sender
+        {
+            get => _sender;
+            set
+            {
+                _sender = value;
+                _ignoreTeam = _sender.Team;
+            }
+        }
+        private BaseController _sender;
+
         public int IgnoreTeam
         {
-            get => Sender ? Sender.Team : _ignoreTeam;
+            get => _ignoreTeam;
             set
             {
                 if (Sender) return;

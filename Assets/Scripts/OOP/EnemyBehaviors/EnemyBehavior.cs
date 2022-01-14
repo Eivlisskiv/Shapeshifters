@@ -49,7 +49,7 @@ namespace Scripts.OOP.EnemyBehaviors
             this.fire = Load<IFireBehavior, TargetAim>
                 (fire, firingBehaviors);
 
-            this.ability = Load<IAbilitybehavior, NoAbility>
+            this.ability = Load<IAbilitybehavior, None>
                 (ability, abilityBehaviors);
         }
 

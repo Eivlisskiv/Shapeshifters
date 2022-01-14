@@ -1,7 +1,14 @@
-﻿namespace Scripts.OOP.Perks
+﻿using System;
+
+namespace Scripts.OOP.Perks
 {
-    public abstract class Perk
-    { 
+    [System.Serializable]
+    public class Perk
+    {
+        public static implicit operator Perk(string name) => PerksHandler.Load(name);
+
+        public int editor_thing;
+
         private string name;
         public string Name => name ??
             (name = GetType().Name.Replace('_', ' '));
@@ -33,7 +40,8 @@
         protected virtual void Start() { }
 
         //Get\Sets
-        protected abstract string GetDescription();
+        protected virtual string GetDescription()
+            => "Empty Perk";
 
         protected virtual void Rebuild()
         {

@@ -237,7 +237,7 @@ namespace Scripts.OOP.Game_Modes
 
             Objectives = menu.SpawnGameUI(description, OnReady);
 
-            PauseHandler.SetControl(true);
+            PauseMenu.SetControl(true);
         }
 
         protected abstract void OnReady();
@@ -260,7 +260,7 @@ namespace Scripts.OOP.Game_Modes
 
         public virtual void EndGame()
         {
-            PauseHandler.SetControl(false);
+            PauseMenu.SetControl(false);
             map.Clear();
         }
     }

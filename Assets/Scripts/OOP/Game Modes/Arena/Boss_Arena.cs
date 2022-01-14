@@ -79,7 +79,7 @@ namespace Scripts.OOP.Game_Modes.Arena
 
         protected override void OnReady()
         {
-            Objectives.CreateObjective("Main", Color.red,
+            Objectives?.CreateObjective("Main", Color.red,
                 func: objElement =>
                 {
                     objElement.Get<Text>("Title", t => t.text = "Survive the bosses!", 1.5f);

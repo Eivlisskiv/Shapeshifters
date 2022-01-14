@@ -210,7 +210,7 @@ namespace Scripts.UI.InGame.Objectives
                 callback: () => UnityEngine.Object.Destroy(element));
         }
 
-        protected void Bounce()
+        public void Bounce()
         {
             rect.Tween<Transform, Vector3, PositionTween>
                 (rect.localPosition + new Vector3(0, -30, 0),

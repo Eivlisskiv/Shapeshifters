@@ -23,7 +23,7 @@ namespace Scripts.OOP.Game_Modes.Arena
         private int switchWeapon;
 
         public Arena(MainMenuHandler menu, MapHandler map) 
-            : base(menu, map, new ExpTable<PathTable>(1.15, 
+            : base(menu, map, new ExpTable<PathTable>(1.15, 10,
                 new PathTable("Regular/Tier1/", "Regular")
                 ), Color.green, Color.red)
         {
@@ -91,6 +91,8 @@ namespace Scripts.OOP.Game_Modes.Arena
 
         protected override void OnReady()
         {
+            if (!Objectives) return;
+
             mainObjective = Objectives.CreateObjective("Main", Color.red,
                 func: objElement =>
                 {

@@ -90,8 +90,7 @@ namespace IgnitedBox.Tweening
 
         private static string ParseName(string name)
         {
-            name = name.Replace("Tween", "");
-            name = name.Replace('_', ' ');
+            name = name.Replace("Tween", "").Replace('_', ' ');
             name = Regex.Replace(name, "([a-z])([A-Z])", "$1 $2");
             return name;
         }

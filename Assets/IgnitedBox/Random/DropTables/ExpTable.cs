@@ -9,41 +9,55 @@ namespace IgnitedBox.Random.DropTables
 
         const int width = 100;
 
-        public double RateDistribution
+        public double VerticalDistribution
         {
-            get => _curve;
+            get => vCurve;
             set
             {
-                _curve =  value;
+                vCurve =  Math.Max(1, value);
             }
         }
 
-        private double _curve = 1.01;
+        private double vCurve = 1.01;
 
-        public ExpTable(double rateDistribution) : base()
+        public double HorizontalDistribution
         {
-            RateDistribution = rateDistribution;
+            get => hCurve;
+            set
+            {
+                hCurve = Math.Max(1, value);
+            }
         }
 
-        public ExpTable(double rateDistribution, IEnumerable<T> items) : base(items)
+        private double hCurve = 1.01;
+
+        public ExpTable(double verticalDistribution, int horizontalDistribution) : base()
         {
-            RateDistribution = rateDistribution;
+            VerticalDistribution = verticalDistribution;
+            HorizontalDistribution = horizontalDistribution;
         }
 
-        public ExpTable(double rateDistribution, params T[] items) : base(items)
+        public ExpTable(double verticalDistribution, int horizontalDistribution, IEnumerable<T> items) : base(items)
         {
-            RateDistribution = rateDistribution;
+            VerticalDistribution = verticalDistribution;
+            HorizontalDistribution = horizontalDistribution;
+        }
+
+        public ExpTable(double verticalDistribution, int horizontalDistribution, params T[] items) : base(items)
+        {
+            VerticalDistribution = verticalDistribution;
+            HorizontalDistribution = horizontalDistribution;
         }
 
         private protected override int DropIndex()
         {
             if (Count == 0) return -1;
-            if (_curve <= 1) return RandomInt(Count);
+            if (hCurve <= 1) return RandomInt(Count);
 
             double x = RandomDouble(width);
 
-            double a = Count / (Math.Pow(_curve, width) - 1);
-            double y = a * Math.Pow(_curve, x) - a;
+            double a = Count / (Math.Pow(hCurve, width) - 1);
+            double y = a * Math.Pow(hCurve, x) - a;
             return (int)y;
         }
 
@@ -61,11 +75,11 @@ namespace IgnitedBox.Random.DropTables
 
         private double GetRate(int y)
         {
-            if (_curve <= 1) return 1.00 / Count;
+            if (hCurve <= 1) return 1.00 / Count;
 
-            double a = y * (Math.Pow(_curve, width) - 1);
+            double a = y * (Math.Pow(hCurve, width) - 1);
             a = Math.Log((a + Count) / Count);
-            return (a / Math.Log(_curve));
+            return (a / Math.Log(hCurve));
         }
     }
 }

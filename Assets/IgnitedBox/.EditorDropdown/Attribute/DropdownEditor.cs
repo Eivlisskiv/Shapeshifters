@@ -29,7 +29,13 @@ namespace IgnitedBox.EditorDropdown.Attribute
         {
             if (_attribute.Index == null) return;
 
-            int index = _attribute.Index.Length == 1 ? 0 : prop.GetIndex();
+            int index = 0;
+            string name = prop.displayName;
+            if (_attribute.IsList)
+            {
+                index = prop.GetIndex();
+                name = _attribute.FieldName + $" {index}";
+            }
 
             if (_attribute.Index.Length <= index)
             {
@@ -45,7 +51,8 @@ namespace IgnitedBox.EditorDropdown.Attribute
                 selected = _attribute.Index[index];
             }
 
-            int nindex = EditorGUI.Popup(position, prop.displayName,
+            //Draw and get the new selected index as "nindex"
+            int nindex = EditorGUI.Popup(position, name,
                 selected, _attribute.Options);
 
             if (_attribute.SetValue(nindex, index))

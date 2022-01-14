@@ -3,6 +3,7 @@ using IgnitedBox.EditorDropdown.Attribute;
 #endif
 using Scripts.OOP.Perks;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Scripts.OOP.EnemyBehaviors
@@ -10,6 +11,13 @@ namespace Scripts.OOP.EnemyBehaviors
     [Serializable]
     public class EnemySettings
     {
+        public static readonly Dictionary<string, string> miniBosses = new Dictionary<string, string>()
+        {
+            { "Pyramid", "Eye Holder" },
+            { "Number Four", "Cloner" },
+            { "PRDS", "RDS" },
+        };
+
         public string name;
 
         public int baseHealth;
@@ -37,6 +45,7 @@ namespace Scripts.OOP.EnemyBehaviors
         [Dropdown(typeof(EnemyBehavior), "abilityBehaviors.Keys")]
 #endif
         public string abilityBehavior;
+
 #if UNITY_EDITOR
         [Dropdown(typeof(PerksHandler), "perksTypes.Keys")]
 #endif

@@ -1,6 +1,6 @@
 ﻿namespace Scripts.OOP.EnemyBehaviors.Ability
 {
-    public class NoAbility : IAbilitybehavior
+    public class None : IAbilitybehavior
     {
         public void Initialize(BaseController self) { }
     }

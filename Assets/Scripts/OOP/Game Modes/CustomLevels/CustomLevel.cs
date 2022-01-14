@@ -58,6 +58,8 @@ namespace Scripts.OOP.Game_Modes.CustomLevels
 
         protected override void OnReady() 
         {
+            if (!ObjectiveHandler.Instance) return;
+
             NextObjective();
 
             ObjectiveHandler.Instance.Events.Subscribe

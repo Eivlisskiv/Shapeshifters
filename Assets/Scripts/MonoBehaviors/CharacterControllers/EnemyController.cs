@@ -1,6 +1,5 @@
 ﻿using IgnitedBox.Utilities;
 using Scripts.OOP.EnemyBehaviors;
-using Scripts.OOP.Game_Modes;
 using Scripts.OOP.Game_Modes.CustomLevels;
 
 public class EnemyController : BaseController, ILevelProp

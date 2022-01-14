@@ -17,7 +17,8 @@
             if (self.stats.HPP > 0 && self.stats.HPP <= next)
             {
                 EnemyController clone = Clone(self);
-
+                clone.settings.baseHealth = (int)(-self.stats.HPP * self.MaxHealth);
+                clone.settings.bonusHealth = 0;
                 clone.settings.abilityBehavior = "NoAbility";
             }
         }

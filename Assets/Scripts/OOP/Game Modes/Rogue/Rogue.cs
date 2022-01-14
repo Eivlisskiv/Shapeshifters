@@ -1,10 +1,9 @@
 ﻿using IgnitedBox.Random.DropTables;
 using IgnitedBox.Random.DropTables.CategorizedTable;
-using Scripts.OOP.TileMaps;
+using Scripts.OOP.EnemyBehaviors;
 using Scripts.OOP.TileMaps.Procedural;
 using Scripts.OOP.Utils;
 using Scripts.UI.InGame.Objectives;
-using Scripts.UI.InGame.Objectives.ObjectivePresets;
 using Scripts.UI.InGame.Objectives.ObjectivePresets.Spawns;
 using System.Collections.Generic;
 using UnityEngine;
@@ -56,7 +55,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
             = new List<PlayerController>();
 
         public Rogue(MainMenuHandler menu, MapHandler map)
-            : base(menu, map, new ExpTable<PathTable>(1.15,
+            : base(menu, map, new ExpTable<PathTable>(1.15, 10,
                 new PathTable("Regular/Tier1/", "Regular")
                 ), Color.green, Color.red)
         {
@@ -108,6 +107,8 @@ namespace Scripts.OOP.Game_Modes.Rogue
                 return;
             }
 
+            Objectives.Current.Bounce();
+
             points += Mathf.Max(1, (member.Level / 5) * member.Body.Radius);
 
             UpdateProgress();
@@ -122,7 +123,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
             Score++;
             if (!map.Loading.Loaded) map.Loading.SetTilesPerFrame(50);
             stage = Stage.Pausing;
-            PauseHandler.SetControl(false);
+            PauseMenu.SetControl(false);
             cooldown = 5;
         }
 
@@ -139,7 +140,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
             stage = Stage.Resuming;
 
             PauseControllers(false);
-            PauseHandler.SetControl(true);
+            PauseMenu.SetControl(true);
         }
 
         private void ReachNext()
@@ -226,13 +227,15 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
         protected override void OnReady()
         {
+            if (!Objectives) return;
+
             objective = Objectives.CreateObjective("Main", Color.red);
-            objective.Get<Text>("Title", t => t.text = "Eliminate all the enemies.", 1.3f);
+            objective.Get<Text>("Title", t => t.text = "Eliminate all the enemies.", 2.2f);
             objective.Get<Text>("Objective", t =>
             {
                 t.text = "Enemies Left: ";
                 t.alignment = TextAnchor.MiddleCenter;
-            });
+            }, 1.2f);
 
             progress = objective.Get<Text>("Progress", t =>
             {
@@ -279,7 +282,7 @@ namespace Scripts.OOP.Game_Modes.Rogue
 
             Color color = new Color(255, 83, 31);
             CustomLevels.ObjectiveData data = new CustomLevels.ObjectiveData
-                ("Target Enemy", color, 10, "Boss Fight", $"Boss/{bossName}", team, level);
+                ("Target Enemy", color, 10, $"Defeat {bossName}", $"Boss/{bossName}", team, level);
 
             Target_Enemy obj = ObjectiveHandler.Instance.CreateObjective<Target_Enemy>(data.id, data.color, data);
             objective = obj;
@@ -294,7 +297,9 @@ namespace Scripts.OOP.Game_Modes.Rogue
             GameObject crate = Object.Instantiate(cratePrefab);
             crate.transform.position = boss.transform.position;
             crate.transform.localScale = new Vector3(0.25f, 0.25f, 1);
-            AddSpawns("Special/", boss.name);
+
+            if(EnemySettings.miniBosses.TryGetValue(boss.name, out string subBoss))
+                AddSpawns("Special/", subBoss);
             boss = null;
         }
 
