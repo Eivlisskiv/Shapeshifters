@@ -22,7 +22,9 @@ namespace IgnitedBox.UnityUtilities
 
         public static void DestroyChildren(this Transform t)
         {
+            if (!t) return;
             int c = t.childCount;
+            if (c < 1) return;
             for(int i = 0; i < c; i++)
             {
                 var child = t.GetChild(i);

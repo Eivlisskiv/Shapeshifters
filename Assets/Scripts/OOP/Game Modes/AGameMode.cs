@@ -73,7 +73,7 @@ namespace Scripts.OOP.Game_Modes
             scoreNamePath = $"Score_{Name}";
         }
 
-        public abstract (int, int, float, float) LoadProgress();
+        public abstract (string, int, int, float, float) LoadProgress();
 
         public abstract void SaveProgress();
 

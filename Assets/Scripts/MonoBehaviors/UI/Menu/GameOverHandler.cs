@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class GameOverHandler : MonoBehaviour
 {
+    public Text title;
+    public Text tittleBack;
     public Transform topScoreTransform;
     public Transform topTimeTransform;
     public Transform lastScoreTransform;
@@ -29,6 +31,12 @@ public class GameOverHandler : MonoBehaviour
         if (lastScore == null) lastScore = new UITextHandler(lastScoreTransform);
         if (lastTime == null) lastTime = new UITextHandler(lastTimeTransform);
 
+    }
+
+    public void SetTitle(string text)
+    {
+        title.text = text;
+        tittleBack.text = text;
     }
 
     public void SetScores(int tscore, int lscore, float ttime, float ltime)

@@ -184,7 +184,8 @@ public class MainMenuHandler : MonoBehaviour
             GameModes.ModeData data = GameModes.arcadeModes[ui.mode];
             (int chap, int ep) = data.storyRequirement;
             //if(!StoryProgress.Completed(chap, ep)) { }
-            if(story) story.ChangeSelect(true); else arcade.ChangeSelect(false);
+            if(story) story.ChangeSelect(true);
+            if (arcade) arcade.ChangeSelect(false);
             SwitchTab(storyMenu.transform.GetComponent<RectTransform>());
             storyMenu.GoToUnlocked(chap - 1, ep - 1);
 
@@ -278,8 +279,9 @@ public class MainMenuHandler : MonoBehaviour
         if(sounds) sounds.PlayRandom("Game Over");
         gameOver.gameObject.SetActive(true);
 
-        (int tscore, int lscore, float ttime, float ltime) = GameModes.GameMode.LoadProgress();
+        (string title, int tscore, int lscore, float ttime, float ltime) = GameModes.GameMode.LoadProgress();
 
+        gameOver.SetTitle(title);
         gameOver.SetScores(tscore, lscore, ttime, ltime);
         cooldown = 5;
         action = MenuAction.GameOver;

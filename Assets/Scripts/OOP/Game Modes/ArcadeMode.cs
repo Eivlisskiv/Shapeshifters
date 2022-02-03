@@ -26,10 +26,10 @@ namespace Scripts.OOP.Game_Modes
 
         protected abstract void AddSpawns(string category, params string[] name);
 
-        public override (int, int, float, float) LoadProgress()
+        public override (string, int, int, float, float) LoadProgress()
         {
             ArcadeProgress progress = ArcadeProgress.LoadOne<ArcadeProgress>(Name);
-            return (progress.TopScore, Score, -1, -1);
+            return ("Game Over", progress.TopScore, Score, -1, -1);
         }
 
         public override void SaveProgress()

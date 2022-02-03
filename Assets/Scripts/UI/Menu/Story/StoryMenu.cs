@@ -263,33 +263,30 @@ namespace Scripts.UI.Menu.Story
             details_Weapon.text = data == null || data?.Weapon == "Weapon" ? "Basic" : data.Weapon;
 
             perks.DestroyChildren();
-            if(data != null)
+            if (data == null || data.Perks == null) return;
+            int c = data.Perks.Length;
+            for (int i = 0; i < c; i++)
             {
-                int c = data.Perks.Length;
-                for (int i = 0; i < c; i++)
+                OOP.Perks.SerializedPerk perk = data.Perks[i];
+                Image img = Components.CreateGameObject<Image>(perk.Name, perks);
+                img.sprite = Resources.Load<Sprite>("Sprites/Perks/" + perk.Name);
+                img.rectTransform.sizeDelta = new Vector2(80, 80);
+
+                Components.CreateGameObject<Text>("Level", img.transform, level =>
                 {
-                    OOP.Perks.SerializedPerk perk = data.Perks[i];
-                    Image img = Components.CreateGameObject<Image>(perk.Name, perks);
-                    img.sprite = Resources.Load<Sprite>("Sprites/Perks/" + perk.Name);
-                    img.rectTransform.sizeDelta = new Vector2(80, 80);
+                    level.text = perk.Buff == 0 || perk.Charge == 0
+                        ? perk.Level.ToString()
+                        : $"+{perk.Buff + perk.Level}";
 
-                    Components.CreateGameObject<Text>("Level", img.transform, level =>
-                    {
-                        level.text = perk.Buff == 0 || perk.Charge == 0
-                            ? perk.Level.ToString()
-                            : $"+{perk.Buff + perk.Level}";
+                    level.rectTransform.CenterStretch();
+                    level.alignment = TextAnchor.MiddleCenter;
+                    level.resizeTextForBestFit = true;
+                    level.resizeTextMaxSize = 50;
+                    level.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
 
-                        level.rectTransform.CenterStretch();
-                        level.alignment = TextAnchor.MiddleCenter;
-                        level.resizeTextForBestFit = true;
-                        level.resizeTextMaxSize = 50;
-                        level.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-
-                        level.color = new Color(1, 1, 1, 0.4f);
-                    });
-                }
+                    level.color = new Color(1, 1, 1, 0.4f);
+                });
             }
-
         }
 
         public void PlaySelectedEpisode(GeneralButton button)
